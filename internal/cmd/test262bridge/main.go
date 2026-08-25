@@ -11,7 +11,7 @@ import (
 	"time"
 	"unicode/utf16"
 
-	ecmascript "github.com/faustbrian/golib/pkg/ecma-regexp"
+	ecmascript "github.com/faustbrian/go-ecma-regexp"
 )
 
 type request struct {

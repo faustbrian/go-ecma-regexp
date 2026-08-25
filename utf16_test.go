@@ -6,7 +6,7 @@ import (
 	"slices"
 	"testing"
 
-	ecmascript "github.com/faustbrian/golib/pkg/ecma-regexp"
+	ecmascript "github.com/faustbrian/go-ecma-regexp"
 )
 
 func TestNonUnicodeMatchPreservesLoneSurrogate(t *testing.T) {

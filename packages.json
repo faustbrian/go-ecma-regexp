@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "repository": "github.com/faustbrian/go-ecma-regexp",
+  "packages": [
+    {
+      "module_directory": ".",
+      "directory": ".",
+      "name": "ecmascript",
+      "import_path": "github.com/faustbrian/go-ecma-regexp",
+      "kind": "public",
+      "production": true,
+      "executable": true,
+      "coverage_required": true,
+      "build_required": true,
+      "build_tags": []
+    },
+    {
+      "module_directory": ".",
+      "directory": "internal/cmd/test262bridge",
+      "name": "main",
+      "import_path": "github.com/faustbrian/go-ecma-regexp/internal/cmd/test262bridge",
+      "kind": "tooling",
+      "production": false,
+      "executable": true,
+      "coverage_required": false,
+      "build_required": true,
+      "build_tags": []
+    },
+    {
+      "module_directory": ".",
+      "directory": "internal/cmd/unicodegen",
+      "name": "main",
+      "import_path": "github.com/faustbrian/go-ecma-regexp/internal/cmd/unicodegen",
+      "kind": "tooling",
+      "production": false,
+      "executable": true,
+      "coverage_required": false,
+      "build_required": true,
+      "build_tags": []
+    }
+  ]
+}

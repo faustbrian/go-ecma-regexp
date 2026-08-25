@@ -7,6 +7,8 @@ and this project intends to use semantic versioning after its first release.
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-08-25
+
 ### Documentation
 
 - Link the package README to the repository-wide Golib documentation portal.
@@ -18,6 +20,7 @@ and this project intends to use semantic versioning after its first release.
 
 ### Changed
 
+- Publish the module from its standalone `github.com/faustbrian/go-ecma-regexp` identity while preserving its documented API and behavior.
 - Provision Test262 in a task-owned disposable directory for conformance and
   provenance gates instead of relying on shared `/tmp` state.
 - Delegate local mutation checks to the canonical exact-100 repository runner
@@ -63,3 +66,6 @@ and this project intends to use semantic versioning after its first release.
 - Synchronous context cancellation without hidden worker goroutines.
 - Meaningful 100% production statement coverage and exact 100% mutation
   efficacy for every viable mutant.
+
+[Unreleased]: https://github.com/faustbrian/go-ecma-regexp/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/faustbrian/go-ecma-regexp/releases/tag/v1.0.0

@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	ecmascript "github.com/faustbrian/golib/pkg/ecma-regexp"
+	ecmascript "github.com/faustbrian/go-ecma-regexp"
 )
 
 func TestCompileAndMatchBacktrackWithCaptures(t *testing.T) {

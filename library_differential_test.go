@@ -7,7 +7,7 @@ import (
 	"github.com/dlclark/regexp2"
 	"github.com/dop251/goja"
 
-	ecmascript "github.com/faustbrian/golib/pkg/ecma-regexp"
+	ecmascript "github.com/faustbrian/go-ecma-regexp"
 )
 
 func TestOverlappingLibraryDifferential(t *testing.T) {

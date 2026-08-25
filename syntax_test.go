@@ -4,7 +4,7 @@ import (
 	"errors"
 	"testing"
 
-	ecmascript "github.com/faustbrian/golib/pkg/ecma-regexp"
+	ecmascript "github.com/faustbrian/go-ecma-regexp"
 )
 
 func TestTokenizePreservesByteSpans(t *testing.T) {
