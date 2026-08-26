@@ -32,7 +32,7 @@ and this project uses semantic versioning.
 
 ### Documentation
 
-- Link the package README to the repository-wide Golib documentation portal.
+- Link the package README to package-owned documentation.
 
 ### Fixed
 
