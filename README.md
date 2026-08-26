@@ -86,7 +86,7 @@ compiled `Program` is immutable and concurrency-safe. Stateful `Session`
 values and any application cache are caller-owned and require external
 synchronization when shared.
 
-## Ecosystem
+## Documentation
 
-Use the [Golib documentation portal](https://github.com/faustbrian/golib/blob/main/docs/index.md)
-to choose companion packages, supported stacks, recipes, and operations guidance.
+Start with the [documentation index](docs/README.md) for syntax, replacement,
+security, compatibility, and migration guidance.

@@ -3,9 +3,13 @@
 All notable changes to this project will be documented in this file.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
-and this project intends to use semantic versioning after its first release.
+and this project uses semantic versioning.
 
 ## [Unreleased]
+
+### Documentation
+
+- Replace the archived monorepo link with package-owned documentation.
 
 ## [1.0.0] - 2026-08-25
 
