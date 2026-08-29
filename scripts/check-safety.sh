@@ -52,23 +52,24 @@ fi
 scan() {
 	local pattern="$1"
 	local status
-	set +e
-	xargs -0 grep -nE "${pattern}" <"${production_files}"
-	status=$?
-	set -e
-	case "${status}" in
-		0)
-			echo "forbidden production mechanism found" >&2
-			return 1
-			;;
-		1)
-			return 0
-			;;
-		*)
-			echo "production safety scan failed closed" >&2
-			return "${status}"
-			;;
-	esac
+	while IFS= read -r -d '' file; do
+		set +e
+		grep -nE "${pattern}" "${file}"
+		status=$?
+		set -e
+		case "${status}" in
+			0)
+				echo "forbidden production mechanism found" >&2
+				return 1
+				;;
+			1)
+				;;
+			*)
+				echo "production safety scan failed closed" >&2
+				return "${status}"
+				;;
+		esac
+	done <"${production_files}"
 }
 
 scan '(^|[^[:alnum:]_])(unsafe|C)\.|go:linkname|func[[:space:]]+init[[:space:]]*\('
