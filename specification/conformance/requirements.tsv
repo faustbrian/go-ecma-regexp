@@ -10,5 +10,5 @@ SAFETY-HOSTILE	project	hardening-goal	Bound catastrophic patterns, zero-width lo
 SAFETY-CONCURRENCY	project	hardening-goal	Race immutable programs and caller-owned synchronized caches.	hardening_test.go; make race	implemented
 SAFETY-LEAKS	project	hardening-goal	Detect goroutine and material retained-buffer leaks across repeated budget failures.	hardening_test.go; make leak; scripts/check-safety.sh	implemented
 INTEROP-DIFFERENTIAL	project	hardening-goal	Differential-test matching and captures against at least two independent JavaScript engine families.	differential_test.go; specification/conformance/differential.tsv	implemented
-QUALITY-FUZZ-MUTATION	project	hardening-goal	Fuzz every public execution stage and mutation-test grammar and matcher decisions.	fuzz_test.go; scripts/check-fuzz.sh; scripts/check-mutation.sh	implemented
+QUALITY-FUZZ-MUTATION	project	hardening-goal	Fuzz every public execution stage and mutation-test grammar and matcher decisions.	fuzz_test.go; .golib.yaml; .verification/mutation	implemented
 TEST262-ACCOUNTING	project	hardening-goal	Reconcile every pinned RegExp case, skip, feature tag, proposal-stage feature, erratum, and supported-edition difference.	test262_syntax_test.go; test262_semantics_test.go; specification/conformance/test262.tsv; specification/conformance/features.tsv; specification/conformance/errata.tsv	implemented

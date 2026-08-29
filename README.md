@@ -75,11 +75,15 @@ Unicode semantics and the required unanchored search behavior.
 ## Development gates
 
 ```sh
-go test ./...
-go test -race ./...
-go vet ./...
-make differential hostile leak
+make inventory
+make check
+make ci
 ```
+
+The gates use the pinned `go-library-tools` release declared in `.golib.yaml`.
+Package-specific safety, documentation, Test262 conformance, interoperability,
+fuzz, benchmark, and mutation evidence remain declared or retained in this
+repository.
 
 The package uses no `unsafe`, hidden workers, or global mutable caches. A
 compiled `Program` is immutable and concurrency-safe. Stateful `Session`
