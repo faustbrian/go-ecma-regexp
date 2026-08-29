@@ -3,9 +3,18 @@
 All notable changes to this project will be documented in this file.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
-and this project intends to use semantic versioning after its first release.
+and this project uses semantic versioning.
 
 ## [Unreleased]
+
+### Changed
+
+- Replace copied repository tooling with the pinned go-library-tools v1.0.4
+  contract while retaining package-owned policy and verification evidence.
+
+### Documentation
+
+- Replace the archived monorepo link with package-owned documentation.
 
 ## [1.0.0] - 2026-08-25
 
@@ -28,7 +37,7 @@ and this project intends to use semantic versioning after its first release.
 
 ### Documentation
 
-- Link the package README to the repository-wide Golib documentation portal.
+- Link the package README to package-owned documentation.
 
 ### Fixed
 

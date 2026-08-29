@@ -27,13 +27,13 @@
       "report_sha256": "d764179da87d31f19c560f2e2a81f6311de102c2f470d66a8675e0fa849e91b7"
     },
     {
-      "module": ".",
-      "package": ".",
       "execution_revision": "c09c5268b1facb88317f933913b2e7cf4377948b",
       "gate_input_digest": "59a4a6ce1638c06abfae0385f8dc8cff441edb564535e99112b8649e2349441d",
-      "replacement_gate_input_digest": "2367f373c0542a600688c7dc7964ac091858125a6e23d5fac5611871068d8b9d",
+      "replacement_gate_input_digest": "f764e64ef0c4e91f37ec4b680c42e27863de33794871544bd04cff33703e4730",
+      "migration_reason": "Standalone publication changed repository and module metadata only; production and test source semantics remain unchanged.",
       "gremlins_version": "v0.6.0",
-      "gremlins_verifier_sha256": "9a9499ff68a8dfd49a0be7995590297a8ee563a1aa226bfd8b9361dc53058108",
+      "module": ".",
+      "package": ".",
       "report_sha256": "0132ad28ad52d7cc8eb9c355b2c878d5d4b045550539219a2f47378538e3f5df"
     }
   ]
