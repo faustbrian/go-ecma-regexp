@@ -8,36 +8,52 @@ cleanup() {
 }
 trap cleanup EXIT HUP INT TERM
 
-nested_modules="${task}/nested-modules"
-if ! find "${root}" -mindepth 2 -type f -name go.mod -print >"${nested_modules}"; then
-	echo "failed to inventory nested modules for production safety scan" >&2
+files="${task}/go-files"
+if ! find "${root}" \
+	\( \
+		-path "${root}/.git" -o \
+		-path "${root}/.golib-tooling" -o \
+		-path "${root}/.verification" -o \
+		-name '.*' -o \
+		-name '_*' -o \
+		-name 'testdata' -o \
+		-name 'vendor' \
+	\) -prune -o \
+	-type f -name '*.go' ! -name '*_test.go' -print0 >"${files}"; then
+	echo "failed to inventory production Go files" >&2
 	exit 1
 fi
 
-scan_args=(
-	--hidden
-	--no-ignore
-	--glob '*.go'
-	--glob '!**/*_test.go'
-	--glob '!**/.*'
-	--glob '!**/_*'
-	--glob '!**/_*/**'
-	--glob '!**/testdata/**'
-	--glob '!**/vendor/**'
-	--glob '!**/.golib-tooling/**'
-	--glob '!**/.verification/**'
-)
-while IFS= read -r module; do
-	[[ -n "${module}" ]] || continue
-	relative="${module#"${root}"/}"
-	scan_args+=(--glob "!${relative%/go.mod}/**")
-done <"${nested_modules}"
+production_files="${task}/production-go-files"
+if ! : >"${production_files}"; then
+	echo "failed to prepare production Go file inventory" >&2
+	exit 1
+fi
+while IFS= read -r -d '' file; do
+	directory="$(dirname "${file}")"
+	nested=0
+	while [[ "${directory}" != "${root}" && "${directory}" != / ]]; do
+		if [[ -f "${directory}/go.mod" ]]; then
+			nested=1
+			break
+		fi
+		directory="$(dirname "${directory}")"
+	done
+	if (( nested == 0 )); then
+		printf '%s\0' "${file}" >>"${production_files}"
+	fi
+done <"${files}"
+
+if [[ ! -s "${production_files}" ]]; then
+	echo "production Go file inventory is empty" >&2
+	exit 1
+fi
 
 scan() {
 	local pattern="$1"
 	local status
 	set +e
-	rg -n "${pattern}" "${scan_args[@]}" "${root}"
+	xargs -0 grep -nE "${pattern}" <"${production_files}"
 	status=$?
 	set -e
 	case "${status}" in
@@ -55,5 +71,5 @@ scan() {
 	esac
 }
 
-scan '(^|[^[:alnum:]_])(unsafe|C)\.|go:linkname|func init\s*\('
+scan '(^|[^[:alnum:]_])(unsafe|C)\.|go:linkname|func[[:space:]]+init[[:space:]]*\('
 scan '^[[:space:]]*go[[:space:]]+'
