@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "entries": [
+    {
+      "id": "ECMAREGEXP-DEC-001",
+      "digests": [
+        "06fc6bec563a10c4bb86eaa1d9567f027b5ee86b074e05d69d492b0142557a4c"
+      ]
+    },
+    {
+      "id": "ECMAREGEXP-DEC-002",
+      "digests": [
+        "d7ba3054e0cf4a0c1ddefbe02c0edc6ed56e384724e25790acb8521c5751e954"
+      ]
+    },
+    {
+      "id": "ECMAREGEXP-DEC-003",
+      "digests": [
+        "15e79d2f5cac76a854210f68a2fd62cb09b788c91fef58e00035c272f8c2c7a6"
+      ]
+    },
+    {
+      "id": "ECMAREGEXP-DEC-004",
+      "digests": [
+        "129018c819bbd1cc16ce293427f198b1bca66126696509d9dad5be34e4f44ef0"
+      ]
+    },
+    {
+      "id": "ECMAREGEXP-DEC-005",
+      "digests": [
+        "1aeffca94e50698c7e2d7139ed7913565eb4643a172127a89582018c1eba4582"
+      ]
+    },
+    {
+      "id": "ECMAREGEXP-DEC-006",
+      "digests": [
+        "76a3c8601c5ae3a452faa67b4cd8d7dd5f35a4b85afa009f4ad20dd4714831e4"
+      ]
+    },
+    {
+      "id": "ECMAREGEXP-DEC-007",
+      "digests": [
+        "a8826a4999bf642e94eedad24d4e09c261507d421e6fa272316535045ea6a4e9"
+      ]
+    },
+    {
+      "id": "ECMAREGEXP-DEC-008",
+      "digests": [
+        "adc13a31805699778029f0fd0bf75c3b8469232f34616a518d9248928e902ecf"
+      ]
+    },
+    {
+      "id": "ECMAREGEXP-DEC-009",
+      "digests": [
+        "5d0a91fb12b8bee52c980a9af4fb34378546d795a9ea19b0ce0256d9bf89289c"
+      ]
+    },
+    {
+      "id": "ECMAREGEXP-DEC-010",
+      "digests": [
+        "904a373c1a9eaf0c9377af0d017158712b218c81ba81a56a0782d5f7a845424d"
+      ]
+    },
+    {
+      "id": "ECMAREGEXP-DEC-011",
+      "digests": [
+        "f32b68e9205973d69582df04974e363e8707b3221cea4fcabee34182a2615304"
+      ]
+    },
+    {
+      "id": "ECMAREGEXP-DEC-012",
+      "digests": [
+        "0333f7e28955d7a4adef530bdf23a56c416dc035fe462b3065e8fe9aa2ac194d"
+      ]
+    },
+    {
+      "id": "ECMAREGEXP-DEC-013",
+      "digests": [
+        "b1bd205e6b1f22094011061bf515005e428c145a87209eceebb8308080aafd37"
+      ]
+    }
+  ]
+}

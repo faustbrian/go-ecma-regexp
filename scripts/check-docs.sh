@@ -7,12 +7,15 @@ required=(
   docs/migration.md docs/performance.md docs/replacement.md docs/security.md
   docs/support.md docs/syntax.md
   specification/README.md specification/manifest.json
+  specification/conformance.json
   specification/conformance/decisions.tsv
   specification/conformance/differential.tsv
   specification/conformance/errata.tsv
   specification/conformance/features.tsv
   specification/conformance/requirements.tsv
   specification/conformance/test262.tsv
+  specification/decision-history.json specification/decisions.json
+  specification/monitoring.json
 )
 for path in "${required[@]}"; do
   test -s "$path"

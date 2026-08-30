@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "reviewed_at": "2026-08-30",
+  "review_interval_days": 30,
+  "authorities": [
+    {
+      "id": "ecma262-source",
+      "kind": "specification",
+      "version": "ECMA-262 16th edition (June 2025)",
+      "url": "https://ecma-international.org/wp-content/uploads/ECMA-262_16th_edition_june_2025.pdf",
+      "sha256": "50e932767f16f3d4bf03e9d94157885125eeff1c165a8d8c05a867bcb56ee7da",
+      "specifications": [
+        "ECMA-262 16th edition (ECMAScript 2025)"
+      ]
+    },
+    {
+      "id": "ecma262-releases",
+      "kind": "releases",
+      "version": "",
+      "url": "https://ecma-international.org/publications-and-standards/standards/ecma-262/",
+      "sha256": "0500fd090fab30ed4d0b439a4d9d2a7d29aed2a09203e001bb7b010d21f2c573",
+      "specifications": [
+        "ECMA-262 16th edition (ECMAScript 2025)"
+      ]
+    },
+    {
+      "id": "test262-source",
+      "kind": "specification",
+      "version": "26058a01fdbc8dad9ded0e97133190098ea8c5d8",
+      "url": "https://raw.githubusercontent.com/tc39/test262/26058a01fdbc8dad9ded0e97133190098ea8c5d8/README.md",
+      "sha256": "7d41aee3ef0a6d98b7d9d8e334cf39a07917ee5f5312425ad9cee8e685f728bc",
+      "specifications": [
+        "TC39 Test262 at 26058a01fdbc8dad9ded0e97133190098ea8c5d8"
+      ]
+    },
+    {
+      "id": "test262-releases",
+      "kind": "releases",
+      "version": "",
+      "url": "https://raw.githubusercontent.com/tc39/test262/main/README.md",
+      "sha256": "7d41aee3ef0a6d98b7d9d8e334cf39a07917ee5f5312425ad9cee8e685f728bc",
+      "specifications": [
+        "TC39 Test262 at 26058a01fdbc8dad9ded0e97133190098ea8c5d8"
+      ]
+    },
+    {
+      "id": "unicode-source",
+      "kind": "specification",
+      "version": "Unicode 16.0.0",
+      "url": "https://www.unicode.org/Public/zipped/16.0.0/UCD.zip",
+      "sha256": "c86dd81f2b14a43b0cc064aa5f89aa7241386801e35c59c7984e579832634eb2",
+      "specifications": [
+        "Unicode 16.0.0"
+      ]
+    },
+    {
+      "id": "unicode-releases",
+      "kind": "releases",
+      "version": "",
+      "url": "https://www.unicode.org/versions/",
+      "sha256": "a53e989ff583e9002b55f0306f46c39b81d63d6c5bc5ae885b06fb3b6a88a09b",
+      "specifications": [
+        "Unicode 16.0.0"
+      ]
+    },
+    {
+      "id": "jsonschema-source",
+      "kind": "specification",
+      "version": "Draft 2020-12",
+      "url": "https://raw.githubusercontent.com/json-schema-org/json-schema-spec/add836e705c9a07434c467b6b90946ba45258a73/jsonschema-validation.xml",
+      "sha256": "dcba094c316c17922cb95cc36affc53b9d9521139bfd5a3afdd1cc810ab39773",
+      "specifications": [
+        "JSON Schema Draft 2020-12 regular expressions"
+      ]
+    },
+    {
+      "id": "jsonschema-releases",
+      "kind": "releases",
+      "version": "",
+      "url": "https://raw.githubusercontent.com/json-schema-org/json-schema-spec/main/README.md",
+      "sha256": "0382ac5c160459cef62dcfbac8736130ab59ad26d712d8fe64b8a3511fddc136",
+      "specifications": [
+        "JSON Schema Draft 2020-12 regular expressions"
+      ]
+    }
+  ]
+}

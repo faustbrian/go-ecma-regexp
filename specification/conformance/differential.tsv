@@ -2,3 +2,5 @@ runtime	engine	pinned_ci_version	vectors	reported_divergences	evidence
 Node.js	V8	25.5.0	25	0	differential_test.go
 Deno	V8	2.9.3	25	0	differential_test.go
 Bun	JavaScriptCore	1.3.14	25	1: /ui long-s case differs from ECMA-262 Canonicalize and V8	differential_test.go; casefold_test.go
+regexp2	regexp2 backtracking engine	v1.12.0	6	0	library_differential_test.go; go.mod
+goja	Go JavaScript runtime	b07b74453ea9	6	0	library_differential_test.go; go.mod
