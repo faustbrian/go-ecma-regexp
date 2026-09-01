@@ -12,6 +12,8 @@
   "test262": {
     "repository": "https://github.com/tc39/test262.git",
     "commit": "26058a01fdbc8dad9ded0e97133190098ea8c5d8",
+    "source_url": "https://raw.githubusercontent.com/tc39/test262/26058a01fdbc8dad9ded0e97133190098ea8c5d8/README.md",
+    "source_sha256": "7d41aee3ef0a6d98b7d9d8e334cf39a07917ee5f5312425ad9cee8e685f728bc",
     "license_sha256": "4dd9244dfe8197c75348c4b24ab53d29d3b1cfad143ac76b5a3d8942aa354ce0",
     "scope": "test/built-ins/RegExp and RegExp-literal grammar cases"
   },
@@ -24,5 +26,11 @@
     "emoji_zwj_sequences_url": "https://unicode.org/Public/emoji/16.0/emoji-zwj-sequences.txt",
     "emoji_zwj_sequences_sha256": "9423ec235474356f970a696506737e2d5d65453a67f45df66b8bbe920c3fab83",
     "status": "generated code-point and properties-of-strings tables"
+  },
+  "json_schema": {
+    "version": "Draft 2020-12",
+    "validation_url": "https://raw.githubusercontent.com/json-schema-org/json-schema-spec/add836e705c9a07434c467b6b90946ba45258a73/jsonschema-validation.xml",
+    "validation_sha256": "dcba094c316c17922cb95cc36affc53b9d9521139bfd5a3afdd1cc810ab39773",
+    "scope": "Section 6.3.3 regular-expression compatibility and substring matching"
   }
 }

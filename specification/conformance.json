@@ -1,0 +1,307 @@
+{
+  "schema_version": 1,
+  "decisions": [
+    {
+      "id": "ECMAREGEXP-DEC-001",
+      "authoritative_sources": [
+        "ecma262-source"
+      ],
+      "executable_evidence": [
+        "TestEditionIsExplicitAndClosed",
+        "TestTest262RegExpFeatureAccounting",
+        "TestParseRejectsMalformedAndUnsupportedSyntaxExplicitly"
+      ],
+      "fixtures": [],
+      "fuzz": [],
+      "interoperability_evidence": [
+        "specification/conformance/test262.tsv"
+      ],
+      "interoperability_classification": "official fixture agreement",
+      "differential_evidence": [],
+      "differential_classification": "not assessed",
+      "public_behavior": [
+        "The package implements exactly ECMA-262 16th edition and rejects or excludes later proposal and live-draft behavior until an explicit edition upgrade."
+      ]
+    },
+    {
+      "id": "ECMAREGEXP-DEC-002",
+      "authoritative_sources": [
+        "ecma262-source"
+      ],
+      "executable_evidence": [
+        "TestTest262RegExpFeatureAccounting",
+        "TestTest262RegExpSemantics",
+        "TestOverlappingLibraryDifferential"
+      ],
+      "fixtures": [],
+      "fuzz": [],
+      "interoperability_evidence": [
+        "specification/conformance/test262.tsv"
+      ],
+      "interoperability_classification": "official fixture agreement",
+      "differential_evidence": [
+        "specification/conformance/differential.tsv"
+      ],
+      "differential_classification": "maintained peer agreement",
+      "public_behavior": [
+        "The package implements Pattern grammar, matching, captures, indices, state, replacement, and split through typed Go APIs; JavaScript host-object behavior is out of scope and explicitly accounted."
+      ]
+    },
+    {
+      "id": "ECMAREGEXP-DEC-003",
+      "authoritative_sources": [
+        "ecma262-source"
+      ],
+      "executable_evidence": [
+        "TestFindReportsUTF16RuneAndByteIndices",
+        "TestUTF16InputViewMapsScalarAndUnpairedSurrogateBoundaries",
+        "TestDifferentialMatchingAgainstJavaScriptEngines"
+      ],
+      "fixtures": [],
+      "fuzz": [
+        "FuzzUTF16Matcher"
+      ],
+      "interoperability_evidence": [],
+      "interoperability_classification": "not assessed",
+      "differential_evidence": [
+        "specification/conformance/differential.tsv"
+      ],
+      "differential_classification": "maintained peer agreement",
+      "public_behavior": [
+        "Match and capture indices are normatively UTF-16 code-unit offsets, with byte and rune mappings for Go-string inputs and exact unit offsets for UTF-16 inputs."
+      ]
+    },
+    {
+      "id": "ECMAREGEXP-DEC-004",
+      "authoritative_sources": [
+        "ecma262-source"
+      ],
+      "executable_evidence": [
+        "TestInvalidUTF8MapsEachByteToReplacementCharacter",
+        "TestInputViewMapsUTF8BoundaryWidths"
+      ],
+      "fixtures": [],
+      "fuzz": [
+        "FuzzCompileAndMatch"
+      ],
+      "interoperability_evidence": [],
+      "interoperability_classification": "not assessed",
+      "differential_evidence": [],
+      "differential_classification": "not assessed",
+      "public_behavior": [
+        "Each invalid Go-string byte maps to one U+FFFD code point and retains its original byte boundary; exact surrogate input uses the UTF-16 APIs."
+      ]
+    },
+    {
+      "id": "ECMAREGEXP-DEC-005",
+      "authoritative_sources": [
+        "unicode-source"
+      ],
+      "executable_evidence": [
+        "TestUnicodePropertyEscapesUsePinnedUnicodeVersion",
+        "TestUnicodePropertyAliasesAreExact",
+        "TestUnicodeSetsPropertiesOfStrings",
+        "TestGenerateIsFormattedAndDeterministic"
+      ],
+      "fixtures": [],
+      "fuzz": [
+        "FuzzTokenizeAndParse"
+      ],
+      "interoperability_evidence": [
+        "specification/conformance/test262.tsv"
+      ],
+      "interoperability_classification": "official fixture agreement",
+      "differential_evidence": [],
+      "differential_classification": "not assessed",
+      "public_behavior": [
+        "The package uses generated Unicode 16.0.0 properties, case folding, identifiers, emoji sequences, and properties of strings with exact ECMAScript aliases."
+      ]
+    },
+    {
+      "id": "ECMAREGEXP-DEC-006",
+      "authoritative_sources": [
+        "ecma262-source"
+      ],
+      "executable_evidence": [
+        "TestFlagsRejectDuplicatesConflictsAndUnknownFlags",
+        "TestAnnexBIsExplicitAndUnicodeModesRemainStrict",
+        "TestUnicodeSetsRejectMixedOperatorsAndReservedPunctuation"
+      ],
+      "fixtures": [],
+      "fuzz": [
+        "FuzzTokenizeAndParse"
+      ],
+      "interoperability_evidence": [
+        "specification/conformance/test262.tsv"
+      ],
+      "interoperability_classification": "official fixture agreement",
+      "differential_evidence": [],
+      "differential_classification": "not assessed",
+      "public_behavior": [
+        "Flags are closed to d g i m s u v y; u and v conflict; u selects Unicode grammar, v selects Unicode Sets grammar, and Annex B is available only through explicit legacy policy."
+      ]
+    },
+    {
+      "id": "ECMAREGEXP-DEC-007",
+      "authoritative_sources": [
+        "ecma262-source"
+      ],
+      "executable_evidence": [
+        "TestDuplicateNamedCapturesInDisjointAlternatives",
+        "TestDuplicateNamedCapturesThatMightBothParticipateAreRejected",
+        "TestDuplicateNamedCaptureReplacementUsesParticipatingGroup"
+      ],
+      "fixtures": [],
+      "fuzz": [],
+      "interoperability_evidence": [
+        "specification/conformance/test262.tsv"
+      ],
+      "interoperability_classification": "official fixture agreement",
+      "differential_evidence": [
+        "specification/conformance/differential.tsv"
+      ],
+      "differential_classification": "maintained peer agreement",
+      "public_behavior": [
+        "Duplicate named captures are accepted only when static alternative analysis proves they cannot both participate; resolution uses the participating capture."
+      ]
+    },
+    {
+      "id": "ECMAREGEXP-DEC-008",
+      "authoritative_sources": [
+        "ecma262-source"
+      ],
+      "executable_evidence": [
+        "TestSessionImplementsGlobalLastIndex",
+        "TestSessionImplementsStickyLastIndex",
+        "TestFindAllAdvancesEmptyMatchesByUnicodeCodePoint",
+        "TestFindAllAndReplaceIncludeTheFinalUTF16Boundary"
+      ],
+      "fixtures": [],
+      "fuzz": [
+        "FuzzCompileAndMatch"
+      ],
+      "interoperability_evidence": [],
+      "interoperability_classification": "not assessed",
+      "differential_evidence": [],
+      "differential_classification": "not assessed",
+      "public_behavior": [
+        "Session lastIndex is UTF-16; global and sticky failure resets it as specified; collection operations advance empty matches by one code unit or one Unicode code point according to mode."
+      ]
+    },
+    {
+      "id": "ECMAREGEXP-DEC-009",
+      "authoritative_sources": [
+        "jsonschema-source"
+      ],
+      "executable_evidence": [
+        "TestJSONSchemaPatternIsUnicodeAndUnanchored",
+        "TestJSONSchemaPatternHonorsExplicitAnchors",
+        "TestJSONSchemaPatternRejectsNonUnicodeLegacySyntax"
+      ],
+      "fixtures": [],
+      "fuzz": [
+        "FuzzCompileAndMatch"
+      ],
+      "interoperability_evidence": [],
+      "interoperability_classification": "not assessed",
+      "differential_evidence": [],
+      "differential_classification": "not assessed",
+      "public_behavior": [
+        "CompileJSONSchemaPattern selects ECMAScript Unicode u semantics, performs unanchored search unless the pattern supplies anchors, exposes no hidden caller flags, and propagates ordinary limits."
+      ]
+    },
+    {
+      "id": "ECMAREGEXP-DEC-010",
+      "authoritative_sources": [
+        "ecma262-source"
+      ],
+      "executable_evidence": [
+        "TestHostileExecutionPathsAreBounded",
+        "TestExecutionDoesNotLeakGoroutinesOrBuffers",
+        "TestMatchEnforcesWallTimeWithoutGoroutine",
+        "TestOperationsEnforceResultAndOutputLimits"
+      ],
+      "fixtures": [],
+      "fuzz": [
+        "FuzzTokenizeAndParse",
+        "FuzzCompileAndMatch",
+        "FuzzReplaceAndSplit"
+      ],
+      "interoperability_evidence": [],
+      "interoperability_classification": "not assessed",
+      "differential_evidence": [],
+      "differential_classification": "not assessed",
+      "public_behavior": [
+        "Parsing, compilation, matching, backtracking, recursion, allocation, results, output, cancellation, and wall time have explicit finite synchronous limits and typed errors; no hidden worker survives return."
+      ]
+    },
+    {
+      "id": "ECMAREGEXP-DEC-011",
+      "authoritative_sources": [
+        "test262-source"
+      ],
+      "executable_evidence": [
+        "TestTest262RegExpFeatureAccounting",
+        "TestTest262BuiltInNegativeRegExpLiteralSyntax",
+        "TestTest262RegExpLiteralNegativeSyntax",
+        "TestTest262RegExpSemantics"
+      ],
+      "fixtures": [],
+      "fuzz": [],
+      "interoperability_evidence": [
+        "specification/conformance/test262.tsv"
+      ],
+      "interoperability_classification": "official fixture agreement",
+      "differential_evidence": [],
+      "differential_classification": "not assessed",
+      "public_behavior": [
+        "Every pinned RegExp and RegExp-literal file is classified as matcher, generated structural, syntax, lexical-only, proposal-stage, host-object-only, or outside the public surface; only exercised behavior is claimed."
+      ]
+    },
+    {
+      "id": "ECMAREGEXP-DEC-012",
+      "authoritative_sources": [
+        "test262-source"
+      ],
+      "executable_evidence": [
+        "TestDifferentialMatchingAgainstJavaScriptEngines",
+        "TestOverlappingLibraryDifferential",
+        "TestUnicodeBackreferenceUsesSimpleCaseFolding"
+      ],
+      "fixtures": [],
+      "fuzz": [],
+      "interoperability_evidence": [],
+      "interoperability_classification": "not assessed",
+      "differential_evidence": [
+        "specification/conformance/differential.tsv"
+      ],
+      "differential_classification": "deliberate policy difference",
+      "public_behavior": [
+        "The release differential compares pattern, flags, input, match, captures, and UTF-16 indices across at least two independent engine families plus maintained Go peers where semantics overlap; every disagreement is minimized and classified."
+      ]
+    },
+    {
+      "id": "ECMAREGEXP-DEC-013",
+      "authoritative_sources": [
+        "ecma262-source"
+      ],
+      "executable_evidence": [
+        "TestReplaceImplementsECMAScriptSubstitutions",
+        "TestReplacementTokenBoundaries",
+        "TestSplitInsertsDefinedAndUnmatchedCaptures",
+        "TestUTF16OperationsPreserveExactInput"
+      ],
+      "fixtures": [],
+      "fuzz": [
+        "FuzzReplaceAndSplit"
+      ],
+      "interoperability_evidence": [],
+      "interoperability_classification": "not assessed",
+      "differential_evidence": [],
+      "differential_classification": "not assessed",
+      "public_behavior": [
+        "Replacement and split implement ECMAScript substitution and capture insertion over exact UTF-16 boundaries; UTF-16 APIs preserve lone surrogates and Go-string APIs preserve original byte slices through explicit mappings."
+      ]
+    }
+  ]
+}

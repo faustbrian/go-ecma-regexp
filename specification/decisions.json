@@ -1,0 +1,662 @@
+{
+  "schema_version": 1,
+  "change_control": {
+    "readme": "README.md",
+    "conformance": "specification/README.md",
+    "compatibility": "COMPATIBILITY.md",
+    "contribution": "CONTRIBUTING.md",
+    "changelog": "CHANGELOG.md",
+    "pull_request_template": ".github/pull_request_template.md"
+  },
+  "decisions": [
+    {
+      "id": "ECMAREGEXP-DEC-001",
+      "title": "Closed ECMAScript edition",
+      "status": "resolved",
+      "owner": "`go-ecma-regexp` maintainers",
+      "classification": "optional behavior",
+      "decision_scope": "application-policy",
+      "specification": "ECMA-262 16th edition (ECMAScript 2025)",
+      "version": "ECMA-262 16th edition (June 2025)",
+      "source_authority": "ecma262-source",
+      "section": "Clauses 22.2.1 through 22.2.7",
+      "requirement_strength": "not specified",
+      "issue": "The live draft and Test262 gain syntax and semantics after each published edition, so an unpinned implementation can change behavior without a package release decision.",
+      "interpretations": [
+        "Track the live draft.",
+        "Accept every Test262 feature understood by the parser.",
+        "Close syntax and semantics to one published edition."
+      ],
+      "peer_behavior": "Maintained JavaScript engines ship proposals and corrections on different schedules; their current acceptance does not redefine a published edition.",
+      "selected_behavior": "The package implements exactly ECMA-262 16th edition and rejects or excludes later proposal and live-draft behavior until an explicit edition upgrade.",
+      "rationale": "A closed edition makes accepted grammar and semantics reproducible and compatibility-reviewable.",
+      "security_consequences": "Unreviewed syntax cannot create new parser or execution states.",
+      "resource_consequences": "Existing finite parse, compile, and execution limits remain the complete resource contract.",
+      "compatibility_consequences": "Pattern and flag acceptance stays stable until a reviewed edition upgrade.",
+      "wire_consequences": "Patterns carry no edition negotiation field, so callers must coordinate edition upgrades.",
+      "executable_evidence": [
+        "TestEditionIsExplicitAndClosed",
+        "TestTest262RegExpFeatureAccounting",
+        "TestParseRejectsMalformedAndUnsupportedSyntaxExplicitly"
+      ],
+      "fixture_evidence": [],
+      "fuzz_evidence": [],
+      "interoperability_evidence": [
+        "specification/conformance/test262.tsv"
+      ],
+      "public_apis": [
+        "Edition",
+        "Compile",
+        "Parse",
+        "Tokenize"
+      ],
+      "documentation": [
+        "docs/specification-decisions.md",
+        "docs/support.md"
+      ],
+      "upstream_status": "The publication, source commit, Test262 feature inventory, and draft audit boundary are pinned in repository evidence.",
+      "reconsider_when": "A later published ECMA-262 edition is selected and its complete grammar and semantic delta has executable evidence."
+    },
+    {
+      "id": "ECMAREGEXP-DEC-002",
+      "title": "Pattern engine rather than JavaScript RegExp object model",
+      "status": "resolved",
+      "owner": "`go-ecma-regexp` maintainers",
+      "classification": "omission",
+      "decision_scope": "application-policy",
+      "specification": "ECMA-262 16th edition (ECMAScript 2025)",
+      "version": "ECMA-262 16th edition (June 2025)",
+      "source_authority": "ecma262-source",
+      "section": "Clauses 22.2.1 and 22.2.2",
+      "requirement_strength": "not specified",
+      "issue": "ECMA-262 combines Pattern semantics with JavaScript constructors, prototypes, coercion, descriptors, species, and RegExp.escape that a native Go API does not expose.",
+      "interpretations": [
+        "Emulate the complete JavaScript object model.",
+        "Embed a JavaScript runtime.",
+        "Implement overlapping Pattern and matcher semantics and account for excluded host-object tests."
+      ],
+      "peer_behavior": "JavaScript engines expose the complete object model, while maintained native regexp libraries overlap only on pattern compilation and matching.",
+      "selected_behavior": "The package implements Pattern grammar, matching, captures, indices, state, replacement, and split through typed Go APIs; JavaScript host-object behavior is out of scope and explicitly accounted.",
+      "rationale": "The boundary provides native deterministic semantics without claiming absent host-language behavior.",
+      "security_consequences": "No production path evaluates JavaScript or invokes implicit host callbacks.",
+      "resource_consequences": "Native parsing and matching remain bounded by caller-visible limits.",
+      "compatibility_consequences": "Semantic pattern results can be compared with peers, but JavaScript object identity and coercion are not supported.",
+      "wire_consequences": "Results are typed Go values rather than serialized JavaScript objects.",
+      "executable_evidence": [
+        "TestTest262RegExpFeatureAccounting",
+        "TestTest262RegExpSemantics",
+        "TestOverlappingLibraryDifferential"
+      ],
+      "fixture_evidence": [],
+      "fuzz_evidence": [],
+      "interoperability_evidence": [
+        "specification/conformance/test262.tsv"
+      ],
+      "differential_evidence": [
+        "specification/conformance/differential.tsv"
+      ],
+      "public_apis": [
+        "Program",
+        "Session",
+        "Match",
+        "Compile",
+        "Find",
+        "Replace",
+        "Split"
+      ],
+      "documentation": [
+        "docs/specification-decisions.md",
+        "specification/README.md"
+      ],
+      "upstream_status": "Every pinned Test262 RegExp file is classified by applicable behavior instead of being silently omitted.",
+      "reconsider_when": "A separately versioned package intentionally implements JavaScript RegExp host objects."
+    },
+    {
+      "id": "ECMAREGEXP-DEC-003",
+      "title": "UTF-16 indices with explicit Go mappings",
+      "status": "resolved",
+      "owner": "`go-ecma-regexp` maintainers",
+      "classification": "interoperability policy",
+      "decision_scope": "normative",
+      "specification": "ECMA-262 16th edition (ECMAScript 2025)",
+      "version": "ECMA-262 16th edition (June 2025)",
+      "source_authority": "ecma262-source",
+      "section": "RegExpBuiltinExec and StringIndexOf",
+      "requirement_strength": "not specified",
+      "issue": "ECMAScript indices count UTF-16 code units while Go strings are byte sequences and Go callers also need rune coordinates.",
+      "interpretations": [
+        "Return byte offsets.",
+        "Return rune offsets.",
+        "Return UTF-16 offsets only.",
+        "Make UTF-16 normative and expose derived byte and rune mappings."
+      ],
+      "peer_behavior": "JavaScript engines report UTF-16 indices; Go regexp libraries report byte offsets.",
+      "selected_behavior": "Match and capture indices are normatively UTF-16 code-unit offsets, with byte and rune mappings for Go-string inputs and exact unit offsets for UTF-16 inputs.",
+      "rationale": "The result preserves ECMAScript semantics without discarding Go interoperability metadata.",
+      "security_consequences": "Explicit validated mappings prevent slicing at invalid boundaries.",
+      "resource_consequences": "Mappings are computed once within input limits and use bounded integer conversions.",
+      "compatibility_consequences": "Callers must select the coordinate system named by the API instead of assuming Go byte offsets.",
+      "wire_consequences": "Serialized indices must identify UTF-16 units; byte and rune offsets are additional Go metadata.",
+      "executable_evidence": [
+        "TestFindReportsUTF16RuneAndByteIndices",
+        "TestUTF16InputViewMapsScalarAndUnpairedSurrogateBoundaries",
+        "TestDifferentialMatchingAgainstJavaScriptEngines"
+      ],
+      "fixture_evidence": [],
+      "fuzz_evidence": [
+        "FuzzUTF16Matcher"
+      ],
+      "interoperability_evidence": [],
+      "differential_evidence": [
+        "specification/conformance/differential.tsv"
+      ],
+      "public_apis": [
+        "Position",
+        "Span",
+        "Match",
+        "Capture",
+        "UTF16"
+      ],
+      "documentation": [
+        "docs/specification-decisions.md",
+        "docs/api.md"
+      ],
+      "upstream_status": "ECMA-262 algorithms operate over UTF-16 code units; Go coordinate mappings are an explicit package extension.",
+      "reconsider_when": "ECMA-262 changes its string model or another input representation is added."
+    },
+    {
+      "id": "ECMAREGEXP-DEC-004",
+      "title": "Invalid UTF-8 in Go strings",
+      "status": "resolved",
+      "owner": "`go-ecma-regexp` maintainers",
+      "classification": "omission",
+      "decision_scope": "application-policy",
+      "specification": "ECMA-262 16th edition (ECMAScript 2025)",
+      "version": "ECMA-262 16th edition (June 2025)",
+      "source_authority": "ecma262-source",
+      "section": "ECMAScript String value model",
+      "requirement_strength": "not specified",
+      "issue": "ECMAScript strings are UTF-16 sequences but Go strings may contain invalid UTF-8 bytes that have no direct ECMAScript scalar interpretation.",
+      "interpretations": [
+        "Reject invalid UTF-8.",
+        "Preserve each invalid byte as an invented surrogate.",
+        "Decode each invalid byte as U+FFFD while retaining source byte offsets."
+      ],
+      "peer_behavior": "JavaScript string APIs cannot receive arbitrary invalid UTF-8 bytes; Go iteration decodes each invalid byte as U+FFFD.",
+      "selected_behavior": "Each invalid Go-string byte maps to one U+FFFD code point and retains its original byte boundary; exact surrogate input uses the UTF-16 APIs.",
+      "rationale": "The policy follows Go decoding and remains deterministic without inventing ECMAScript code units.",
+      "security_consequences": "Invalid bytes cannot bypass matching through inconsistent decoders.",
+      "resource_consequences": "Each input byte contributes at most one bounded mapping entry.",
+      "compatibility_consequences": "Invalid UTF-8 matches replacement-character behavior and may differ from byte-oriented regexp engines.",
+      "wire_consequences": "Exact invalid bytes are not preserved through Unicode string serialization; byte offsets still identify the source.",
+      "executable_evidence": [
+        "TestInvalidUTF8MapsEachByteToReplacementCharacter",
+        "TestInputViewMapsUTF8BoundaryWidths"
+      ],
+      "fixture_evidence": [],
+      "fuzz_evidence": [
+        "FuzzCompileAndMatch"
+      ],
+      "interoperability_evidence": [],
+      "public_apis": [
+        "Compile",
+        "Program.Match",
+        "Program.Find"
+      ],
+      "documentation": [
+        "docs/specification-decisions.md",
+        "docs/api.md"
+      ],
+      "upstream_status": "ECMA-262 does not define conversion from invalid Go UTF-8; this is package policy.",
+      "reconsider_when": "A byte-oriented input API or a different explicit invalid-input profile is introduced."
+    },
+    {
+      "id": "ECMAREGEXP-DEC-005",
+      "title": "Pinned Unicode data and exact aliases",
+      "status": "resolved",
+      "owner": "`go-ecma-regexp` maintainers",
+      "classification": "interoperability policy",
+      "decision_scope": "normative",
+      "specification": "Unicode 16.0.0",
+      "version": "Unicode 16.0.0",
+      "source_authority": "unicode-source",
+      "section": "UCD 16.0.0 and ECMA-262 Unicode property escape algorithms",
+      "requirement_strength": "not specified",
+      "issue": "Unicode data evolves independently from ECMA-262 and host runtimes, while loose property aliases would accept spellings ECMAScript requires to match exactly.",
+      "interpretations": [
+        "Use the Go toolchain Unicode tables.",
+        "Fetch current Unicode data at build time.",
+        "Generate immutable tables from one digest-pinned Unicode release and apply exact aliases."
+      ],
+      "peer_behavior": "JavaScript engines and Go releases ship different Unicode versions; maintained engine disagreement can therefore be version-specific.",
+      "selected_behavior": "The package uses generated Unicode 16.0.0 properties, case folding, identifiers, emoji sequences, and properties of strings with exact ECMAScript aliases.",
+      "rationale": "Pinned generated tables make behavior reproducible across hosts and releases.",
+      "security_consequences": "Digest verification prevents silent corpus substitution and exact aliases avoid confusable spellings.",
+      "resource_consequences": "Generated immutable tables avoid runtime network access and keep lookup bounded.",
+      "compatibility_consequences": "Newer Unicode characters retain the 16.0.0 result until an explicit data upgrade.",
+      "wire_consequences": "Pattern property names and matches are stable for the pinned Unicode release.",
+      "executable_evidence": [
+        "TestUnicodePropertyEscapesUsePinnedUnicodeVersion",
+        "TestUnicodePropertyAliasesAreExact",
+        "TestUnicodeSetsPropertiesOfStrings",
+        "TestGenerateIsFormattedAndDeterministic"
+      ],
+      "fixture_evidence": [],
+      "fuzz_evidence": [
+        "FuzzTokenizeAndParse"
+      ],
+      "interoperability_evidence": [
+        "specification/conformance/test262.tsv"
+      ],
+      "public_apis": [
+        "Edition",
+        "Compile",
+        "Parse"
+      ],
+      "documentation": [
+        "docs/specification-decisions.md",
+        "docs/syntax.md"
+      ],
+      "upstream_status": "UCD, emoji sequence, and emoji ZWJ inputs are independently digest-pinned and their release index is monitored.",
+      "reconsider_when": "A reviewed package release selects a different Unicode version."
+    },
+    {
+      "id": "ECMAREGEXP-DEC-006",
+      "title": "Unicode modes, Unicode Sets, and Annex B",
+      "status": "resolved",
+      "owner": "`go-ecma-regexp` maintainers",
+      "classification": "optional behavior",
+      "decision_scope": "normative",
+      "specification": "ECMA-262 16th edition (ECMAScript 2025)",
+      "version": "ECMA-262 16th edition (June 2025)",
+      "source_authority": "ecma262-source",
+      "section": "Pattern grammar, UnicodeMode, Unicode Sets, and Annex B.1.4",
+      "requirement_strength": "not specified",
+      "issue": "Legacy, u, and v grammars differ materially, u and v conflict, and Annex B extends only legacy web grammar.",
+      "interpretations": [
+        "Use one permissive union grammar.",
+        "Enable Annex B everywhere.",
+        "Reject Annex B.",
+        "Select the exact grammar from validated flags and explicit legacy policy."
+      ],
+      "peer_behavior": "Maintained JavaScript engines select grammar from flags and implement Annex B in non-Unicode mode.",
+      "selected_behavior": "Flags are closed to d g i m s u v y; u and v conflict; u selects Unicode grammar, v selects Unicode Sets grammar, and Annex B is available only through explicit legacy policy.",
+      "rationale": "Mode-specific grammar prevents legacy compatibility syntax from weakening Unicode early errors.",
+      "security_consequences": "Closed modes prevent ambiguous parser states and unreviewed syntax.",
+      "resource_consequences": "Each selected grammar remains subject to the same finite parse and compile budgets.",
+      "compatibility_consequences": "Patterns accepted only by a permissive union parser are rejected in their actual mode.",
+      "wire_consequences": "Pattern text has meaning only with its exact validated flags and legacy policy.",
+      "executable_evidence": [
+        "TestFlagsRejectDuplicatesConflictsAndUnknownFlags",
+        "TestAnnexBIsExplicitAndUnicodeModesRemainStrict",
+        "TestUnicodeSetsRejectMixedOperatorsAndReservedPunctuation"
+      ],
+      "fixture_evidence": [],
+      "fuzz_evidence": [
+        "FuzzTokenizeAndParse"
+      ],
+      "interoperability_evidence": [
+        "specification/conformance/test262.tsv"
+      ],
+      "public_apis": [
+        "ParseFlags",
+        "Compile",
+        "ParseOptions.AnnexB"
+      ],
+      "documentation": [
+        "docs/specification-decisions.md",
+        "docs/syntax.md"
+      ],
+      "upstream_status": "The pinned edition and feature register define each applicable grammar and proposal boundary.",
+      "reconsider_when": "A later edition changes grammar modes, flags, or Annex B applicability."
+    },
+    {
+      "id": "ECMAREGEXP-DEC-007",
+      "title": "Duplicate named captures in disjoint alternatives",
+      "status": "resolved",
+      "owner": "`go-ecma-regexp` maintainers",
+      "classification": "optional behavior",
+      "decision_scope": "normative",
+      "specification": "ECMA-262 16th edition (ECMAScript 2025)",
+      "version": "ECMA-262 16th edition (June 2025)",
+      "source_authority": "ecma262-source",
+      "section": "Pattern early errors for duplicate GroupName",
+      "requirement_strength": "not specified",
+      "issue": "Edition 16 permits duplicate names only when alternatives prove that at most one same-named capture can participate.",
+      "interpretations": [
+        "Reject all duplicate names.",
+        "Accept all duplicate names and choose a capture dynamically.",
+        "Accept only statically disjoint alternatives."
+      ],
+      "peer_behavior": "Current JavaScript engines adopted the edition-specific relaxation on different schedules.",
+      "selected_behavior": "Duplicate named captures are accepted only when static alternative analysis proves they cannot both participate; resolution uses the participating capture.",
+      "rationale": "This implements the edition rule without introducing ambiguous capture ownership.",
+      "security_consequences": "Static proof avoids attacker-controlled ambiguity in replacement and backreference resolution.",
+      "resource_consequences": "Disjointness analysis is bounded by AST limits and does not execute the pattern.",
+      "compatibility_consequences": "Older engines may reject valid edition-16 patterns and permissive engines may accept patterns rejected here.",
+      "wire_consequences": "Named capture maps contain one logical name and the participating capture value.",
+      "executable_evidence": [
+        "TestDuplicateNamedCapturesInDisjointAlternatives",
+        "TestDuplicateNamedCapturesThatMightBothParticipateAreRejected",
+        "TestDuplicateNamedCaptureReplacementUsesParticipatingGroup"
+      ],
+      "fixture_evidence": [],
+      "fuzz_evidence": [],
+      "interoperability_evidence": [
+        "specification/conformance/test262.tsv"
+      ],
+      "differential_evidence": [
+        "specification/conformance/differential.tsv"
+      ],
+      "public_apis": [
+        "Compile",
+        "Match.Named",
+        "Replace"
+      ],
+      "documentation": [
+        "docs/specification-decisions.md",
+        "docs/syntax.md"
+      ],
+      "upstream_status": "The pinned edition and Test262 duplicate-name fixtures define the accepted boundary.",
+      "reconsider_when": "ECMA-262 changes duplicate-name early errors or capture resolution."
+    },
+    {
+      "id": "ECMAREGEXP-DEC-008",
+      "title": "Zero-width progress and stateful lastIndex",
+      "status": "resolved",
+      "owner": "`go-ecma-regexp` maintainers",
+      "classification": "omission",
+      "decision_scope": "defensive",
+      "specification": "ECMA-262 16th edition (ECMAScript 2025)",
+      "version": "ECMA-262 16th edition (June 2025)",
+      "source_authority": "ecma262-source",
+      "section": "AdvanceStringIndex and RegExpBuiltinExec",
+      "requirement_strength": "not specified",
+      "issue": "Stateful execution exposes UTF-16 lastIndex, while repeated collection operations must progress after empty matches without splitting Unicode code points.",
+      "interpretations": [
+        "Leave progress to callers.",
+        "Always advance one byte.",
+        "Always advance one UTF-16 unit.",
+        "Advance by the selected Unicode mode while keeping lastIndex in UTF-16 units."
+      ],
+      "peer_behavior": "JavaScript engines expose UTF-16 lastIndex and mode-aware AdvanceStringIndex behavior.",
+      "selected_behavior": "Session lastIndex is UTF-16; global and sticky failure resets it as specified; collection operations advance empty matches by one code unit or one Unicode code point according to mode.",
+      "rationale": "The state contract remains ECMAScript-compatible while every repeated operation terminates.",
+      "security_consequences": "Empty matches cannot create infinite loops.",
+      "resource_consequences": "Progress is monotonic and result limits bound collection growth.",
+      "compatibility_consequences": "Callers observe UTF-16 state rather than Go byte offsets and deterministic empty-match progression.",
+      "wire_consequences": "Persisted session indices must be interpreted as UTF-16 code units.",
+      "executable_evidence": [
+        "TestSessionImplementsGlobalLastIndex",
+        "TestSessionImplementsStickyLastIndex",
+        "TestFindAllAdvancesEmptyMatchesByUnicodeCodePoint",
+        "TestFindAllAndReplaceIncludeTheFinalUTF16Boundary"
+      ],
+      "fixture_evidence": [],
+      "fuzz_evidence": [
+        "FuzzCompileAndMatch"
+      ],
+      "interoperability_evidence": [],
+      "public_apis": [
+        "Session",
+        "Program.FindAll",
+        "Program.Replace",
+        "Program.Split"
+      ],
+      "documentation": [
+        "docs/specification-decisions.md",
+        "docs/api.md"
+      ],
+      "upstream_status": "ECMA-262 defines stateful execution; package collection APIs apply the same progress rule explicitly.",
+      "reconsider_when": "The supported edition changes lastIndex or AdvanceStringIndex semantics."
+    },
+    {
+      "id": "ECMAREGEXP-DEC-009",
+      "title": "JSON Schema pattern profile",
+      "status": "resolved",
+      "owner": "`go-ecma-regexp` maintainers",
+      "classification": "interoperability policy",
+      "decision_scope": "recommended",
+      "specification": "JSON Schema Draft 2020-12 regular expressions",
+      "version": "Draft 2020-12",
+      "source_authority": "jsonschema-source",
+      "section": "Section 6.3.3 and regular-expression interoperability guidance",
+      "requirement_strength": "SHOULD",
+      "issue": "JSON Schema recommends ECMA-262-compatible regular expressions but carries pattern text without JavaScript flags and requires substring rather than implicit whole-string matching.",
+      "interpretations": [
+        "Use Go RE2 syntax.",
+        "Use legacy ECMAScript mode.",
+        "Anchor every pattern.",
+        "Use a closed Unicode ECMAScript profile with unanchored search semantics."
+      ],
+      "peer_behavior": "JSON Schema validators vary between ECMA-262, PCRE, RE2, and documented portable subsets.",
+      "selected_behavior": "CompileJSONSchemaPattern selects ECMAScript Unicode u semantics, performs unanchored search unless the pattern supplies anchors, exposes no hidden caller flags, and propagates ordinary limits.",
+      "rationale": "The profile follows Draft 2020-12 guidance while making the otherwise absent flag selection explicit.",
+      "security_consequences": "The same parse and execution budgets apply to schema-controlled patterns and instance strings.",
+      "resource_consequences": "Schema matching is synchronous and bounded with no remote loading.",
+      "compatibility_consequences": "RE2-, PCRE-, or legacy-mode validators can accept or reject different patterns; portability guidance documents the subset.",
+      "wire_consequences": "Pattern remains ordinary JSON Schema text with no added flag field.",
+      "executable_evidence": [
+        "TestJSONSchemaPatternIsUnicodeAndUnanchored",
+        "TestJSONSchemaPatternHonorsExplicitAnchors",
+        "TestJSONSchemaPatternRejectsNonUnicodeLegacySyntax"
+      ],
+      "fixture_evidence": [],
+      "fuzz_evidence": [
+        "FuzzCompileAndMatch"
+      ],
+      "interoperability_evidence": [],
+      "public_apis": [
+        "CompileJSONSchemaPattern",
+        "JSONSchemaPattern.Match"
+      ],
+      "documentation": [
+        "docs/specification-decisions.md",
+        "docs/json-schema.md"
+      ],
+      "upstream_status": "Draft 2020-12 validation guidance recommends ECMA-262 regular expressions but does not define a JavaScript flag transport.",
+      "reconsider_when": "A later JSON Schema dialect changes its regular-expression requirement or adds explicit mode negotiation."
+    },
+    {
+      "id": "ECMAREGEXP-DEC-010",
+      "title": "Bounded native execution and cancellation",
+      "status": "resolved",
+      "owner": "`go-ecma-regexp` maintainers",
+      "classification": "omission",
+      "decision_scope": "defensive",
+      "specification": "ECMA-262 16th edition (ECMAScript 2025)",
+      "version": "ECMA-262 16th edition (June 2025)",
+      "source_authority": "ecma262-source",
+      "section": "Pattern evaluation algorithms and host-defined resource policy",
+      "requirement_strength": "not specified",
+      "issue": "ECMA-262 specifies results but does not select finite native parser, compiler, backtracking, recursion, output, cancellation, or wall-time budgets.",
+      "interpretations": [
+        "Run without limits.",
+        "Use hidden worker goroutines and abandon timed-out work.",
+        "Reject backtracking features.",
+        "Preserve semantics within explicit synchronous budgets and classified failures."
+      ],
+      "peer_behavior": "Maintained engines and regexp libraries apply different hidden or configurable resource policies.",
+      "selected_behavior": "Parsing, compilation, matching, backtracking, recursion, allocation, results, output, cancellation, and wall time have explicit finite synchronous limits and typed errors; no hidden worker survives return.",
+      "rationale": "Callers retain ownership of resource policy without weakening supported ECMAScript semantics.",
+      "security_consequences": "Hostile patterns cannot consume unbounded CPU, memory, stack, goroutines, or output.",
+      "resource_consequences": "Every untrusted-size and execution dimension is checked before unbounded work or allocation.",
+      "compatibility_consequences": "Valid patterns can return limit or cancellation errors under configured budgets instead of producing a match result.",
+      "wire_consequences": "Limit failures are typed local errors and never partial serialized results.",
+      "executable_evidence": [
+        "TestHostileExecutionPathsAreBounded",
+        "TestExecutionDoesNotLeakGoroutinesOrBuffers",
+        "TestMatchEnforcesWallTimeWithoutGoroutine",
+        "TestOperationsEnforceResultAndOutputLimits"
+      ],
+      "fixture_evidence": [],
+      "fuzz_evidence": [
+        "FuzzTokenizeAndParse",
+        "FuzzCompileAndMatch",
+        "FuzzReplaceAndSplit"
+      ],
+      "interoperability_evidence": [],
+      "public_apis": [
+        "ParseLimits",
+        "CompileLimits",
+        "ExecutionLimits",
+        "MatchOptions"
+      ],
+      "documentation": [
+        "docs/specification-decisions.md",
+        "docs/security.md"
+      ],
+      "upstream_status": "The resource policy is defensive package behavior and is not presented as an ECMA-262 requirement.",
+      "reconsider_when": "A new execution backend or public operation adds a resource dimension not covered by the current limits."
+    },
+    {
+      "id": "ECMAREGEXP-DEC-011",
+      "title": "Test262 applicability and negative syntax accounting",
+      "status": "resolved",
+      "owner": "`go-ecma-regexp` maintainers",
+      "classification": "interoperability policy",
+      "decision_scope": "defensive",
+      "specification": "TC39 Test262 at 26058a01fdbc8dad9ded0e97133190098ea8c5d8",
+      "version": "26058a01fdbc8dad9ded0e97133190098ea8c5d8",
+      "source_authority": "test262-source",
+      "section": "test/built-ins/RegExp and test/language/literals/regexp",
+      "requirement_strength": "not specified",
+      "issue": "Test262 files mix Pattern grammar, JavaScript source tokenization, matcher calls, host-object behavior, proposals, and harness semantics, so raw pass counts overstate native pattern conformance.",
+      "interpretations": [
+        "Claim the complete RegExp tree.",
+        "Run convenient fixtures without a denominator.",
+        "Silently exclude host-dependent files.",
+        "Inventory every pinned file and classify the exact behavior executed."
+      ],
+      "peer_behavior": "JavaScript engines use the official harness and naturally cover host objects; native libraries require scoped adapters.",
+      "selected_behavior": "Every pinned RegExp and RegExp-literal file is classified as matcher, generated structural, syntax, lexical-only, proposal-stage, host-object-only, or outside the public surface; only exercised behavior is claimed.",
+      "rationale": "Attributable accounting prevents unsupported JavaScript APIs from inflating conformance claims.",
+      "security_consequences": "Corpus provisioning is digest-pinned and tests execute without fixture-controlled network or file access.",
+      "resource_consequences": "Corpus runs use disposable storage and the engine limits.",
+      "compatibility_consequences": "Published counts describe applicable behavior rather than an incomparable percentage of the JavaScript object model.",
+      "wire_consequences": "Fixture classifications are evidence metadata and do not change runtime results.",
+      "executable_evidence": [
+        "TestTest262RegExpFeatureAccounting",
+        "TestTest262BuiltInNegativeRegExpLiteralSyntax",
+        "TestTest262RegExpLiteralNegativeSyntax",
+        "TestTest262RegExpSemantics"
+      ],
+      "fixture_evidence": [],
+      "fuzz_evidence": [],
+      "interoperability_evidence": [
+        "specification/conformance/test262.tsv"
+      ],
+      "public_apis": [
+        "Compile",
+        "Parse",
+        "Program.Match",
+        "Program.Find"
+      ],
+      "documentation": [
+        "docs/specification-decisions.md",
+        "specification/README.md"
+      ],
+      "upstream_status": "The Test262 commit and license digest are pinned; feature and file accounting changes require review.",
+      "reconsider_when": "The Test262 pin, public surface, or harness classification changes."
+    },
+    {
+      "id": "ECMAREGEXP-DEC-012",
+      "title": "Differential engines and classified divergence",
+      "status": "resolved",
+      "owner": "`go-ecma-regexp` maintainers",
+      "classification": "interoperability policy",
+      "decision_scope": "defensive",
+      "specification": "TC39 Test262 at 26058a01fdbc8dad9ded0e97133190098ea8c5d8",
+      "version": "26058a01fdbc8dad9ded0e97133190098ea8c5d8",
+      "source_authority": "test262-source",
+      "section": "Maintained-peer comparison policy for applicable RegExp semantics",
+      "requirement_strength": "not specified",
+      "issue": "One runtime can share a bug, proposal state, or Unicode version with this package, while peer disagreement is evidence rather than a normative vote.",
+      "interpretations": [
+        "Compare only one runtime.",
+        "Accept majority behavior.",
+        "Tolerate every disagreement.",
+        "Compare equivalent semantics across maintained independent engine families and classify each divergence."
+      ],
+      "peer_behavior": "Pinned Node.js and Deno use V8, Bun uses JavaScriptCore, regexp2 is a maintained native engine, and goja is a maintained Go JavaScript runtime.",
+      "selected_behavior": "The release differential compares pattern, flags, input, match, captures, and UTF-16 indices across at least two independent engine families plus maintained Go peers where semantics overlap; every disagreement is minimized and classified.",
+      "rationale": "Independent implementations expose local, peer, fixture, harness, ambiguity, and deliberate-policy defects without replacing normative source review.",
+      "security_consequences": "Differential subprocesses are test-only, pinned, time-bounded, and receive generated non-secret vectors.",
+      "resource_consequences": "The fixed vector inventory and test timeouts bound subprocess and in-process comparisons.",
+      "compatibility_consequences": "Peer-version differences remain visible and never silently redefine the supported edition.",
+      "wire_consequences": "Semantic fields are compared while irrelevant host serializer formatting is excluded.",
+      "executable_evidence": [
+        "TestDifferentialMatchingAgainstJavaScriptEngines",
+        "TestOverlappingLibraryDifferential",
+        "TestUnicodeBackreferenceUsesSimpleCaseFolding"
+      ],
+      "fixture_evidence": [],
+      "fuzz_evidence": [],
+      "interoperability_evidence": [],
+      "differential_evidence": [
+        "specification/conformance/differential.tsv"
+      ],
+      "public_apis": [
+        "Compile",
+        "Program.Find",
+        "Match.Captures"
+      ],
+      "documentation": [
+        "docs/specification-decisions.md",
+        "specification/README.md"
+      ],
+      "upstream_status": "Runtime families, exact versions, vector counts, and the one reviewed JavaScriptCore divergence are retained in the differential register.",
+      "reconsider_when": "A peer becomes unmaintained, changes engine family, or a normative correction resolves a recorded divergence."
+    },
+    {
+      "id": "ECMAREGEXP-DEC-013",
+      "title": "Replacement and split on exact UTF-16 input",
+      "status": "resolved",
+      "owner": "`go-ecma-regexp` maintainers",
+      "classification": "interoperability policy",
+      "decision_scope": "normative",
+      "specification": "ECMA-262 16th edition (ECMAScript 2025)",
+      "version": "ECMA-262 16th edition (June 2025)",
+      "source_authority": "ecma262-source",
+      "section": "GetSubstitution and RegExp execution semantics",
+      "requirement_strength": "not specified",
+      "issue": "Replacement tokens, unmatched captures, empty matches, surrogate pairs, and lone surrogates expose incompatible Go byte and ECMAScript UTF-16 slicing behavior.",
+      "interpretations": [
+        "Delegate to Go string replacement.",
+        "Convert every input to Unicode scalars.",
+        "Preserve exact UTF-16 units and implement ECMAScript substitution parsing.",
+        "Reject lone surrogates."
+      ],
+      "peer_behavior": "JavaScript engines preserve UTF-16 code units and implement ECMAScript substitution tokens; Go string helpers do neither.",
+      "selected_behavior": "Replacement and split implement ECMAScript substitution and capture insertion over exact UTF-16 boundaries; UTF-16 APIs preserve lone surrogates and Go-string APIs preserve original byte slices through explicit mappings.",
+      "rationale": "Exact boundaries prevent data corruption while matching the supported edition token semantics.",
+      "security_consequences": "Token parsing and output growth are bounded and checked before allocation.",
+      "resource_consequences": "Match count, result count, output units, bytes, and execution work remain finite.",
+      "compatibility_consequences": "Results match ECMAScript code-unit behavior and can differ from Go regexp replacement conventions.",
+      "wire_consequences": "Exact surrogate data requires a UTF-16-capable representation; ordinary Go-string output retains original byte slices where mapped.",
+      "executable_evidence": [
+        "TestReplaceImplementsECMAScriptSubstitutions",
+        "TestReplacementTokenBoundaries",
+        "TestSplitInsertsDefinedAndUnmatchedCaptures",
+        "TestUTF16OperationsPreserveExactInput"
+      ],
+      "fixture_evidence": [],
+      "fuzz_evidence": [
+        "FuzzReplaceAndSplit"
+      ],
+      "interoperability_evidence": [],
+      "public_apis": [
+        "Program.Replace",
+        "Program.ReplaceUTF16",
+        "Program.Split",
+        "Program.SplitUTF16"
+      ],
+      "documentation": [
+        "docs/specification-decisions.md",
+        "docs/replacement.md"
+      ],
+      "upstream_status": "Replacement and split requirements are mapped to the pinned ECMA-262 edition and differential surface.",
+      "reconsider_when": "ECMA-262 changes substitution tokens or another output representation is added."
+    }
+  ]
+}

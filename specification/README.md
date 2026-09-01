@@ -1,43 +1,57 @@
-# Specification provenance
+# ECMAScript regular-expression conformance matrix
 
-The implementation target is exactly ECMA-262, 16th edition, also known as
-ECMAScript 2025. `manifest.json` records the upstream tag, commit, published
-PDF, and digest. Future editions are unsupported until their grammar and
-semantic differences have their own inventory and executable evidence.
+The root module implements only the decision-bounded ECMA-262, Test262, Unicode, and JSON Schema profiles declared in the [specification decision register](../docs/specification-decisions.md). No broader JavaScript host-object or certification claim is implied.
 
-Test262 is pinned by commit. The RegExp-literal negative parse slice accounts
-for all 186 tests: 167 execute against the package and 19 are explicitly
-excluded because they test JavaScript source tokenization rather than Pattern
-grammar. All 52 other literal files provide positive syntax evidence; 12 make
-matcher calls and 40 only exercise syntax or JavaScript evaluation behavior.
+[`manifest.json`](manifest.json) pins generated and official inputs. [`monitoring.json`](monitoring.json) records bounded source and change-authority review. [`decision-history.json`](decision-history.json) retains every canonical decision digest.
 
-The pinned `built-ins/RegExp` inventory contains 1,868 files. The harness
-rejects all 192 negative pattern literals, compares 443 generated class and
-Unicode property fixtures directly with the engine tables, and delegates the
-matcher calls from 494 selected feature files to the Go engine. Sixty selected
-files make no matcher call. The remaining 679 files specify JavaScript
-constructor, prototype, species, or `RegExp.escape` object behavior that this
-Go package does not expose. Exact accounting is in `conformance/test262.tsv`.
+## Decision conformance
 
-`conformance/requirements.tsv` maps normative obligations to executable
-evidence. A row is complete only when its evidence exercises the whole stated
-requirement. The canonical
-[specification decision register](../docs/specification-decisions.md) records
-the complete rationale and consequences for deliberate interpretations,
-ambiguities, and policy. `conformance/decisions.tsv` is its compact source
-index.
+| Decision | Authority | Evidence boundary | Maintained-peer result |
+| --- | --- | --- | --- |
+| ECMAREGEXP-DEC-001 | `ecma262-source` | TestEditionIsExplicitAndClosed, TestTest262RegExpFeatureAccounting, TestParseRejectsMalformedAndUnsupportedSyntaxExplicitly | Not separately assessed |
+| ECMAREGEXP-DEC-002 | `ecma262-source` | TestTest262RegExpFeatureAccounting, TestTest262RegExpSemantics, TestOverlappingLibraryDifferential | Registered overlapping vectors agree |
+| ECMAREGEXP-DEC-003 | `ecma262-source` | TestFindReportsUTF16RuneAndByteIndices, TestUTF16InputViewMapsScalarAndUnpairedSurrogateBoundaries, TestDifferentialMatchingAgainstJavaScriptEngines | Registered overlapping vectors agree |
+| ECMAREGEXP-DEC-004 | `ecma262-source` | TestInvalidUTF8MapsEachByteToReplacementCharacter, TestInputViewMapsUTF8BoundaryWidths | Not separately assessed |
+| ECMAREGEXP-DEC-005 | `unicode-source` | TestUnicodePropertyEscapesUsePinnedUnicodeVersion, TestUnicodePropertyAliasesAreExact, TestUnicodeSetsPropertiesOfStrings, TestGenerateIsFormattedAndDeterministic | Not separately assessed |
+| ECMAREGEXP-DEC-006 | `ecma262-source` | TestFlagsRejectDuplicatesConflictsAndUnknownFlags, TestAnnexBIsExplicitAndUnicodeModesRemainStrict, TestUnicodeSetsRejectMixedOperatorsAndReservedPunctuation | Not separately assessed |
+| ECMAREGEXP-DEC-007 | `ecma262-source` | TestDuplicateNamedCapturesInDisjointAlternatives, TestDuplicateNamedCapturesThatMightBothParticipateAreRejected, TestDuplicateNamedCaptureReplacementUsesParticipatingGroup | Registered overlapping vectors agree |
+| ECMAREGEXP-DEC-008 | `ecma262-source` | TestSessionImplementsGlobalLastIndex, TestSessionImplementsStickyLastIndex, TestFindAllAdvancesEmptyMatchesByUnicodeCodePoint, TestFindAllAndReplaceIncludeTheFinalUTF16Boundary | Not separately assessed |
+| ECMAREGEXP-DEC-009 | `jsonschema-source` | TestJSONSchemaPatternIsUnicodeAndUnanchored, TestJSONSchemaPatternHonorsExplicitAnchors, TestJSONSchemaPatternRejectsNonUnicodeLegacySyntax | Not separately assessed |
+| ECMAREGEXP-DEC-010 | `ecma262-source` | TestHostileExecutionPathsAreBounded, TestExecutionDoesNotLeakGoroutinesOrBuffers, TestMatchEnforcesWallTimeWithoutGoroutine, TestOperationsEnforceResultAndOutputLimits | Not separately assessed |
+| ECMAREGEXP-DEC-011 | `test262-source` | TestTest262RegExpFeatureAccounting, TestTest262BuiltInNegativeRegExpLiteralSyntax, TestTest262RegExpLiteralNegativeSyntax, TestTest262RegExpSemantics | Not separately assessed |
+| ECMAREGEXP-DEC-012 | `test262-source` | TestDifferentialMatchingAgainstJavaScriptEngines, TestOverlappingLibraryDifferential, TestUnicodeBackreferenceUsesSimpleCaseFolding | One classified JavaScriptCore policy divergence; all other registered vectors agree |
+| ECMAREGEXP-DEC-013 | `ecma262-source` | TestReplaceImplementsECMAScriptSubstitutions, TestReplacementTokenBoundaries, TestSplitInsertsDefinedAndUnmatchedCaptures, TestUTF16OperationsPreserveExactInput | Not separately assessed |
 
-`conformance/features.tsv` reconciles every Test262 feature tag present in the
-pinned RegExp corpus and records the only current RegExp proposal outside the
-2025 snapshot. `conformance/errata.tsv` records the publication-index and live
-draft audit boundary. Feature-tag counts are enforced by the Test262 gate.
+## Official corpus and generated-data accounting
 
-`conformance/differential.tsv` records the pinned CI runtimes, their underlying
-engine families, vector counts, and every tolerated engine divergence. The
-release gate requires at least two installed JavaScript runtimes and includes
-both V8 and JavaScriptCore in CI. A divergence is never silently skipped.
+The pinned RegExp-literal slice accounts for all 186 negative files and all 52
+positive files. Of the negative files, 167 exercise Pattern parsing and 19 are
+JavaScript source-tokenization-only. Of the positive files, 12 execute matcher
+calls and 40 exercise syntax or host evaluation only.
 
-Unicode code-point properties are generated from the pinned Unicode 16.0.0
-UCD archive. Run `go generate` to download, digest-check, and reproduce the
-tables. Unicode Sets properties of strings are tracked separately and are not
-claimed by the code-point table generator.
+The pinned `built-ins/RegExp` inventory accounts for all 1,868 files: 192
+negative Pattern cases, 443 generated class and property fixtures, 554 selected
+matcher-feature files (494 executed and 60 without matcher calls), and 679
+JavaScript host-object files outside this package's public surface. Exact rows
+and executable bindings remain in [`conformance/test262.tsv`](conformance/test262.tsv).
+
+Unicode code-point, case-folding, identifier, emoji-sequence, and
+properties-of-strings tables are generated only from the digest-pinned Unicode
+16.0.0 inputs in [`manifest.json`](manifest.json). The host Go or JavaScript
+runtime Unicode version is not substituted.
+
+[`conformance/differential.tsv`](conformance/differential.tsv) records exact
+runtime or module versions, engine families, vector counts, and the classified
+JavaScriptCore long-s divergence. Node.js and Deno share V8 and therefore count
+as one engine family; Bun supplies JavaScriptCore, while regexp2 and goja cover
+the smaller maintained-Go-peer overlap.
+
+## Update and conformance process
+
+1. A changed authority digest, release page, corpus pin, or maintained-peer result blocks unattended adoption.
+2. Maintainers review the decision, requirement strength, compatibility and wire effects, executable evidence, and changelog digest before selecting behavior.
+3. `golib specification check` validates the offline register, history, evidence, provenance, and change-control contract.
+4. `golib specification check --online` verifies current authority content over bounded public HTTPS retrieval.
+5. Test262 and maintained-peer gates remain separately attributable; peer agreement never overrides normative prose.
+
+No unresolved decision is currently recorded.
