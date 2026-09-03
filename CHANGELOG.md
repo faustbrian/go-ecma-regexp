@@ -9,12 +9,26 @@ and this project uses semantic versioning.
 
 ### Changed
 
+- Adopt the checksum-verified `go-library-tools` v1.3.0 CLI, publish complete
+  schema-v2 cohesion metadata, and expose the repository-local
+  `make cohesion` validation target.
+
+- Pin reusable CI to the v1.3.0 workflow so the required repository contract
+  enforces cohesion metadata alongside the existing specification gates.
+
 - Adopt the pinned `go-library-tools` v1.2.0 CLI and reusable workflow so CI
   enforces specification decisions, conformance bindings, source monitoring,
   and change control while retaining package-owned policy and verification
   evidence.
 
 ### Documentation
+
+- Record the behavior-neutral review of the ECMA-262 17th edition publication
+  while retaining the pinned 16th-edition language and RegExp contracts, and
+  refresh the monitored release-page digest.
+
+- Link the public module to the immutable v1.3.0 ecosystem index and correct
+  the README's stale pre-release status for the existing v1.0.0 release.
 
 - Declare the complete ECMA-262, Test262, Unicode, and JSON Schema
   interpretation surface in the
