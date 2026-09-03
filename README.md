@@ -19,9 +19,9 @@ The supported language is closed to ECMA-262, 16th edition (ECMAScript 2025),
 with Unicode 16.0.0 data. The exact ECMA-262, Test262, Unicode, and emoji
 provenance is recorded in [`specification/manifest.json`](specification/manifest.json).
 
-> Release status: release-ready but not yet released. The applicable pinned
-> Test262 inventory, meaningful 100% production statement coverage, and scoped
-> mutation gate are complete. See the
+> Release status: stable and released as v1.0.0. The applicable pinned Test262
+> inventory, meaningful 100% production statement coverage, and scoped mutation
+> gate are complete. See the
 > [conformance inventory](specification/README.md).
 
 ## Quick start
@@ -72,10 +72,15 @@ Unicode semantics and the required unanchored search behavior.
 - [FAQ](docs/faq.md)
 - [Changelog](CHANGELOG.md)
 
+For ecosystem-wide selection and ownership guidance, see the versioned
+[Golib ecosystem index](https://github.com/faustbrian/go-library-tools/blob/v1.3.0/docs/ecosystem/README.md)
+and its [Domain utilities family](https://github.com/faustbrian/go-library-tools/blob/v1.3.0/docs/ecosystem/design-language.md#package-families-and-selection).
+
 ## Development gates
 
 ```sh
 make inventory
+make cohesion
 make check
 make ci
 ```
