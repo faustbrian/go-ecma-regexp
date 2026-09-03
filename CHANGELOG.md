@@ -23,6 +23,10 @@ and this project uses semantic versioning.
 
 ### Documentation
 
+- Record the behavior-neutral review of the ECMA-262 17th edition publication
+  while retaining the pinned 16th-edition language and RegExp contracts, and
+  refresh the monitored release-page digest.
+
 - Link the public module to the immutable v1.3.0 ecosystem index and correct
   the README's stale pre-release status for the existing v1.0.0 release.
 
