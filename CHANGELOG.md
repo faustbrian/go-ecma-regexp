@@ -16,6 +16,13 @@ and this project uses semantic versioning.
 - Pin reusable CI to the v1.3.0 workflow so the required repository contract
   enforces cohesion metadata alongside the existing specification gates.
 
+- Advance to the checksum-verified `go-library-tools` v1.4.0 CLI and enforce
+  online specification monitoring from local `make ci` while retaining
+  package-owned source and evidence.
+
+- Pin reusable CI to the immutable v1.4.0 W14 workflow while retaining the
+  existing cohesion and specification gates.
+
 - Adopt the pinned `go-library-tools` v1.2.0 CLI and reusable workflow so CI
   enforces specification decisions, conformance bindings, source monitoring,
   and change control while retaining package-owned policy and verification
@@ -27,8 +34,13 @@ and this project uses semantic versioning.
   while retaining the pinned 16th-edition language and RegExp contracts, and
   refresh the monitored release-page digest.
 
+- Record a follow-up review of the ECMA release page and update its monitored
+  digest without changing the pinned language contract.
+
 - Link the public module to the immutable v1.3.0 ecosystem index and correct
   the README's stale pre-release status for the existing v1.0.0 release.
+
+- Advance the public module link to the immutable v1.4.0 ecosystem index.
 
 - Declare the complete ECMA-262, Test262, Unicode, and JSON Schema
   interpretation surface in the

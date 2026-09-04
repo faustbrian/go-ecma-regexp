@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "reviewed_at": "2026-09-03",
+  "reviewed_at": "2026-09-04",
   "review_interval_days": 30,
   "authorities": [
     {
@@ -18,7 +18,7 @@
       "kind": "releases",
       "version": "",
       "url": "https://ecma-international.org/publications-and-standards/standards/ecma-262/",
-      "sha256": "777a05f9fadf521409565c7340eba9983859c251527a17df4a4b29e11731b1b5",
+      "sha256": "cb577b5553aed5b794c93fbb66824e89dc7821c2827f31c2b8fb152524f75f18",
       "specifications": [
         "ECMA-262 16th edition (ECMAScript 2025)"
       ]
