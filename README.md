@@ -24,6 +24,12 @@ provenance is recorded in [`specification/manifest.json`](specification/manifest
 > gate are complete. See the
 > [conformance inventory](specification/README.md).
 
+## Install
+
+```sh
+go get github.com/faustbrian/go-ecma-regexp
+```
+
 ## Quick start
 
 ```go
@@ -58,6 +64,9 @@ For JSON Schema Draft 2020-12, use `CompileJSONSchemaPattern`; it selects
 Unicode semantics and the required unanchored search behavior.
 
 ## Documentation
+
+Start with the [documentation index](docs/README.md) for the complete guide
+set.
 
 - [Support and compatibility](docs/support.md)
 - [Specification decisions](docs/specification-decisions.md)
@@ -94,8 +103,3 @@ The package uses no `unsafe`, hidden workers, or global mutable caches. A
 compiled `Program` is immutable and concurrency-safe. Stateful `Session`
 values and any application cache are caller-owned and require external
 synchronization when shared.
-
-## Documentation
-
-Start with the [documentation index](docs/README.md) for syntax, replacement,
-security, compatibility, and migration guidance.
