@@ -30,6 +30,13 @@ and this project uses semantic versioning.
 
 ### Documentation
 
+- Add the canonical module installation command and consolidate README
+  navigation under one documentation entry point.
+
+- Record the current presentation-only ECMA release-page refresh while
+  retaining the reviewed 17th-edition publication boundary and pinned
+  16th-edition language contract.
+
 - Record the behavior-neutral review of the ECMA-262 17th edition publication
   while retaining the pinned 16th-edition language and RegExp contracts, and
   refresh the monitored release-page digest.
