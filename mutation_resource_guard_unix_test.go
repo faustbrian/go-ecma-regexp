@@ -13,7 +13,7 @@ import (
 
 const (
 	mutationTestHeapLimit = 256 << 20
-	mutationTestWallLimit = 20 * time.Second
+	mutationTestWallLimit = 5 * time.Second
 )
 
 func TestMain(testingMain *testing.M) {
