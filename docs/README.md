@@ -2,8 +2,10 @@
 
 ## Getting started
 
+- [Executable quick start](../example_test.go)
 - [API](api.md)
 - [Cookbook](cookbook.md)
+- [Package map](../README.md#package-map)
 
 ## Concepts and design
 
@@ -22,6 +24,12 @@
 - [Support](support.md)
 - [Migration](migration.md)
 - [FAQ](faq.md)
+- [Troubleshooting](troubleshooting.md)
 - [Specification sources](../specification/README.md)
 - [Contribution guide](../CONTRIBUTING.md)
 - [Release history](../CHANGELOG.md)
+- [GitHub support routes](../SUPPORT.md)
+- [Private security reporting](../SECURITY.md)
+- [Compatibility policy](../COMPATIBILITY.md)
+- [Deprecation policy](../DEPRECATION.md)
+- [License](../LICENSE)

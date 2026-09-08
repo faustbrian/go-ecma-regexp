@@ -30,6 +30,10 @@ and this project uses semantic versioning.
 
 ### Documentation
 
+- Add the public package map, executable quick start, actionable
+  troubleshooting, and direct support and security navigation, and require
+  those entry points in the documentation gate and catalog.
+
 - Add the canonical module installation command and consolidate README
   navigation under one documentation entry point.
 

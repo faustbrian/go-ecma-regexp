@@ -2,10 +2,10 @@
 set -euo pipefail
 
 required=(
-  README.md CHANGELOG.md
+  README.md CHANGELOG.md SECURITY.md SUPPORT.md example_test.go
   docs/api.md docs/cookbook.md docs/faq.md docs/json-schema.md
   docs/migration.md docs/performance.md docs/replacement.md docs/security.md
-  docs/support.md docs/syntax.md
+  docs/support.md docs/syntax.md docs/troubleshooting.md
   specification/README.md specification/manifest.json
   specification/conformance.json
   specification/conformance/decisions.tsv
@@ -32,5 +32,6 @@ while IFS=: read -r source match; do
   }
 done < <(rg -o --with-filename '\[[^]]+\]\([^)]+\)' README.md docs)
 
-go test ./... -run '^Example' -count=1
+rg -q '^func Example[A-Za-z0-9_]*\(' example_test.go
+go test . -run '^Example' -count=1
 go vet ./...

@@ -63,6 +63,18 @@ ordinary no-match result.
 For JSON Schema Draft 2020-12, use `CompileJSONSchemaPattern`; it selects
 Unicode semantics and the required unanchored search behavior.
 
+The checked-in [`Example`](example_test.go) is the compiler-checked public
+quick start and runs as part of the documentation gate.
+
+## Package map
+
+| Import path | Package | Use |
+| --- | --- | --- |
+| `github.com/faustbrian/go-ecma-regexp` | `ecmascript` | Parse, compile, and execute bounded ECMAScript and JSON Schema regular expressions. |
+
+The module exposes no public subpackages. Commands beneath `internal/cmd` are
+repository tooling and cannot be imported by consumers.
+
 ## Documentation
 
 Start with the [documentation index](docs/README.md) for the complete guide
@@ -79,6 +91,9 @@ set.
 - [Migration from Go regexp and PCRE](docs/migration.md)
 - [Cookbook](docs/cookbook.md)
 - [FAQ](docs/faq.md)
+- [Troubleshooting](docs/troubleshooting.md)
+- [Support](SUPPORT.md)
+- [Security reporting](SECURITY.md)
 - [Changelog](CHANGELOG.md)
 
 For ecosystem-wide selection and ownership guidance, see the versioned
