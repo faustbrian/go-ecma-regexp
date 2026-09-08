@@ -30,8 +30,8 @@ while IFS=: read -r source match; do
     echo "broken local documentation link: $source -> $link" >&2
     exit 1
   }
-done < <(rg -o --with-filename '\[[^]]+\]\([^)]+\)' README.md docs)
+done < <(grep -EoH '\[[^]]+\]\([^)]+\)' README.md docs/*.md)
 
-rg -q '^func Example[A-Za-z0-9_]*\(' example_test.go
+grep -Eq '^func Example[A-Za-z0-9_]*\(' example_test.go
 go test . -run '^Example' -count=1
 go vet ./...
