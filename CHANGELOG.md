@@ -30,6 +30,10 @@ and this project uses semantic versioning.
 
 ### Documentation
 
+- Refresh the monitored ECMA release-page digest after confirming the latest
+  presentation change retains the reviewed 17th-edition publication boundary
+  and does not change the pinned 16th-edition language contract.
+
 - Add the public package map, executable quick start, actionable
   troubleshooting, and direct support and security navigation, and require
   those entry points in the documentation gate and catalog.
