@@ -9,6 +9,9 @@ and this project uses semantic versioning.
 
 ### Changed
 
+- Keep reusable CI and its checked-out tooling on the same v1.8.4 source
+  while retaining the checksum-verified v1.4.0 CLI bootstrap.
+
 - Adopt the checksum-verified `go-library-tools` v1.3.0 CLI, publish complete
   schema-v2 cohesion metadata, and expose the repository-local
   `make cohesion` validation target.
