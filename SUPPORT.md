@@ -1,12 +1,12 @@
 # Support
 
-Use GitHub issues for reproducible defects, documentation gaps, and bounded
-feature proposals. Include the module path and version, Go version, platform,
-minimal reproduction, expected behavior, actual behavior, and relevant
-non-secret logs.
+Public issue and discussion channels are not currently enabled for this
+repository. Consult the [FAQ](docs/faq.md),
+[troubleshooting guide](docs/troubleshooting.md), and
+[documentation index](docs/README.md) for usage questions.
 
-Use GitHub Discussions for adoption questions and design exploration. Use the
-private process in [`SECURITY.md`](SECURITY.md) for vulnerabilities.
+Use the private process in [`SECURITY.md`](SECURITY.md) only for
+vulnerabilities.
 
 Support covers released module versions according to
 [`COMPATIBILITY.md`](COMPATIBILITY.md). Unreleased main-branch behavior may
