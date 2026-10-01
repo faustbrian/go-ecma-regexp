@@ -42,3 +42,19 @@ are enumerated in `specification/conformance/differential.tsv`.
 Optional integrations should depend only on the public `Compile`, `Program`,
 and JSON Schema profile APIs. The core module does not require
 `json-schema`, `rule-engine`, or `validation`.
+
+The owned interoperability operation provisions checksum-pinned Node 24.4.1
+(V8) and Bun 1.3.14 (JavaScriptCore) in disposable storage and requires both
+families before comparing the existing vectors and maintained Go peers.
+It also compares Deno 2.9.3 when present. Ordinary suite runs retain their
+available-runtime comparisons; they alone are not release-family evidence.
+Run `make -f verification/package.mk interoperability` from the repository
+root for this same gate. The peers are test-only and never runtime dependencies.
+
+The October 1, 2026 monitoring review found the ECMA release page still
+publishes the 17th edition (ECMAScript 2026), with the 16th-edition archive
+retained. The Unicode release index now identifies Unicode 18.0.0 as latest.
+Neither notice selects a new package edition or Unicode data version:
+ECMAScript 2025 and Unicode 16.0.0 remain the supported semantic boundary.
+The prior index bodies were not retained, so the Unicode change is not
+classified as presentation-only.

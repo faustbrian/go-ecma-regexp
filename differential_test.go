@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"os"
 	"os/exec"
 	"slices"
 	"testing"
@@ -62,6 +63,16 @@ func TestDifferentialMatchingAgainstJavaScriptEngines(t *testing.T) {
 	}
 	if bun, err := exec.LookPath("bun"); err == nil {
 		engines["bun"] = []string{bun, "-e"}
+	}
+	// The owned interoperability operation supplies both independently pinned families.
+	// Ordinary suite runs retain their existing available-runtime comparisons.
+	if os.Getenv("ECMA_RELEASE_DIFFERENTIAL") == "1" {
+		_, node := engines["node"]
+		_, deno := engines["deno"]
+		_, bun := engines["bun"]
+		if !bun || (!node && !deno) {
+			t.Fatal("release differential requires V8 and JavaScriptCore")
+		}
 	}
 	if len(engines) < 2 {
 		t.Fatalf(

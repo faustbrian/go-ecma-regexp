@@ -81,10 +81,9 @@ operations:
   - module: "."
     gate: interoperability
     steps:
-      - type: go-test
-        packages:
-          - "."
-        run: '^TestDifferentialMatchingAgainstJavaScriptEngines$'
+      - type: make
+        makefile: verification/package.mk
+        target: interoperability
         timeout: 20m
   - module: "."
     gate: docs

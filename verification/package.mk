@@ -1,4 +1,4 @@
-.PHONY: conformance docs safety
+.PHONY: conformance docs safety interoperability
 
 conformance:
 	./scripts/run-test262.sh all
@@ -8,3 +8,6 @@ docs:
 
 safety:
 	./scripts/check-safety.sh
+
+interoperability:
+	./scripts/run-differential.sh

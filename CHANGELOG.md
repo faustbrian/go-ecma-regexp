@@ -7,7 +7,19 @@ and this project uses semantic versioning.
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-10-01
+
 ### Changed
+
+- Require Go 1.27.0 instead of Go 1.26.6. Upgrade consumer toolchains
+  before adopting v1.1.0; the exported API, ECMAScript 2025 behavior, and
+  generated Unicode 16 data remain unchanged.
+- Require V8 and JavaScriptCore in the owned interoperability operation,
+  with checksum-pinned Node 24.4.1 and Bun 1.3.14 and the maintained Go
+  peers. Node and Deno alone no longer satisfy the release-family gate.
+- Review the monitored ECMA 17th-edition publication page and Unicode
+  18.0 release notice while explicitly retaining ECMAScript 2025 and
+  Unicode 16 semantic pins; refresh only their release-index monitors.
 
 - Keep reusable CI and its checked-out tooling on the same v1.8.4 source
   while retaining the checksum-verified v1.4.0 CLI bootstrap.
@@ -158,5 +170,6 @@ and this project uses semantic versioning.
 - Meaningful 100% production statement coverage and exact 100% mutation
   efficacy for every viable mutant.
 
-[Unreleased]: https://github.com/faustbrian/go-ecma-regexp/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/faustbrian/go-ecma-regexp/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/faustbrian/go-ecma-regexp/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/faustbrian/go-ecma-regexp/releases/tag/v1.0.0
