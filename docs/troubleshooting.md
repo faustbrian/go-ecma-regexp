@@ -29,8 +29,7 @@ Go string. Use the `UTF16String` APIs when lone surrogates must be preserved.
 
 ## More help
 
-Use [GitHub Issues](https://github.com/faustbrian/go-ecma-regexp/issues) for a
-reproducible defect and [GitHub
-Discussions](https://github.com/faustbrian/go-ecma-regexp/discussions) for
-adoption questions. Report suspected vulnerabilities only through the private
-process in [SECURITY.md](../SECURITY.md).
+See the [FAQ](faq.md), [documentation index](README.md), and
+[support policy](../SUPPORT.md) for more guidance and available support
+channels. Report suspected vulnerabilities only through the private process
+in [SECURITY.md](../SECURITY.md).
