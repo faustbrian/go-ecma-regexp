@@ -71,8 +71,19 @@ export PATH="${task}/bin:${PATH}"
 node --version
 bun --version
 if command -v deno >/dev/null; then
-  [[ "$(deno --version | head -n 1)" == 'deno 2.9.3' ]]
-  deno --version
+  # Official headers include the release channel and platform. Capture the
+  # complete output so a failed version command cannot pass through a pipe.
+  if ! deno_output="$(deno --version)"; then
+    echo "differential Deno version command failed" >&2
+    exit 1
+  fi
+  deno_header="${deno_output%%$'\n'*}"
+  deno_header_pattern='^deno 2\.9\.3( \(stable, release, [[:alnum:]_-]+\))?$'
+  if [[ ! "${deno_header}" =~ ${deno_header_pattern} ]]; then
+    echo "differential Deno version mismatch" >&2
+    exit 1
+  fi
+  printf '%s\n' "${deno_output}"
 fi
 
 export GOCACHE="${task}/build" GOMODCACHE="${task}/mod" GOTMPDIR="${task}/tmp" GOWORK=off
