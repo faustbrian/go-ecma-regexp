@@ -7,6 +7,12 @@ and this project uses semantic versioning.
 
 ## [Unreleased]
 
+### Changed
+
+- Refresh the reviewed ECMA publication-index monitor while retaining the
+  ECMAScript 2025 source and Unicode 16 semantic contracts. The supported
+  specification and generated inputs are unchanged.
+
 ## [1.1.0] - 2026-10-01
 
 ### Changed
