@@ -8,7 +8,7 @@ import (
 // FindAll returns ordered non-overlapping matches. Empty matches advance by
 // AdvanceStringIndex semantics, using code points in u or v mode.
 func (p *Program) FindAll(ctx context.Context, input string, options MatchOptions) ([]Result, error) {
-	view, err := makeInputView(input, options.Limits)
+	view, err := makeInputViewContext(ctx, input, options.Limits)
 	if err != nil {
 		return nil, err
 	}
@@ -18,7 +18,7 @@ func (p *Program) FindAll(ctx context.Context, input string, options MatchOption
 // FindAllUTF16 returns ordered non-overlapping matches in an exact ECMAScript
 // string, including inputs containing lone surrogates.
 func (p *Program) FindAllUTF16(ctx context.Context, input UTF16String, options MatchOptions) ([]Result, error) {
-	view, err := makeUTF16InputView(input, options.Limits)
+	view, err := makeUTF16InputViewContext(ctx, input, options.Limits)
 	if err != nil {
 		return nil, err
 	}
@@ -62,7 +62,7 @@ func (p *Program) findAll(ctx context.Context, view *inputView, options MatchOpt
 // Replace applies ECMAScript GetSubstitution tokens. The g flag selects all
 // matches; without g, only the first match is replaced.
 func (p *Program) Replace(ctx context.Context, input string, replacement UTF16String, options MatchOptions) (UTF16String, error) {
-	view, err := makeInputView(input, options.Limits)
+	view, err := makeInputViewContext(ctx, input, options.Limits)
 	if err != nil {
 		return UTF16String{}, err
 	}
@@ -72,7 +72,7 @@ func (p *Program) Replace(ctx context.Context, input string, replacement UTF16St
 // ReplaceUTF16 applies ECMAScript substitution semantics to an exact
 // ECMAScript string, including inputs containing lone surrogates.
 func (p *Program) ReplaceUTF16(ctx context.Context, input, replacement UTF16String, options MatchOptions) (UTF16String, error) {
-	view, err := makeUTF16InputView(input, options.Limits)
+	view, err := makeUTF16InputViewContext(ctx, input, options.Limits)
 	if err != nil {
 		return UTF16String{}, err
 	}
@@ -228,7 +228,7 @@ func (v SplitValue) Value() UTF16String { return newUTF16String(v.value.units) }
 
 // Split separates input and inserts separator captures in result order.
 func (p *Program) Split(ctx context.Context, input string, options MatchOptions) ([]SplitValue, error) {
-	view, err := makeInputView(input, options.Limits)
+	view, err := makeInputViewContext(ctx, input, options.Limits)
 	if err != nil {
 		return nil, err
 	}
@@ -238,7 +238,7 @@ func (p *Program) Split(ctx context.Context, input string, options MatchOptions)
 // SplitUTF16 separates an exact ECMAScript string and preserves lone
 // surrogates in both values and captures.
 func (p *Program) SplitUTF16(ctx context.Context, input UTF16String, options MatchOptions) ([]SplitValue, error) {
-	view, err := makeUTF16InputView(input, options.Limits)
+	view, err := makeUTF16InputViewContext(ctx, input, options.Limits)
 	if err != nil {
 		return nil, err
 	}

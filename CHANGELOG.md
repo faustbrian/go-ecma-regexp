@@ -7,6 +7,12 @@ and this project uses semantic versioning.
 
 ## [Unreleased]
 
+### Security
+
+- Honor caller cancellation before input admission and during bounded UTF-8
+  and UTF-16 preparation. Preserve session state when cancellation is
+  observed, including out-of-range execution starts.
+
 ### Changed
 
 - Refresh the reviewed ECMA publication-index monitor while retaining the

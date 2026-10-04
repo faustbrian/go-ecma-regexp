@@ -6,7 +6,9 @@ The processing pipeline is explicit:
 2. `Parse` returns an immutable typed `Pattern` AST.
 3. `Compile` returns an immutable executable `Program`.
 4. `Match`, `Find`, `FindAll`, `Replace`, and `Split` execute with caller
-   options and context cancellation.
+   options and context cancellation. A canceled context is checked before
+   input admission; preparation and VM execution poll cancellation
+   cooperatively. Nil contexts retain background behavior.
 
 `Match` attempts only `MatchOptions.StartUTF16`. `Find` searches from that
 position unless the `y` flag makes the program sticky. `FindAll` returns

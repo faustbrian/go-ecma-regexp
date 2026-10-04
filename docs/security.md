@@ -15,6 +15,14 @@ wall-time exhaustion, and resource exhaustion are reported separately as
 `context` errors, `TimeoutError`, and `LimitError`. Do not convert these errors
 to a normal non-match without an explicit application policy.
 
+All public execution entry points check cancellation before input admission
+and poll during UTF-8 and UTF-16 preparation. Cancellation observed during
+preparation returns no partial result and does not enter the VM. Session state
+remains unchanged when cancellation is observed before an execution result.
+Cancellation is cooperative, not an asynchronous interruption of each memory
+operation. `MatchLimits.WallTime` begins at VM execution; use a caller deadline
+to include input preparation in the operation budget.
+
 Execution is synchronous. The package creates no timeout goroutine, uses no
 `unsafe`, and maintains no global mutable cache. Applications may add a
 caller-owned bounded cache of immutable `Program` values.
@@ -27,3 +35,6 @@ and replacement growth, nested assertions, Unicode sets, and malformed UTF-8.
 Default limits are safe starting points, not universal policy. Lower them for
 interactive or multi-tenant validation and measure real workloads before
 raising them.
+
+The versioned [threat model](threat-model.md) records current boundaries,
+accepted risks, and the unresolved replacement-work admission gap.
