@@ -5,14 +5,14 @@
   "modules": [
     {
       "directory": ".",
-      "module_path": "github.com/faustbrian/go-ecma-regexp",
+      "module_path": "github.com/faustbrian/go-ecma-regexp/v2",
       "go_version": "1.27.0",
       "packages": [
         {
           "module_directory": ".",
           "directory": ".",
           "name": "ecmascript",
-          "import_path": "github.com/faustbrian/go-ecma-regexp",
+          "import_path": "github.com/faustbrian/go-ecma-regexp/v2",
           "kind": "public",
           "production": true,
           "executable": true,
@@ -24,7 +24,7 @@
           "module_directory": ".",
           "directory": "internal/cmd/test262bridge",
           "name": "main",
-          "import_path": "github.com/faustbrian/go-ecma-regexp/internal/cmd/test262bridge",
+          "import_path": "github.com/faustbrian/go-ecma-regexp/v2/internal/cmd/test262bridge",
           "kind": "tooling",
           "production": false,
           "executable": true,
@@ -36,7 +36,7 @@
           "module_directory": ".",
           "directory": "internal/cmd/unicodegen",
           "name": "main",
-          "import_path": "github.com/faustbrian/go-ecma-regexp/internal/cmd/unicodegen",
+          "import_path": "github.com/faustbrian/go-ecma-regexp/v2/internal/cmd/unicodegen",
           "kind": "tooling",
           "production": false,
           "executable": true,
@@ -48,12 +48,12 @@
       "purpose": "`ecma-regexp` is a bounded, specification-backed ECMAScript regular expression engine for Go. It implements JavaScript semantics directly; it does not translate patterns to Go's RE2-based `regexp` package and does not embed a JavaScript runtime.",
       "lifecycle": "stable",
       "kind": "public library",
-      "releasable": true,
+      "releasable": false,
       "family": "domain-utilities",
       "family_label": "Domain Utilities",
       "family_description": "Domain-specific immutable values, algorithms, parsers, proofs, and calculations.",
       "family_order": 8,
-      "version": "1.1.0",
+      "version": "2.0.0",
       "tag_prefix": "v",
       "owned_dependencies": [],
       "reverse_owned_dependencies": [],
@@ -99,10 +99,10 @@
         ],
         "public_package_identifier": "ecmascript",
         "primary_entry_packages": [
-          "github.com/faustbrian/go-ecma-regexp"
+          "github.com/faustbrian/go-ecma-regexp/v2"
         ],
         "package_selection": {
-          "github.com/faustbrian/go-ecma-regexp": "Use for bounded ECMAScript 2025 regular-expression semantics, UTF-16 indices, or JSON Schema Draft 2020-12 pattern matching."
+          "github.com/faustbrian/go-ecma-regexp/v2": "Use for bounded ECMAScript 2025 regular-expression semantics, UTF-16 indices, or JSON Schema Draft 2020-12 pattern matching."
         },
         "lifecycle_status": "active",
         "maturity": "stable",
@@ -151,7 +151,7 @@
           "examples": "example_test.go",
           "faq": "docs/faq.md",
           "changelog": "CHANGELOG.md",
-          "pkg_go_dev": "https://pkg.go.dev/github.com/faustbrian/go-ecma-regexp",
+          "pkg_go_dev": "https://pkg.go.dev/github.com/faustbrian/go-ecma-regexp/v2",
           "ecosystem_index": "https://github.com/faustbrian/go-library-tools/blob/v1.4.0/docs/ecosystem/README.md"
         },
         "known_good_compatibility_sets": [],

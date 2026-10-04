@@ -7,7 +7,7 @@ import (
 	"reflect"
 	"testing"
 
-	ecmascript "github.com/faustbrian/go-ecma-regexp"
+	ecmascript "github.com/faustbrian/go-ecma-regexp/v2"
 )
 
 // Ordinary tiny templates exercise admission without a resource campaign.

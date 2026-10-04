@@ -5,7 +5,7 @@ import (
 
 	"testing"
 
-	ecmascript "github.com/faustbrian/go-ecma-regexp"
+	ecmascript "github.com/faustbrian/go-ecma-regexp/v2"
 )
 
 func FuzzTokenizeAndParse(f *testing.F) {

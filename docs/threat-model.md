@@ -1,7 +1,7 @@
 # Threat model
 
-- Model: `ECMA-REGEXP-THREAT-MODEL-1.1.0`
-- Applies to: `github.com/faustbrian/go-ecma-regexp` v1
+- Model: `ECMA-REGEXP-THREAT-MODEL-2.0.0`
+- Applies to: `github.com/faustbrian/go-ecma-regexp/v2` candidate on main
 - Reviewed: 2026-10-05
 - Owner: ECMA regexp maintainers
 

@@ -6,8 +6,11 @@ import (
 	"unicode/utf16"
 )
 
-// MatchLimits bounds one Match or Find call, including all Find start
-// candidates. Zero is a zero allowance, not unlimited.
+// MatchLimits bounds one execution call, including all Find start candidates.
+// InputBytes and InputRunes independently admit the subject and replacement;
+// exact UTF-16 storage uses two bytes per unit and counts surrogate pairs as
+// one code point. Steps includes consumed substitution and capture-name work.
+// Zero is a zero allowance, not unlimited.
 type MatchLimits struct {
 	InputBytes     uint64
 	InputRunes     uint64

@@ -10,7 +10,7 @@ import (
 
 	"go.uber.org/goleak"
 
-	ecmascript "github.com/faustbrian/go-ecma-regexp"
+	ecmascript "github.com/faustbrian/go-ecma-regexp/v2"
 )
 
 func TestHostileExecutionPathsAreBounded(t *testing.T) {

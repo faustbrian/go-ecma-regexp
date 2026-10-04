@@ -1,4 +1,4 @@
-module github.com/faustbrian/go-ecma-regexp
+module github.com/faustbrian/go-ecma-regexp/v2
 
 go 1.27.0
 

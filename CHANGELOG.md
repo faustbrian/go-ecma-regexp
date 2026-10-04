@@ -19,6 +19,9 @@ and this project uses semantic versioning.
 
 ### Changed
 
+- Prepare the v2 root module and `/v2` imports on main for the narrowed
+  replacement resource policy. V2 publication remains pending; source stays
+  in the same repository root and requires Go 1.27.
 - Refresh the reviewed ECMA publication-index monitor while retaining the
   ECMAScript 2025 source and Unicode 16 semantic contracts. The supported
   specification and generated inputs are unchanged.

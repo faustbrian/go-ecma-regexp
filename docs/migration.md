@@ -1,5 +1,26 @@
 # Migration from Go regexp and PCRE
 
+## Planned v2 adoption
+
+V2 is prepared on main but is not yet published. After release qualification,
+use `github.com/faustbrian/go-ecma-regexp/v2` imports and a v2 Git tag; source
+remains in the repository root. Go 1.27 is required. Published v1.1.0 remains
+available at its original module path and tag.
+
+Subject and replacement templates independently use `InputBytes` and
+`InputRunes`. UTF-16 templates cost two bytes per unit and one code point per
+surrogate pair or lone unit. Budget both inputs explicitly; zero remains a
+zero allowance. Consumed token/name scanning and conversion share `Steps`
+with matching, even when the template produces no output. Previously accepted
+templates can now return a typed limit error without partial output.
+
+Caller cancellation is checked before admission and cooperatively during
+preparation. Continue supplying a caller deadline for the whole operation;
+VM `WallTime` does not include preparation. Session state remains unchanged
+when execution is refused.
+
+## Other engine migrations
+
 Do not assume that a pattern accepted by Go `regexp`, PCRE, or ECMAScript has
 the same language or result in another engine.
 
