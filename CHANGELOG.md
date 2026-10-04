@@ -9,6 +9,10 @@ and this project uses semantic versioning.
 
 ### Security
 
+- Apply input byte and code-point allowances independently to replacement
+  templates before substitution, and charge consumed token/name work to the
+  shared step budget. Previously accepted templates may now be refused;
+  this compatibility change requires a major release, not a v1 patch.
 - Honor caller cancellation before input admission and during bounded UTF-8
   and UTF-16 preparation. Preserve session state when cancellation is
   observed, including out-of-range execution starts.

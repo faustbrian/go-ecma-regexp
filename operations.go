@@ -80,6 +80,9 @@ func (p *Program) ReplaceUTF16(ctx context.Context, input, replacement UTF16Stri
 }
 
 func (p *Program) replace(ctx context.Context, view *inputView, replacement UTF16String, options MatchOptions) (UTF16String, error) {
+	if err := admitReplacement(ctx, replacement.units, options.Limits); err != nil {
+		return UTF16String{}, err
+	}
 	executor := newExecutor(ctx, p, view, options.Limits)
 	output := outputUnits{limit: options.Limits.OutputUTF16}
 	search := options.StartUTF16
@@ -125,6 +128,37 @@ func (p *Program) replace(ctx context.Context, view *inputView, replacement UTF1
 	return newUTF16String(output.units), nil
 }
 
+// Admit the template independently of the subject, before scanning tokens or
+// allocating a capture name. Output limits cannot bound a consumed empty name.
+func admitReplacement(ctx context.Context, units []uint16, limits MatchLimits) error {
+	ctx = normalizeContext(ctx)
+	if err := ctx.Err(); err != nil {
+		return err
+	}
+	storageBytes := uint64(len(units)) * 2
+	if storageBytes > limits.InputBytes {
+		return &LimitError{Kind: LimitInputBytes, Limit: limits.InputBytes, Used: storageBytes}
+	}
+	codePoints := uint64(0)
+	for index := 0; index < len(units); {
+		if codePoints%inputContextCheckInterval == 0 {
+			if err := ctx.Err(); err != nil {
+				return err
+			}
+		}
+		width := 1
+		if isHighSurrogate(units[index]) && index+1 < len(units) && isLowSurrogate(units[index+1]) {
+			width = 2
+		}
+		index += width
+		codePoints++
+	}
+	if codePoints > limits.InputRunes {
+		return &LimitError{Kind: LimitInputRunes, Limit: limits.InputRunes, Used: codePoints}
+	}
+	return ctx.Err()
+}
+
 func (p *Program) appendSubstitution(output *outputUnits, input, replacement []uint16, result Result, executor *executor) error {
 	matchStart := result.Full().span.Start.UTF16
 	matchEnd := result.Full().span.End.UTF16
@@ -139,6 +173,9 @@ func (p *Program) appendSubstitution(output *outputUnits, input, replacement []u
 			continue
 		}
 		next := replacement[index+1]
+		if err := executor.step(); err != nil {
+			return err
+		}
 		switch next {
 		case '$':
 			if err := output.append([]uint16{'$'}); err != nil {
@@ -162,11 +199,20 @@ func (p *Program) appendSubstitution(output *outputUnits, input, replacement []u
 			index++
 		case '<':
 			end := index + 2
-			for end < len(replacement) && replacement[end] != '>' {
+			for end < len(replacement) {
+				if err := executor.step(); err != nil {
+					return err
+				}
+				if replacement[end] == '>' {
+					break
+				}
 				end++
 			}
 			if end < len(replacement) && len(p.captureNames) > 0 {
-				name := utf16ASCII(replacement[index+2 : end])
+				name, err := utf16ASCII(replacement[index+2:end], executor)
+				if err != nil {
+					return err
+				}
 				capture, _ := result.Named(name)
 				if capture.participated {
 					if err := output.append(capture.value.units); err != nil {
@@ -183,6 +229,9 @@ func (p *Program) appendSubstitution(output *outputUnits, input, replacement []u
 			if captureIndex, ok := decimalDigit(next); ok {
 				consumed := 1
 				if index+2 < len(replacement) {
+					if err := executor.step(); err != nil {
+						return err
+					}
 					secondDigit, secondOK := decimalDigit(replacement[index+2])
 					twoDigits := captureIndex*10 + secondDigit
 					if secondOK {
@@ -349,10 +398,13 @@ func advanceStringIndex(view *inputView, index int, unicodeMode bool) int {
 	return index + 2
 }
 
-func utf16ASCII(units []uint16) string {
+func utf16ASCII(units []uint16, executor *executor) (string, error) {
 	var result strings.Builder
 	for _, unit := range units {
+		if err := executor.step(); err != nil {
+			return "", err
+		}
 		result.WriteByte(byte(unit))
 	}
-	return result.String()
+	return result.String(), nil
 }

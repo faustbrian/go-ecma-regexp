@@ -15,6 +15,13 @@ position unless the `y` flag makes the program sticky. `FindAll` returns
 ordered, non-overlapping matches and advances empty matches using ECMAScript
 `AdvanceStringIndex` semantics.
 
+`Replace` and `ReplaceUTF16` admit the subject and replacement independently
+against `MatchLimits.InputBytes` and `InputRunes`, even without a match. Exact
+UTF-16 storage costs two bytes per unit; paired surrogates count as one code
+point and lone surrogates as one. Token scans and capture-name conversion share
+`Steps` with the VM; output allowances do not replace input or work admission.
+This narrows the former subject-only policy and requires a major release.
+
 Every capture has a half-open `IndexSpan`. `Index.UTF16` is the normative
 ECMAScript code-unit position. `Index.Rune` and `Index.Byte` map to the Go
 input. `Index.Exact` is false at a boundary inside a surrogate pair.

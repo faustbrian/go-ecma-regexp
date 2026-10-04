@@ -32,6 +32,15 @@ bounds input bytes and runes, VM steps, backtracking, stack and recursion,
 logical allocations, results, output units, and VM wall time. Zero allowances
 remain zero, not unlimited.
 
+Replacement templates are admitted independently against the same input byte
+and code-point allowances as subjects. UTF-16 storage costs two bytes per
+unit; a surrogate pair counts as one code point and a lone surrogate as one.
+Admission allocates no template copy or index map. Consumed token/name scanning
+and name conversion share the VM step budget, including names producing empty
+output and suffixes revisited during literal fallback. Temporary name storage
+is bounded by admitted template bytes. Caller cancellation is checked during
+admission and by periodic charged execution work.
+
 Every public execution method checks genuine caller cancellation before input
 admission. UTF-8 counting/construction and UTF-16 counting/copy/construction
 poll cancellation in bounded chunks. Observed cancellation returns no partial
@@ -66,15 +75,16 @@ semantic, input-boundary, and index tests remain required affected checks.
 | ECMA-RISK-003 | Medium | Application integrator | VM wall time excludes input preparation and is not a whole-operation deadline. | Supply a bounded caller context and finite input budgets. | Revisit if wall-time scope changes or a whole-operation timeout is promised. |
 | ECMA-RISK-004 | Medium | Application integrator | Caller-selected large budgets increase resource exposure. | Tenant-specific finite limits, bounded program caches, and isolated process capacity where needed. | Revisit when raising defaults or supported limits, or after a resource-exhaustion incident. |
 
-## Unresolved finding and release boundary
+## Replacement repair and release boundary
 
-ECMA-OPEN-001 is owned by runtime maintainers: replacement-name scanning can
-consume caller-sized work before output is emitted, without charging the VM
-step budget or polling context in that inner scan. Output limits alone do not
-admit replacement input. This is an unresolved finite-work requirement, not an
-accepted risk and not repaired by input preparation changes. Characterize and
-bound replacement admission and consumed work before security-goal release
-qualification; severity remains under assessment.
+ECMA-OPEN-001 is owned by runtime maintainers. Hosted pre-fix regression tests
+demonstrate missing replacement admission and uncharged consumed-name work.
+The candidate repair admits templates and charges scanning/conversion, but
+corrected-source hosted verification and independent review remain pending.
+This finding is not yet closed or accepted. The narrowed replacement contract
+requires a major release and documented migration from subject-only budgets;
+v1 patch publication does not qualify the repair. Runtime interruption during
+a particular scan remains unproved; source checkpoints are not that proof.
 
 Review this model after changes to input handling, budgets, cancellation,
 concurrency, dependencies, generated data, or public execution semantics.
