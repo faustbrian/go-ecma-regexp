@@ -53,7 +53,7 @@ The official ECMA publication index advertises the 17th edition (ECMAScript
 index HTML is unavailable, so this observation does not establish that the
 change was presentation-only. The consumed 16th-edition PDF identity remains
 `50e932767f16f3d4bf03e9d94157885125eeff1c165a8d8c05a867bcb56ee7da`.
-ECMAREGEXP-DEC-001 still excludes later editions until an explicit upgrade;
+The edition-selection decision still excludes later editions until an upgrade;
 normative pins, generated inputs, fixtures and decisions remain unchanged.
 
 ## Update and conformance process
