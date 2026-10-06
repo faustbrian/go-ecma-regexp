@@ -13,6 +13,14 @@ and this project uses semantic versioning.
   ECMAScript 2025 source and Unicode 16 semantic contracts. The supported
   specification and generated inputs are unchanged.
 
+## [1.1.1] - 2026-10-06
+
+### Changed
+
+- Refresh the immutable shared workflow and current ECMA publication-index
+  observation while retaining ECMAScript 2025, Unicode 16, the public API,
+  and the supported Go toolchain. Normative inputs remain unchanged.
+
 ## [1.1.0] - 2026-10-01
 
 ### Changed
