@@ -17,6 +17,8 @@ and this project uses semantic versioning.
 
 ### Changed
 
+- Update the private documentation parser to smol-toml v1.9.0 to remove
+  quadratic TOML key parsing; the Go module dependency graph is unchanged.
 - Refresh the immutable shared workflow and current ECMA publication-index
   observation while retaining ECMAScript 2025, Unicode 16, the public API,
   and the supported Go toolchain. Normative inputs remain unchanged.
