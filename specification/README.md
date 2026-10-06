@@ -56,6 +56,15 @@ change was presentation-only. The consumed 16th-edition PDF identity remains
 The edition-selection decision still excludes later editions until an upgrade;
 normative pins, generated inputs, fixtures and decisions remain unchanged.
 
+## ECMA publication-index observation: 2026-10-06
+
+A fresh bounded retrieval with the pinned tooling User-Agent observes the
+17th-edition index with the updated digest in `monitoring.json`. The prior
+HTML is unavailable; this records current content, not a presentation-only
+classification. All other monitored identities, including the consumed
+16th-edition PDF, match their existing pins. No normative edition, generated
+input, fixture, or decision is changed.
+
 ## Update and conformance process
 
 1. A changed authority digest, release page, corpus pin, or maintained-peer result blocks unattended adoption.
