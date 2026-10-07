@@ -19,6 +19,47 @@ permissions:
   security-events: write
 
 jobs:
+  # Temporary focused reproduction while the full security gate fails first.
+  replacement-regression:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version-file: .go-version
+          cache: false
+      - name: Check Unicode replacement names
+        shell: bash
+        env:
+          GOWORK: 'off'
+          GOMAXPROCS: '2'
+          GOFLAGS: '-p=1'
+          GOPROXY: https://proxy.golang.org
+          GOSUMDB: sum.golang.org
+          GOPRIVATE: ''
+          GONOPROXY: ''
+          GONOSUMDB: ''
+        run: |
+          evidence_cache=$(mktemp -d "${RUNNER_TEMP}/ecma-replacement.XXXXXX")
+          cleanup() {
+            result=$?
+            trap - EXIT
+            chmod -R u+w -- "$evidence_cache" || exit 1
+            rm -rf -- "$evidence_cache" || exit 1
+            exit "$result"
+          }
+          trap cleanup EXIT
+          export GOCACHE="$evidence_cache/build"
+          export GOMODCACHE="$evidence_cache/modules"
+          export GOTMPDIR="$evidence_cache/tmp"
+          mkdir -p "$GOTMPDIR"
+          go test -p=1 -run '^TestReplacementUnicodeCaptureNamesHosted$' -count=1 -timeout=2m .
+
   ci:
     uses: faustbrian/go-library-tools/.github/workflows/library-ci.yml@606c3e9da5112086217f7108f335c2f88528bc14 # immutable development tooling
     with:
@@ -30,11 +71,12 @@ jobs:
   required:
     name: Required
     if: always()
-    needs: ci
+    needs: [ci, replacement-regression]
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
       - name: Require shared workflow
         env:
           CI_RESULT: ${{ needs.ci.result }}
-        run: test "${CI_RESULT}" = success
+          REPLACEMENT_RESULT: ${{ needs.replacement-regression.result }}
+        run: test "${CI_RESULT}" = success && test "${REPLACEMENT_RESULT}" = success
