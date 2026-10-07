@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	ecmascript "github.com/faustbrian/go-ecma-regexp"
+	ecmascript "github.com/faustbrian/go-ecma-regexp/v2"
 )
 
 const test262SemanticFileCount = 606

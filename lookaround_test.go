@@ -5,7 +5,7 @@ import (
 	"errors"
 	"testing"
 
-	ecmascript "github.com/faustbrian/go-ecma-regexp"
+	ecmascript "github.com/faustbrian/go-ecma-regexp/v2"
 )
 
 func TestLookaheadCapturesAndNegativeLookahead(t *testing.T) {

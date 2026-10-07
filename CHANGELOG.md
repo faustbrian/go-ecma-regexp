@@ -7,8 +7,21 @@ and this project uses semantic versioning.
 
 ## [Unreleased]
 
+### Security
+
+- Apply input byte and code-point allowances independently to replacement
+  templates before substitution, and charge consumed token/name work to the
+  shared step budget. Previously accepted templates may now be refused;
+  this compatibility change requires a major release, not a v1 patch.
+- Honor caller cancellation before input admission and during bounded UTF-8
+  and UTF-16 preparation. Preserve session state when cancellation is
+  observed, including out-of-range execution starts.
+
 ### Changed
 
+- Prepare the v2 root module and `/v2` imports on main for the narrowed
+  replacement resource policy. V2 publication remains pending; source stays
+  in the same repository root and requires Go 1.27.
 - Refresh the reviewed ECMA publication-index monitor while retaining the
   ECMAScript 2025 source and Unicode 16 semantic contracts. The supported
   specification and generated inputs are unchanged.

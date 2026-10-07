@@ -19,16 +19,22 @@ The supported language is closed to ECMA-262, 16th edition (ECMAScript 2025),
 with Unicode 16.0.0 data. The exact ECMA-262, Test262, Unicode, and emoji
 provenance is recorded in [`specification/manifest.json`](specification/manifest.json).
 
-> Release status: stable and released as v1.0.0. The applicable pinned Test262
-> inventory, meaningful 100% production statement coverage, and scoped mutation
-> gate are complete. See the
+> Release status: v1.1.1 is the latest published stable release. This main
+> source prepares v2 and is not yet published or release-qualified. Runtime
+> regressions passed before the module-path change; current-source coverage
+> and release qualification remain pending. See the
 > [conformance inventory](specification/README.md).
 
 ## Install
 
 ```sh
-go get github.com/faustbrian/go-ecma-regexp
+go get github.com/faustbrian/go-ecma-regexp@v1.1.1
 ```
+
+After v2 is qualified and published, install it with
+`go get github.com/faustbrian/go-ecma-regexp/v2@v2`. The current main source
+uses `/v2` imports in the same root directory; it has no version-specific
+source branch or directory. See [migration guidance](docs/migration.md).
 
 ## Quick start
 
@@ -70,7 +76,7 @@ quick start and runs as part of the documentation gate.
 
 | Import path | Package | Use |
 | --- | --- | --- |
-| `github.com/faustbrian/go-ecma-regexp` | `ecmascript` | Parse, compile, and execute bounded ECMAScript and JSON Schema regular expressions. |
+| `github.com/faustbrian/go-ecma-regexp/v2` | `ecmascript` | Parse, compile, and execute bounded ECMAScript and JSON Schema regular expressions; v2 publication is pending. |
 
 The module exposes no public subpackages. Commands beneath `internal/cmd` are
 repository tooling and cannot be imported by consumers.

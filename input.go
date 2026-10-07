@@ -1,9 +1,12 @@
 package ecmascript
 
 import (
+	"context"
 	"unicode/utf16"
 	"unicode/utf8"
 )
+
+const inputContextCheckInterval = 256
 
 // Index maps one ECMAScript UTF-16 boundary to Go byte and rune boundaries.
 // Exact is false when a UTF-16 boundary splits a surrogate pair and therefore
@@ -28,12 +31,33 @@ type inputView struct {
 }
 
 func makeInputView(source string, limits MatchLimits) (*inputView, error) {
+	return makeInputViewContext(context.Background(), source, limits)
+}
+
+func makeInputViewContext(ctx context.Context, source string, limits MatchLimits) (*inputView, error) {
+	ctx = normalizeContext(ctx)
+	if err := ctx.Err(); err != nil {
+		return nil, err
+	}
 	if uint64(len(source)) > limits.InputBytes {
 		return nil, &LimitError{Kind: LimitInputBytes, Limit: limits.InputBytes, Used: uint64(len(source))}
 	}
-	runeCount := utf8.RuneCountInString(source)
+	runeCount := 0
+	for byteOffset := 0; byteOffset < len(source); {
+		if runeCount%inputContextCheckInterval == 0 {
+			if err := ctx.Err(); err != nil {
+				return nil, err
+			}
+		}
+		_, size := utf8.DecodeRuneInString(source[byteOffset:])
+		byteOffset += size
+		runeCount++
+	}
 	if uint64(runeCount) > limits.InputRunes {
 		return nil, &LimitError{Kind: LimitInputRunes, Limit: limits.InputRunes, Used: uint64(runeCount)}
+	}
+	if err := ctx.Err(); err != nil {
+		return nil, err
 	}
 
 	view := &inputView{
@@ -45,6 +69,11 @@ func makeInputView(source string, limits MatchLimits) (*inputView, error) {
 	view.codePointBoundary[0] = true
 	runeOffset := 0
 	for byteOffset, char := range source {
+		if runeOffset%inputContextCheckInterval == 0 {
+			if err := ctx.Err(); err != nil {
+				return nil, err
+			}
+		}
 		_, size := utf8.DecodeRuneInString(source[byteOffset:])
 		encoded := utf16.Encode([]rune{char})
 		for unitIndex, unit := range encoded {
@@ -66,11 +95,22 @@ func makeInputView(source string, limits MatchLimits) (*inputView, error) {
 		}
 		runeOffset++
 	}
+	if err := ctx.Err(); err != nil {
+		return nil, err
+	}
 
 	return view, nil
 }
 
 func makeUTF16InputView(input UTF16String, limits MatchLimits) (*inputView, error) {
+	return makeUTF16InputViewContext(context.Background(), input, limits)
+}
+
+func makeUTF16InputViewContext(ctx context.Context, input UTF16String, limits MatchLimits) (*inputView, error) {
+	ctx = normalizeContext(ctx)
+	if err := ctx.Err(); err != nil {
+		return nil, err
+	}
 	storageBytes := uint64(len(input.units)) * 2
 	if storageBytes > limits.InputBytes {
 		return nil, &LimitError{Kind: LimitInputBytes, Limit: limits.InputBytes, Used: storageBytes}
@@ -81,6 +121,11 @@ func makeUTF16InputView(input UTF16String, limits MatchLimits) (*inputView, erro
 	codePointBoundary := make([]bool, len(input.units)+1)
 	codePointBoundary[0] = true
 	for index := 0; index < len(input.units); {
+		if codePoints%inputContextCheckInterval == 0 {
+			if err := ctx.Err(); err != nil {
+				return nil, err
+			}
+		}
 		unit := input.units[index]
 		width := 1
 		if isHighSurrogate(unit) && index+1 < len(input.units) && isLowSurrogate(input.units[index+1]) {
@@ -95,16 +140,36 @@ func makeUTF16InputView(input UTF16String, limits MatchLimits) (*inputView, erro
 	if uint64(codePoints) > limits.InputRunes {
 		return nil, &LimitError{Kind: LimitInputRunes, Limit: limits.InputRunes, Used: uint64(codePoints)}
 	}
+	if err := ctx.Err(); err != nil {
+		return nil, err
+	}
+
+	units := make([]uint16, len(input.units))
+	for start := 0; start < len(input.units); start += inputContextCheckInterval {
+		if err := ctx.Err(); err != nil {
+			return nil, err
+		}
+		end := min(start+inputContextCheckInterval, len(input.units))
+		copy(units[start:end], input.units[start:end])
+	}
 
 	view := &inputView{
-		units:             append([]uint16(nil), input.units...),
+		units:             units,
 		boundaries:        make([]Index, len(input.units)+1),
 		codePointBoundary: codePointBoundary,
 	}
 	view.boundaries[0] = Index{Exact: true}
 	if !validScalar {
 		for index := 1; index < len(view.boundaries); index++ {
+			if index%inputContextCheckInterval == 0 {
+				if err := ctx.Err(); err != nil {
+					return nil, err
+				}
+			}
 			view.boundaries[index] = Index{UTF16: index, Rune: -1, Byte: -1}
+		}
+		if err := ctx.Err(); err != nil {
+			return nil, err
 		}
 		return view, nil
 	}
@@ -112,6 +177,11 @@ func makeUTF16InputView(input UTF16String, limits MatchLimits) (*inputView, erro
 	runeOffset := 0
 	byteOffset := 0
 	for index := 0; index < len(input.units); {
+		if runeOffset%inputContextCheckInterval == 0 {
+			if err := ctx.Err(); err != nil {
+				return nil, err
+			}
+		}
 		unit := input.units[index]
 		if isHighSurrogate(unit) {
 			view.boundaries[index+1] = Index{UTF16: index + 1, Rune: runeOffset, Byte: byteOffset}
@@ -126,6 +196,9 @@ func makeUTF16InputView(input UTF16String, limits MatchLimits) (*inputView, erro
 		runeOffset++
 		byteOffset += utf8.RuneLen(rune(unit))
 		view.boundaries[index] = Index{UTF16: index, Rune: runeOffset, Byte: byteOffset, Exact: true}
+	}
+	if err := ctx.Err(); err != nil {
+		return nil, err
 	}
 
 	return view, nil

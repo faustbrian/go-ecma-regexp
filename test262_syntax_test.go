@@ -9,7 +9,7 @@ import (
 	"testing"
 	"unicode"
 
-	ecmascript "github.com/faustbrian/go-ecma-regexp"
+	ecmascript "github.com/faustbrian/go-ecma-regexp/v2"
 )
 
 const (

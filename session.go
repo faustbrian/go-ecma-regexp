@@ -23,7 +23,7 @@ func (s *Session) SetLastIndex(index int) {
 // failures leave lastIndex unchanged; an ordinary failed global or sticky
 // match resets it to zero.
 func (s *Session) Exec(ctx context.Context, input string, limits MatchLimits) (Result, bool, error) {
-	view, err := makeInputView(input, limits)
+	view, err := makeInputViewContext(ctx, input, limits)
 	if err != nil {
 		return Result{}, false, err
 	}
@@ -32,7 +32,7 @@ func (s *Session) Exec(ctx context.Context, input string, limits MatchLimits) (R
 
 // ExecUTF16 applies stateful RegExp execution to an exact ECMAScript string.
 func (s *Session) ExecUTF16(ctx context.Context, input UTF16String, limits MatchLimits) (Result, bool, error) {
-	view, err := makeUTF16InputView(input, limits)
+	view, err := makeUTF16InputViewContext(ctx, input, limits)
 	if err != nil {
 		return Result{}, false, err
 	}
@@ -40,6 +40,9 @@ func (s *Session) ExecUTF16(ctx context.Context, input UTF16String, limits Match
 }
 
 func (s *Session) exec(ctx context.Context, view *inputView, limits MatchLimits) (Result, bool, error) {
+	if err := normalizeContext(ctx).Err(); err != nil {
+		return Result{}, false, err
+	}
 	stateful := s.program.flags.Global() || s.program.flags.Sticky()
 	start := 0
 	if stateful {

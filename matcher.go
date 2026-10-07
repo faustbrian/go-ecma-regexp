@@ -6,8 +6,11 @@ import (
 	"unicode/utf16"
 )
 
-// MatchLimits bounds one Match or Find call, including all Find start
-// candidates. Zero is a zero allowance, not unlimited.
+// MatchLimits bounds one execution call, including all Find start candidates.
+// InputBytes and InputRunes independently admit the subject and replacement;
+// exact UTF-16 storage uses two bytes per unit and counts surrogate pairs as
+// one code point. Steps includes consumed substitution and capture-name work.
+// Zero is a zero allowance, not unlimited.
 type MatchLimits struct {
 	InputBytes     uint64
 	InputRunes     uint64
@@ -81,7 +84,7 @@ func (r Result) Captures() []Capture {
 
 // Match attempts the program exactly at StartUTF16.
 func (p *Program) Match(ctx context.Context, input string, options MatchOptions) (Result, bool, error) {
-	view, err := makeInputView(input, options.Limits)
+	view, err := makeInputViewContext(ctx, input, options.Limits)
 	if err != nil {
 		return Result{}, false, err
 	}
@@ -92,7 +95,7 @@ func (p *Program) Match(ctx context.Context, input string, options MatchOptions)
 // MatchUTF16 attempts the program against an exact ECMAScript string at
 // StartUTF16, including inputs containing lone surrogates.
 func (p *Program) MatchUTF16(ctx context.Context, input UTF16String, options MatchOptions) (Result, bool, error) {
-	view, err := makeUTF16InputView(input, options.Limits)
+	view, err := makeUTF16InputViewContext(ctx, input, options.Limits)
 	if err != nil {
 		return Result{}, false, err
 	}
@@ -103,7 +106,7 @@ func (p *Program) MatchUTF16(ctx context.Context, input UTF16String, options Mat
 // Find returns the first ordered match at or after StartUTF16. Sticky programs
 // attempt only the explicit start position.
 func (p *Program) Find(ctx context.Context, input string, options MatchOptions) (Result, bool, error) {
-	view, err := makeInputView(input, options.Limits)
+	view, err := makeInputViewContext(ctx, input, options.Limits)
 	if err != nil {
 		return Result{}, false, err
 	}
@@ -113,7 +116,7 @@ func (p *Program) Find(ctx context.Context, input string, options MatchOptions) 
 
 // FindUTF16 returns the first ordered match in an exact ECMAScript string.
 func (p *Program) FindUTF16(ctx context.Context, input UTF16String, options MatchOptions) (Result, bool, error) {
-	view, err := makeUTF16InputView(input, options.Limits)
+	view, err := makeUTF16InputViewContext(ctx, input, options.Limits)
 	if err != nil {
 		return Result{}, false, err
 	}
@@ -157,11 +160,14 @@ type executor struct {
 }
 
 func newExecutor(ctx context.Context, program *Program, input *inputView, limits MatchLimits) *executor {
-	if ctx == nil {
-		ctx = context.Background()
-	}
+	return &executor{ctx: normalizeContext(ctx), program: program, input: input, limits: limits, started: time.Now()}
+}
 
-	return &executor{ctx: ctx, program: program, input: input, limits: limits, started: time.Now()}
+func normalizeContext(ctx context.Context) context.Context {
+	if ctx == nil {
+		return context.Background()
+	}
+	return ctx
 }
 
 func (e *executor) at(start int) (Result, bool, error) {

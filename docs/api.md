@@ -6,12 +6,21 @@ The processing pipeline is explicit:
 2. `Parse` returns an immutable typed `Pattern` AST.
 3. `Compile` returns an immutable executable `Program`.
 4. `Match`, `Find`, `FindAll`, `Replace`, and `Split` execute with caller
-   options and context cancellation.
+   options and context cancellation. A canceled context is checked before
+   input admission; preparation and VM execution poll cancellation
+   cooperatively. Nil contexts retain background behavior.
 
 `Match` attempts only `MatchOptions.StartUTF16`. `Find` searches from that
 position unless the `y` flag makes the program sticky. `FindAll` returns
 ordered, non-overlapping matches and advances empty matches using ECMAScript
 `AdvanceStringIndex` semantics.
+
+`Replace` and `ReplaceUTF16` admit the subject and replacement independently
+against `MatchLimits.InputBytes` and `InputRunes`, even without a match. Exact
+UTF-16 storage costs two bytes per unit; paired surrogates count as one code
+point and lone surrogates as one. Token scans and capture-name conversion share
+`Steps` with the VM; output allowances do not replace input or work admission.
+This narrows the former subject-only policy and requires a major release.
 
 Every capture has a half-open `IndexSpan`. `Index.UTF16` is the normative
 ECMAScript code-unit position. `Index.Rune` and `Index.Byte` map to the Go
