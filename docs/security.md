@@ -43,3 +43,10 @@ raising them.
 
 The versioned [threat model](threat-model.md) records current boundaries,
 accepted risks, and the pending replacement-work repair verification.
+
+Three exact `G115` source dispositions cover nonnegative, token-bounded
+capture-count conversions and the pinned Unicode table sentinel encoding.
+They do not exclude files or other scanner rules. The library maintainer
+must review them when capture counting, token consumption, or generated
+Unicode inputs change; current aliases select tables 0 through 434 and encode
+them as values 1 through 435 in a `uint16` field.

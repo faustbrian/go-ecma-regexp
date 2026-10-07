@@ -86,7 +86,7 @@ type parser struct {
 	tokens             []Token
 	position           int
 	captures           int
-	classes            int
+	classes            uint64
 	nodes              uint64
 	captureNames       map[string][]int
 	totalCaptures      int
@@ -503,7 +503,7 @@ func (p *parser) consumeDecimalEscape(end int) int {
 }
 
 func (p *parser) legacyOctalEscape(prefix Token, first rune) (Node, error) {
-	digits := []byte{byte(first)}
+	digits := []byte(string(first))
 	maximum := 2
 	if first <= '3' {
 		maximum = 3
@@ -526,8 +526,8 @@ func (p *parser) characterClass(depth uint64) (Node, error) {
 	open := p.current()
 	p.advance()
 	p.classes++
-	if uint64(p.classes) > p.options.Limits.CharacterClasses {
-		return Node{}, &LimitError{Kind: LimitCharacterClasses, Limit: p.options.Limits.CharacterClasses, Used: uint64(p.classes)}
+	if p.classes > p.options.Limits.CharacterClasses {
+		return Node{}, &LimitError{Kind: LimitCharacterClasses, Limit: p.options.Limits.CharacterClasses, Used: p.classes}
 	}
 	negated := false
 	if p.current().kind == TokenCaret {
@@ -591,8 +591,8 @@ func (p *parser) unicodeSetClass(depth uint64) (Node, error) {
 		return Node{}, &LimitError{Kind: LimitASTDepth, Limit: p.options.Limits.ASTDepth, Used: depth}
 	}
 	p.classes++
-	if uint64(p.classes) > p.options.Limits.CharacterClasses {
-		return Node{}, &LimitError{Kind: LimitCharacterClasses, Limit: p.options.Limits.CharacterClasses, Used: uint64(p.classes)}
+	if p.classes > p.options.Limits.CharacterClasses {
+		return Node{}, &LimitError{Kind: LimitCharacterClasses, Limit: p.options.Limits.CharacterClasses, Used: p.classes}
 	}
 	complement := false
 	if p.current().kind == TokenCaret {
@@ -853,16 +853,17 @@ func (p *parser) propertyEscape(prefix Token, negated bool) (Node, error) {
 			return Node{}, p.syntax(SyntaxInvalidEscape, Span{Start: prefix.span.Start, End: end}, "a Unicode string property cannot be complemented")
 		}
 		p.classes++
-		if uint64(p.classes) > p.options.Limits.CharacterClasses {
-			return Node{}, &LimitError{Kind: LimitCharacterClasses, Limit: p.options.Limits.CharacterClasses, Used: uint64(p.classes)}
+		if p.classes > p.options.Limits.CharacterClasses {
+			return Node{}, &LimitError{Kind: LimitCharacterClasses, Limit: p.options.Limits.CharacterClasses, Used: p.classes}
 		}
 		return p.node(Node{kind: NodeCharacterClass, span: Span{Start: prefix.span.Start, End: end}, classStrings: stringsInProperty})
 	}
 	p.classes++
-	if uint64(p.classes) > p.options.Limits.CharacterClasses {
-		return Node{}, &LimitError{Kind: LimitCharacterClasses, Limit: p.options.Limits.CharacterClasses, Used: uint64(p.classes)}
+	if p.classes > p.options.Limits.CharacterClasses {
+		return Node{}, &LimitError{Kind: LimitCharacterClasses, Limit: p.options.Limits.CharacterClasses, Used: p.classes}
 	}
 
+	// #nosec G115 -- The pinned generated aliases select tables 0..434; sentinel encoding 1..435 fits uint16. Review when generated Unicode inputs change.
 	return p.node(Node{kind: NodeCharacterClass, span: Span{Start: prefix.span.Start, End: end}, class: []classTerm{{property: uint16(table + 1), negated: negated}}})
 }
 
@@ -1196,7 +1197,9 @@ func (p *parser) group(depth uint64) (Node, error) {
 	if capturing {
 		p.captures++
 		capture = p.captures
+		// #nosec G115 -- The private capture count starts at zero and increments once per consumed group token, bounded by the int-sized token slice.
 		if uint64(p.captures) > p.options.Limits.Captures {
+			// #nosec G115 -- The same nonnegative token-bounded capture count is reported without changing signed capture-index identity.
 			return Node{}, &LimitError{Kind: LimitCaptures, Limit: p.options.Limits.Captures, Used: uint64(p.captures)}
 		}
 		if name != "" {

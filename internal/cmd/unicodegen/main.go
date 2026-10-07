@@ -174,7 +174,7 @@ func main() {
 	legacyUpper := parseLegacyUpper(files["UnicodeData.txt"])
 	generated, err := generate(tables, aliases, stringProperties, folds, legacyUpper)
 	check(err)
-	check(os.WriteFile(*outputPath, generated, 0o644))
+	check(os.WriteFile(*outputPath, generated, 0o600))
 }
 
 func readFiles(archive *zip.Reader) map[string][]byte {
@@ -385,7 +385,7 @@ func setRanges(bits []uint64, ranges []codeRange, value bool) {
 
 func setBit(bits []uint64, codePoint rune, value bool) {
 	word := int(codePoint) / 64
-	mask := uint64(1) << (uint(codePoint) % 64)
+	mask := uint64(1) << (codePoint % 64)
 	if value {
 		bits[word] |= mask
 	} else {

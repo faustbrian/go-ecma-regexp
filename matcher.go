@@ -203,7 +203,7 @@ type runOutcome struct {
 	guards   []int
 }
 
-func (e *executor) run(pc, start int, captures, guards []int, direction, depth int) (runOutcome, bool, error) {
+func (e *executor) run(pc, start int, captures, guards []int, direction int, depth uint64) (runOutcome, bool, error) {
 	current := thread{pc: pc, captures: captures, guards: guards, position: start}
 	stack := make([]thread, 0, min(len(e.program.code), 64))
 
@@ -328,8 +328,8 @@ func (e *executor) run(pc, start int, captures, guards []int, direction, depth i
 			}
 		case opLook:
 			lookDepth := depth + 1
-			if uint64(lookDepth) > e.limits.RecursionDepth {
-				return runOutcome{}, false, &LimitError{Kind: LimitRecursionDepth, Limit: e.limits.RecursionDepth, Used: uint64(lookDepth)}
+			if lookDepth > e.limits.RecursionDepth {
+				return runOutcome{}, false, &LimitError{Kind: LimitRecursionDepth, Limit: e.limits.RecursionDepth, Used: lookDepth}
 			}
 			if err := e.allocate(2); err != nil {
 				return runOutcome{}, false, err
