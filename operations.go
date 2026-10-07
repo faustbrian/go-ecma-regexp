@@ -3,6 +3,7 @@ package ecmascript
 import (
 	"context"
 	"strings"
+	"unicode/utf16"
 )
 
 // FindAll returns ordered non-overlapping matches. Empty matches advance by
@@ -209,7 +210,7 @@ func (p *Program) appendSubstitution(output *outputUnits, input, replacement []u
 				end++
 			}
 			if end < len(replacement) && len(p.captureNames) > 0 {
-				name, err := utf16ASCII(replacement[index+2:end], executor)
+				name, err := utf16CaptureName(replacement[index+2:end], executor)
 				if err != nil {
 					return err
 				}
@@ -398,13 +399,24 @@ func advanceStringIndex(view *inputView, index int, unicodeMode bool) int {
 	return index + 2
 }
 
-func utf16ASCII(units []uint16, executor *executor) (string, error) {
+func utf16CaptureName(units []uint16, executor *executor) (string, error) {
 	var result strings.Builder
-	for _, unit := range units {
+	for index := 0; index < len(units); index++ {
 		if err := executor.step(); err != nil {
 			return "", err
 		}
-		result.WriteByte(byte(unit))
+		unit := units[index]
+		if isHighSurrogate(unit) && index+1 < len(units) && isLowSurrogate(units[index+1]) {
+			if err := executor.step(); err != nil {
+				return "", err
+			}
+			result.WriteRune(utf16.DecodeRune(rune(unit), rune(units[index+1])))
+			index++
+		} else {
+			// An unpaired surrogate cannot be a valid parsed capture name.
+			// WriteRune maps it to U+FFFD rather than aliasing an ASCII name.
+			result.WriteRune(rune(unit))
+		}
 	}
 	return result.String(), nil
 }

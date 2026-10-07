@@ -58,7 +58,7 @@ jobs:
           export GOMODCACHE="$evidence_cache/modules"
           export GOTMPDIR="$evidence_cache/tmp"
           mkdir -p "$GOTMPDIR"
-          go test -p=1 -run '^TestReplacementUnicodeCaptureNamesHosted$' -count=1 -timeout=2m .
+          go test -p=1 -run '^TestReplacement(UnicodeCaptureNames|ConsumedNameBudget|WorkBoundaries|InputAdmission)Hosted$' -count=1 -timeout=2m .
 
   ci:
     uses: faustbrian/go-library-tools/.github/workflows/library-ci.yml@606c3e9da5112086217f7108f335c2f88528bc14 # immutable development tooling

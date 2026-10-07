@@ -7,6 +7,12 @@ and this project uses semantic versioning.
 
 ## [Unreleased]
 
+### Fixed
+
+- Resolve Unicode named replacements using the capture-name identity from
+  the parser instead of truncating UTF-16 code units. Distinct and absent
+  names no longer alias ASCII captures; replacement work remains bounded.
+
 ### Security
 
 - Apply input byte and code-point allowances independently to replacement
