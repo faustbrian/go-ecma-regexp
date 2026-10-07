@@ -24,6 +24,7 @@ jobs:
     with:
       tooling_sha: 606c3e9da5112086217f7108f335c2f88528bc14
       source_bootstrap: true
+      public_dependencies: true
       release_dry_run: ${{ inputs.release_dry_run || false }}
 
   required:
