@@ -45,3 +45,28 @@ func TestReplacementUnicodeCaptureNamesHosted(t *testing.T) {
 		})
 	}
 }
+
+func TestReplacementUnpairedCaptureNameHosted(t *testing.T) {
+	if os.Getenv("GITHUB_ACTIONS") != "true" {
+		t.Skip("replacement surrogate boundary runs in hosted CI")
+	}
+	program, err := ecmascript.Compile(`(?<x>a)`, "u", ecmascript.DefaultCompileOptions())
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, representation := range []string{"string", "UTF16"} {
+		t.Run(representation, func(t *testing.T) {
+			replacement := ecmascript.UTF16FromUnits([]uint16{'$', '<', 0xd800, '>'})
+			var got ecmascript.UTF16String
+			var err error
+			if representation == "string" {
+				got, err = program.Replace(context.Background(), "a", replacement, ecmascript.DefaultMatchOptions())
+			} else {
+				got, err = program.ReplaceUTF16(context.Background(), ecmascript.UTF16FromString("a"), replacement, ecmascript.DefaultMatchOptions())
+			}
+			if err != nil || len(got.Units()) != 0 {
+				t.Fatalf("unpaired missing-name replacement = %v, %v; want empty output", got.Units(), err)
+			}
+		})
+	}
+}

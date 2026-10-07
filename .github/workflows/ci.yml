@@ -58,7 +58,7 @@ jobs:
           export GOMODCACHE="$evidence_cache/modules"
           export GOTMPDIR="$evidence_cache/tmp"
           mkdir -p "$GOTMPDIR"
-          go test -p=1 -run '^TestReplacement(UnicodeCaptureNames|ConsumedNameBudget|WorkBoundaries|InputAdmission)Hosted$' -count=1 -timeout=2m .
+          go test -p=1 -run '^Test(Replacement(UnicodeCaptureNames|UnpairedCaptureName|ConsumedNameBudget|WorkBoundaries|InputAdmission)|UTF16InputSecondCopyChunk)Hosted$' -count=1 -timeout=2m .
           go test -p=1 -run '^Test(ParserLimitContracts|CharacterClassRangeAndLimitBoundaries|UnicodeSetRangeDepthAndClassBoundaries|GroupAndNodeLimitsAllowExactBoundary|LookaroundEnforcesRecursionBudget|LegacyOctalEscapeUsesThreeDigitsOnlyThroughThree|AnnexBLegacyDecimalAndOctalEscapes)$' -count=1 -timeout=2m .
 
   ci:
