@@ -7,6 +7,17 @@ and this project uses semantic versioning.
 
 ## [Unreleased]
 
+## [2.0.0] - 2026-10-08
+
+Publish the Go 1.27 `/v2` major with independently bounded replacement
+admission, charged consumed-name work, Unicode capture-name identity, and
+cooperative preparation cancellation. Update imports and review the
+[migration guide](docs/migration.md); the original v1 module has no backport
+of the replacement admission repair.
+
+The preparation entries below record work before publication; their
+preparation wording is historical.
+
 ### Fixed
 
 - Resolve Unicode named replacements using the capture-name identity from

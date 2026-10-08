@@ -1,11 +1,12 @@
 # Migration from Go regexp and PCRE
 
-## Planned v2 adoption
+## Published v2 adoption
 
-V2 is prepared on main but is not yet published. After release qualification,
-use `github.com/faustbrian/go-ecma-regexp/v2` imports and a v2 Git tag; source
+V2.0.0 is published from main. Use
+`github.com/faustbrian/go-ecma-regexp/v2` imports and a v2 Git tag; source
 remains in the repository root. Go 1.27 is required. Published v1.1.1 remains
-available at its original module path and tag.
+available at its original module path and tag, without a backport of the
+replacement admission repair. See [security guidance](security.md).
 
 Subject and replacement templates independently use `InputBytes` and
 `InputRunes`. UTF-16 templates cost two bytes per unit and one code point per

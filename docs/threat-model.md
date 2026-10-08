@@ -1,7 +1,7 @@
 # Threat model
 
 - Model: `ECMA-REGEXP-THREAT-MODEL-2.0.0`
-- Applies to: `github.com/faustbrian/go-ecma-regexp/v2` candidate on main
+- Applies to: `github.com/faustbrian/go-ecma-regexp/v2` v2.0.0
 - Reviewed: 2026-10-08
 - Owner: ECMA regexp maintainers
 
@@ -72,9 +72,15 @@ manual release rehearsal with `release_dry_run` enabled on the candidate ref.
 This route retains the selected release, scanner, API and native gates; it
 does not qualify the tooling's pending public v2 binary. ECMA has no runtime
 dependency on that binary, so its publication is not an ECMA release gate.
-Stable binary adoption remains separate maintainer work. An actual successful
-ECMA release rehearsal, signed publication and clean public-consumer
-verification are still required before claiming the public v2 remedy.
+Stable binary adoption remains separate maintainer work. The
+[actual release rehearsal](https://github.com/faustbrian/go-ecma-regexp/actions/runs/37839687043)
+and [exact-main CI](https://github.com/faustbrian/go-ecma-regexp/actions/runs/37841043972)
+passed for the signed [v2.0.0 release](https://github.com/faustbrian/go-ecma-regexp/releases/tag/v2.0.0).
+A clean public proxy/SumDB consumer verified that source identity, finite
+replacement admission, Unicode capture-name behavior, entry cancellation,
+and preserved session state. Public release assets and all 136 module
+archive members matched the reviewed source archive. This does not prove
+asynchronous interruption during a particular preparation pass.
 
 Hosted public regression tests independently exercise pre-cancellation and
 expired-deadline precedence on all thirteen execution entry points, absent
@@ -104,8 +110,10 @@ ECMA-OPEN-001 is owned by runtime maintainers. Hosted pre-fix regression tests
 demonstrate missing replacement admission and uncharged consumed-name work.
 The repair on main admits templates and charges scanning/conversion;
 corrected-source hosted verification and independent final-diff review passed.
-Public remediation remains pending the v2 release and clean public-consumer
-verification; this is not a claim of a published fix for the legacy module.
+Public remediation is the separate v2.0.0 release, verified by a clean
+public consumer. The original v1 module has no patched version for this
+finding; see
+[replacement admission advisory](https://github.com/faustbrian/go-ecma-regexp/security/advisories/GHSA-q6mc-8c55-cvwf).
 The narrowed replacement contract
 requires a major release and documented migration from subject-only budgets;
 v1 patch publication does not qualify the repair. Runtime interruption during

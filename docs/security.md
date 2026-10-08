@@ -42,8 +42,15 @@ interactive or multi-tenant validation and measure real workloads before
 raising them.
 
 The versioned [threat model](threat-model.md) records current boundaries,
-accepted risks, source-qualified replacement-work repairs, and the pending
-public v2 release and consumer verification.
+accepted risks, and the published v2 replacement-work repair. The original
+v1 module through v1.1.1 does not independently admit replacement templates
+or account for all consumed-name work; its subject and output limits do not
+supply those missing bounds. See
+[replacement admission advisory](https://github.com/faustbrian/go-ecma-regexp/security/advisories/GHSA-q6mc-8c55-cvwf).
+Upgrade to the separate `/v2` module using the [migration guide](migration.md).
+Until migration, keep replacement templates application-controlled or apply
+explicit small admission limits and restrict substitution forms before
+forwarding them to the legacy API.
 
 Three exact `G115` source dispositions cover nonnegative, token-bounded
 capture-count conversions and the pinned Unicode table sentinel encoding.

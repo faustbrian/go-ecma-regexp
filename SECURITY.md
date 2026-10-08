@@ -12,8 +12,11 @@ timelines depend on severity and verification.
 
 ## Supported Versions
 
-The latest stable `v1` release line receives security fixes. Support windows
-are documented per module and in
+The latest stable major is
+[`github.com/faustbrian/go-ecma-regexp/v2` v2.0.0](https://github.com/faustbrian/go-ecma-regexp/releases/tag/v2.0.0).
+The original v1 module has no backport of the replacement admission repair;
+see [security guidance](docs/security.md) for its advisory and migration.
+Support windows are documented per module and in
 [`COMPATIBILITY.md`](COMPATIBILITY.md).
 
 ## Security Gates

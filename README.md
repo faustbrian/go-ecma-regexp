@@ -5,7 +5,7 @@
 [![Coverage](https://img.shields.io/badge/coverage-100%25_required-blue)](CONTRIBUTING.md#verification)
 [![Mutation](https://img.shields.io/badge/mutation-100%25_required-blue)](CONTRIBUTING.md#verification)
 [![Documentation](https://img.shields.io/badge/docs-checked_in_CI-blue)](docs/)
-[![Go Reference](https://pkg.go.dev/badge/github.com/faustbrian/go-ecma-regexp.svg)](https://pkg.go.dev/github.com/faustbrian/go-ecma-regexp)
+[![Go Reference](https://pkg.go.dev/badge/github.com/faustbrian/go-ecma-regexp/v2.svg)](https://pkg.go.dev/github.com/faustbrian/go-ecma-regexp/v2)
 [![Release](https://img.shields.io/github/v/release/faustbrian/go-ecma-regexp?sort=semver)](https://github.com/faustbrian/go-ecma-regexp/releases)
 [![Go](https://img.shields.io/badge/go-1.27.0-00ADD8?logo=go)](https://go.dev/)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
@@ -19,22 +19,21 @@ The supported language is closed to ECMA-262, 16th edition (ECMAScript 2025),
 with Unicode 16.0.0 data. The exact ECMA-262, Test262, Unicode, and emoji
 provenance is recorded in [`specification/manifest.json`](specification/manifest.json).
 
-> Release status: v1.1.1 is the latest published stable release. This main
-> source prepares v2 and is not yet published or release-qualified. Runtime
-> regressions passed before the module-path change; current-source coverage
-> and release qualification remain pending. See the
+> Release status: v2.0.0 is the latest published stable release and requires
+> Go 1.27 or later. The legacy v1 module has no backport of the replacement
+> admission repair. See [security guidance](docs/security.md),
+> [migration](docs/migration.md), and the
 > [conformance inventory](specification/README.md).
 
 ## Install
 
 ```sh
-go get github.com/faustbrian/go-ecma-regexp@v1.1.1
+go get github.com/faustbrian/go-ecma-regexp/v2@v2
 ```
 
-After v2 is qualified and published, install it with
-`go get github.com/faustbrian/go-ecma-regexp/v2@v2`. The current main source
-uses `/v2` imports in the same root directory; it has no version-specific
-source branch or directory. See [migration guidance](docs/migration.md).
+Use `/v2` imports for the current stable major. Source remains in the same
+root directory on main, without a version-specific source branch or
+directory. See [migration guidance](docs/migration.md).
 
 ## Quick start
 
@@ -76,7 +75,7 @@ quick start and runs as part of the documentation gate.
 
 | Import path | Package | Use |
 | --- | --- | --- |
-| `github.com/faustbrian/go-ecma-regexp/v2` | `ecmascript` | Parse, compile, and execute bounded ECMAScript and JSON Schema regular expressions; v2 publication is pending. |
+| `github.com/faustbrian/go-ecma-regexp/v2` | `ecmascript` | Parse, compile, and execute bounded ECMAScript and JSON Schema regular expressions. |
 
 The module exposes no public subpackages. Commands beneath `internal/cmd` are
 repository tooling and cannot be imported by consumers.
