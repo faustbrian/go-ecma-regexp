@@ -4,65 +4,17 @@
     {
       "module_directory": ".",
       "package_directory": ".",
-      "source_digest": "84923d4daf270c07993ab31b2dafb866cd040724f86118a4208bd2f6d3545239",
+      "source_digest": "1ad40f68bc1e4bf7aa64b7850ec760a29ac0117b55e1509b000aaa35a9e4fb0a",
       "gremlins_version": "v0.6.0",
       "gremlins_verifier_sha256": "c28707fd4ce35dd228260de564107c1fb7726e42d4e9ea2bf9e988083e1f3b5b",
       "mutations": [
-        {
-          "file_name": "input.go",
-          "type": "CONDITIONALS_NEGATION",
-          "line": 47,
-          "column": 42,
-          "contract_domain": "Documented synchronous cooperative cancellation during finite UTF-8/UTF-16 preparation, explicit input byte/code-point allowances, unchanged successful units/indexes, no partial result or VM/session mutation after observed cancellation; not exact polling, timing, transient allocation or cancellation-versus-limit interleavings",
-          "reason": "Independent reviewer /root/knapsack_placement_final_review ACCEPT; owner runtime maintainer; reviewed 2026-10-08; expires 2026-11-07 or any bound source/verifier, polling granularity or public cancellation/error-precedence change. Changing periodic ==0 to !=0 tightens UTF-8 counting to at most two decoded runes between checks instead of256; decoding, invalid-UTF8 one-byte progress and rune admission are unchanged. Entry and final checkpoints remain. Side-effectful, blocking or panicking Context method traces and exact asynchronous winners are not claimed equivalent. ECMA-RISK-001 retains bounded cooperative cancellation ownership and chunk-change review. Native37580275331 remains FAILED1197killed/13lived; six ARITHMETIC_BASE poll-removal survivors remain excluded and unresolved."
-        },
-        {
-          "file_name": "input.go",
-          "type": "CONDITIONALS_NEGATION",
-          "line": 72,
-          "column": 43,
-          "contract_domain": "Documented synchronous cooperative cancellation during finite UTF-8/UTF-16 preparation, explicit input byte/code-point allowances, unchanged successful units/indexes, no partial result or VM/session mutation after observed cancellation; not exact polling, timing, transient allocation or cancellation-versus-limit interleavings",
-          "reason": "Independent reviewer /root/knapsack_placement_final_review ACCEPT; owner runtime maintainer; reviewed 2026-10-08; expires 2026-11-07 or any bound source/verifier, polling granularity or public cancellation/error-precedence change. Changing periodic ==0 to !=0 tightens string index construction to at most two code points between checks; each emits at most two UTF16 units. Capacities, units, surrogate interiors and exact byte/rune endpoints are unchanged. Entry and final checkpoints remain. Side-effectful, blocking or panicking Context method traces and exact asynchronous winners are not claimed equivalent. ECMA-RISK-001 retains bounded cooperative cancellation ownership and chunk-change review. Native37580275331 remains FAILED1197killed/13lived; six ARITHMETIC_BASE poll-removal survivors remain excluded and unresolved."
-        },
-        {
-          "file_name": "input.go",
-          "type": "CONDITIONALS_NEGATION",
-          "line": 124,
-          "column": 43,
-          "contract_domain": "Documented synchronous cooperative cancellation during finite UTF-8/UTF-16 preparation, explicit input byte/code-point allowances, unchanged successful units/indexes, no partial result or VM/session mutation after observed cancellation; not exact polling, timing, transient allocation or cancellation-versus-limit interleavings",
-          "reason": "Independent reviewer /root/knapsack_placement_final_review ACCEPT; owner runtime maintainer; reviewed 2026-10-08; expires 2026-11-07 or any bound source/verifier, polling granularity or public cancellation/error-precedence change. Changing periodic ==0 to !=0 tightens UTF16 counting to at most two code points/four units between checks. Paired-surrogate two-unit progress, lone-surrogate classification, byte admission and final rune allowance are unchanged. Entry and final checkpoints remain. Side-effectful, blocking or panicking Context method traces and exact asynchronous winners are not claimed equivalent. ECMA-RISK-001 retains bounded cooperative cancellation ownership and chunk-change review. Native37580275331 remains FAILED1197killed/13lived; six ARITHMETIC_BASE poll-removal survivors remain excluded and unresolved."
-        },
-        {
-          "file_name": "input.go",
-          "type": "CONDITIONALS_NEGATION",
-          "line": 164,
-          "column": 39,
-          "contract_domain": "Documented synchronous cooperative cancellation during finite UTF-8/UTF-16 preparation, explicit input byte/code-point allowances, unchanged successful units/indexes, no partial result or VM/session mutation after observed cancellation; not exact polling, timing, transient allocation or cancellation-versus-limit interleavings",
-          "reason": "Independent reviewer /root/knapsack_placement_final_review ACCEPT; owner runtime maintainer; reviewed 2026-10-08; expires 2026-11-07 or any bound source/verifier, polling granularity or public cancellation/error-precedence change. Changing periodic ==0 to !=0 tightens non-scalar mapping checks; its unit-boundary counter starts at1, observes before the first write and leaves at most two boundary writes between checks. Every boundary still receives identical UTF16 and Rune/Byte=-1 values. Entry and final checkpoints remain. Side-effectful, blocking or panicking Context method traces and exact asynchronous winners are not claimed equivalent. ECMA-RISK-001 retains bounded cooperative cancellation ownership and chunk-change review. Native37580275331 remains FAILED1197killed/13lived; six ARITHMETIC_BASE poll-removal survivors remain excluded and unresolved."
-        },
-        {
-          "file_name": "input.go",
-          "type": "CONDITIONALS_NEGATION",
-          "line": 180,
-          "column": 43,
-          "contract_domain": "Documented synchronous cooperative cancellation during finite UTF-8/UTF-16 preparation, explicit input byte/code-point allowances, unchanged successful units/indexes, no partial result or VM/session mutation after observed cancellation; not exact polling, timing, transient allocation or cancellation-versus-limit interleavings",
-          "reason": "Independent reviewer /root/knapsack_placement_final_review ACCEPT; owner runtime maintainer; reviewed 2026-10-08; expires 2026-11-07 or any bound source/verifier, polling granularity or public cancellation/error-precedence change. Changing periodic ==0 to !=0 tightens scalar UTF16 mapping by code point/rune, not unit. Surrogate pair consumption, interior positions and exact byte/rune endpoints are unchanged; unchecked work never exceeds the original256-iteration chunk. Entry and final checkpoints remain. Side-effectful, blocking or panicking Context method traces and exact asynchronous winners are not claimed equivalent. ECMA-RISK-001 retains bounded cooperative cancellation ownership and chunk-change review. Native37580275331 remains FAILED1197killed/13lived; six ARITHMETIC_BASE poll-removal survivors remain excluded and unresolved."
-        },
-        {
-          "file_name": "operations.go",
-          "type": "CONDITIONALS_NEGATION",
-          "line": 145,
-          "column": 43,
-          "contract_domain": "Documented synchronous cooperative cancellation during finite UTF-8/UTF-16 preparation, explicit input byte/code-point allowances, unchanged successful units/indexes, no partial result or VM/session mutation after observed cancellation; not exact polling, timing, transient allocation or cancellation-versus-limit interleavings",
-          "reason": "Independent reviewer /root/knapsack_placement_final_review ACCEPT; owner runtime maintainer; reviewed 2026-10-08; expires 2026-11-07 or any bound source/verifier, polling granularity or public cancellation/error-precedence change. Changing periodic ==0 to !=0 tightens replacement code-point counting to at most two points between checks. Two-byte-per-unit storage admission, pair/lone-surrogate semantics and rune admission are unchanged; no token/VM/session work starts before successful admission. Entry and final checkpoints remain. Side-effectful, blocking or panicking Context method traces and exact asynchronous winners are not claimed equivalent. ECMA-RISK-001 retains bounded cooperative cancellation ownership and chunk-change review. Native37580275331 remains FAILED1197killed/13lived; six ARITHMETIC_BASE poll-removal survivors remain excluded and unresolved."
-        },
         {
           "file_name": "input.go",
           "type": "CONDITIONALS_BOUNDARY",
           "line": 148,
           "column": 24,
           "contract_domain": "Documented synchronous cooperative cancellation during finite UTF-8/UTF-16 preparation, explicit input byte/code-point allowances, unchanged successful units/indexes, no partial result or VM/session mutation after observed cancellation; not exact polling, timing, transient allocation or cancellation-versus-limit interleavings",
-          "reason": "Independent reviewer /root/knapsack_placement_final_review ACCEPT; owner runtime maintainer; reviewed 2026-10-08; expires 2026-11-07 or any bound source/verifier, polling granularity or public cancellation/error-precedence change. Changing start<len to start<=len adds exactly one context check and empty [len:len] copy when unit length is divisible by256, including zero; other lengths are unchanged. It adds no payload copy, capacity or index mutation and retains all nonempty-chunk checks and subsequent construction/final cancellation checks. Entry and final checkpoints remain. Side-effectful, blocking or panicking Context method traces and exact asynchronous winners are not claimed equivalent. ECMA-RISK-001 retains bounded cooperative cancellation ownership and chunk-change review. Native37580275331 remains FAILED1197killed/13lived; six ARITHMETIC_BASE poll-removal survivors remain excluded and unresolved."
+          "reason": "Previously independently accepted by /root/knapsack_placement_final_review; owner runtime maintainer; reviewed 2026-10-08; expires 2026-11-07 or any bound source/verifier, polling granularity or public cancellation/error-precedence change. Changing start<len to start<=len adds exactly one context check and empty [len:len] copy when unit length is divisible by256, including zero; other lengths are unchanged. It adds no payload copy, capacity or index mutation and retains all nonempty-chunk checks and subsequent construction/final cancellation checks. Side-effectful, blocking or panicking Context method traces and exact asynchronous winners are not claimed equivalent. Source rebind requires independent validation of the unchanged copy loop and retained final checks before qualification. Historical native37580275331 remains FAILED1197killed/13lived; the six old inline conditional identities have been removed after shared-policy extraction. No current native pass is inferred."
         }
       ]
     }

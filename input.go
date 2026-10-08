@@ -44,7 +44,7 @@ func makeInputViewContext(ctx context.Context, source string, limits MatchLimits
 	}
 	runeCount := 0
 	for byteOffset := 0; byteOffset < len(source); {
-		if runeCount%inputContextCheckInterval == 0 {
+		if inputContextCheckpoint(uint64(runeCount)) {
 			if err := ctx.Err(); err != nil {
 				return nil, err
 			}
@@ -69,7 +69,7 @@ func makeInputViewContext(ctx context.Context, source string, limits MatchLimits
 	view.codePointBoundary[0] = true
 	runeOffset := 0
 	for byteOffset, char := range source {
-		if runeOffset%inputContextCheckInterval == 0 {
+		if inputContextCheckpoint(uint64(runeOffset)) {
 			if err := ctx.Err(); err != nil {
 				return nil, err
 			}
@@ -121,7 +121,7 @@ func makeUTF16InputViewContext(ctx context.Context, input UTF16String, limits Ma
 	codePointBoundary := make([]bool, len(input.units)+1)
 	codePointBoundary[0] = true
 	for index := 0; index < len(input.units); {
-		if codePoints%inputContextCheckInterval == 0 {
+		if inputContextCheckpoint(uint64(codePoints)) {
 			if err := ctx.Err(); err != nil {
 				return nil, err
 			}
@@ -161,7 +161,7 @@ func makeUTF16InputViewContext(ctx context.Context, input UTF16String, limits Ma
 	view.boundaries[0] = Index{Exact: true}
 	if !validScalar {
 		for index := 1; index < len(view.boundaries); index++ {
-			if index%inputContextCheckInterval == 0 {
+			if inputContextCheckpoint(uint64(index)) {
 				if err := ctx.Err(); err != nil {
 					return nil, err
 				}
@@ -177,7 +177,7 @@ func makeUTF16InputViewContext(ctx context.Context, input UTF16String, limits Ma
 	runeOffset := 0
 	byteOffset := 0
 	for index := 0; index < len(input.units); {
-		if runeOffset%inputContextCheckInterval == 0 {
+		if inputContextCheckpoint(uint64(runeOffset)) {
 			if err := ctx.Err(); err != nil {
 				return nil, err
 			}
@@ -206,4 +206,10 @@ func makeUTF16InputViewContext(ctx context.Context, input UTF16String, limits Ma
 
 func (v *inputView) span(start, end int) IndexSpan {
 	return IndexSpan{Start: v.boundaries[start], End: v.boundaries[end]}
+}
+
+// Input preparation and replacement admission share this polling policy, not
+// the VM's first-step execution policy. Callers count nonnegative work units.
+func inputContextCheckpoint(processed uint64) bool {
+	return processed%inputContextCheckInterval == 0
 }

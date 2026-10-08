@@ -142,7 +142,7 @@ func admitReplacement(ctx context.Context, units []uint16, limits MatchLimits) e
 	}
 	codePoints := uint64(0)
 	for index := 0; index < len(units); {
-		if codePoints%inputContextCheckInterval == 0 {
+		if inputContextCheckpoint(codePoints) {
 			if err := ctx.Err(); err != nil {
 				return err
 			}
