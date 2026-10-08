@@ -66,9 +66,15 @@ oracles. All other applicable security and release gates remain required.
 During v2 preparation, CI explicitly builds the immutable development tooling
 source pinned in its workflow and runs full repository contracts. The declared
 v1.4.0 binary does not support the optional coverage policy; it is not an
-equivalent local verification route. Development source evidence does not
-certify that tooling's pending public v2 release or this package's release.
-Stable binary adoption and public-consumer verification remain release work.
+equivalent local verification route. The existing workflow also supports
+release qualification through that same immutable source bootstrap: run its
+manual release rehearsal with `release_dry_run` enabled on the candidate ref.
+This route retains the selected release, scanner, API and native gates; it
+does not qualify the tooling's pending public v2 binary. ECMA has no runtime
+dependency on that binary, so its publication is not an ECMA release gate.
+Stable binary adoption remains separate maintainer work. An actual successful
+ECMA release rehearsal, signed publication and clean public-consumer
+verification are still required before claiming the public v2 remedy.
 
 Hosted public regression tests independently exercise pre-cancellation and
 expired-deadline precedence on all thirteen execution entry points, absent

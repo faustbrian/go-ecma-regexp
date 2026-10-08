@@ -48,7 +48,7 @@
       "purpose": "`ecma-regexp` is a bounded, specification-backed ECMAScript regular expression engine for Go. It implements JavaScript semantics directly; it does not translate patterns to Go's RE2-based `regexp` package and does not embed a JavaScript runtime.",
       "lifecycle": "stable",
       "kind": "public library",
-      "releasable": false,
+      "releasable": true,
       "family": "domain-utilities",
       "family_label": "Domain Utilities",
       "family_description": "Domain-specific immutable values, algorithms, parsers, proofs, and calculations.",
