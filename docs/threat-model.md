@@ -2,7 +2,7 @@
 
 - Model: `ECMA-REGEXP-THREAT-MODEL-2.0.0`
 - Applies to: `github.com/faustbrian/go-ecma-regexp/v2` candidate on main
-- Reviewed: 2026-10-05
+- Reviewed: 2026-10-08
 - Owner: ECMA regexp maintainers
 
 ## Assets and trust boundaries
@@ -73,8 +73,10 @@ Stable binary adoption and public-consumer verification remain release work.
 Hosted public regression tests independently exercise pre-cancellation and
 expired-deadline precedence on all thirteen execution entry points, absent
 partial output, and the out-of-range global Session state boundary. Ordinary
-limit and nil-context controls remain separate. Corrected-source hosted
-verification is required before claiming this repair delivered.
+limit and nil-context controls remain separate. Corrected-source
+[hosted verification](https://github.com/faustbrian/go-ecma-regexp/actions/runs/37831455381)
+passed on commit `67a7efaa6d746c6b55dec38ae18c7d60ae18a9d7`, now on main.
+This qualifies the source repair, not a public release or consumer migration.
 
 These tests do not establish runtime cancellation during a specific preparation
 pass. The periodic checks are source-reviewed; no manufactured context polling
@@ -94,9 +96,11 @@ semantic, input-boundary, and index tests remain required affected checks.
 
 ECMA-OPEN-001 is owned by runtime maintainers. Hosted pre-fix regression tests
 demonstrate missing replacement admission and uncharged consumed-name work.
-The candidate repair admits templates and charges scanning/conversion, but
-corrected-source hosted verification and independent review remain pending.
-This finding is not yet closed or accepted. The narrowed replacement contract
+The repair on main admits templates and charges scanning/conversion;
+corrected-source hosted verification and independent final-diff review passed.
+Public remediation remains pending the v2 release and clean public-consumer
+verification; this is not a claim of a published fix for the legacy module.
+The narrowed replacement contract
 requires a major release and documented migration from subject-only budgets;
 v1 patch publication does not qualify the repair. Runtime interruption during
 a particular scan remains unproved; source checkpoints are not that proof.

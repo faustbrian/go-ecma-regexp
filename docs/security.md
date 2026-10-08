@@ -42,7 +42,8 @@ interactive or multi-tenant validation and measure real workloads before
 raising them.
 
 The versioned [threat model](threat-model.md) records current boundaries,
-accepted risks, and the pending replacement-work repair verification.
+accepted risks, source-qualified replacement-work repairs, and the pending
+public v2 release and consumer verification.
 
 Three exact `G115` source dispositions cover nonnegative, token-bounded
 capture-count conversions and the pinned Unicode table sentinel encoding.
