@@ -3,7 +3,7 @@
 [![CI](https://github.com/faustbrian/go-ecma-regexp/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/faustbrian/go-ecma-regexp/actions/workflows/ci.yml)
 [![CodeQL](https://img.shields.io/badge/CodeQL-required-blue)](https://github.com/faustbrian/go-ecma-regexp/actions/workflows/ci.yml)
 [![Coverage](https://img.shields.io/badge/coverage-100%25_required-blue)](CONTRIBUTING.md#verification)
-[![Mutation](https://img.shields.io/badge/mutation-100%25_required-blue)](CONTRIBUTING.md#verification)
+[![Mutation](https://img.shields.io/badge/mutation-local_and_scheduled-blue)](CONTRIBUTING.md#verification)
 [![Documentation](https://img.shields.io/badge/docs-checked_in_CI-blue)](docs/)
 [![Go Reference](https://pkg.go.dev/badge/github.com/faustbrian/go-ecma-regexp/v2.svg)](https://pkg.go.dev/github.com/faustbrian/go-ecma-regexp/v2)
 [![Release](https://img.shields.io/github/v/release/faustbrian/go-ecma-regexp?sort=semver)](https://github.com/faustbrian/go-ecma-regexp/releases)
@@ -108,16 +108,15 @@ and its [Domain utilities family](https://github.com/faustbrian/go-library-tools
 ## Development gates
 
 ```sh
-make inventory
-make cohesion
-make check
-make ci
+go test ./...
 ```
 
-The gates use the pinned `go-library-tools` release declared in `.golib.yaml`.
-Package-specific safety, documentation, Test262 conformance, interoperability,
-fuzz, benchmark, and mutation evidence remain declared or retained in this
-repository.
+`make check` and `make ci` use bounded local checks with the pinned public
+verifier declared in `.golib.yaml`; `make check-full` retains explicit full
+assurance. Ordinary tests run fuzz seeds, not active exploration, and do not
+prove external Test262 or release interoperability when their peers are absent.
+See [contributor verification](CONTRIBUTING.md#verification) for focused fuzzing,
+optional local mutation and selected conformance/release requirements.
 
 The package uses no `unsafe`, hidden workers, or global mutable caches. A
 compiled `Program` is immutable and concurrency-safe. Stateful `Session`

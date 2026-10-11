@@ -32,10 +32,13 @@ Execution is synchronous. The package creates no timeout goroutine, uses no
 `unsafe`, and maintains no global mutable cache. Applications may add a
 caller-owned bounded cache of immutable `Program` values.
 
-`make hostile` exercises catastrophic backtracking, zero-width loops, capture
-and replacement growth, nested assertions, Unicode sets, and malformed UTF-8.
-`make leak` repeats budget failures under goroutine and retained-heap checks.
-`make race` shares immutable programs through a caller-owned synchronized cache.
+The explicit `make check-full` test operation exercises catastrophic
+backtracking, zero-width loops, capture and replacement growth, nested
+assertions, Unicode sets and malformed UTF-8. It retains the ten-count
+goroutine/retained-heap leak assertion. Bounded `make check` selects the existing
+immutable-program/caller-owned-cache race assertion once with a two-minute
+timeout. See [contributor verification](../CONTRIBUTING.md#verification) for
+deterministic seeds versus active fuzzing and the full qualification boundary.
 
 Default limits are safe starting points, not universal policy. Lower them for
 interactive or multi-tenant validation and measure real workloads before
