@@ -9,19 +9,28 @@ type Session struct {
 	lastIndex int
 }
 
+// NewSession borrows Program and starts lastIndex at zero. It expects a non-nil
+// compiled Program but does not validate the pointer. The zero Session or a nil
+// Program is not a usable execution session.
 func NewSession(program *Program) *Session {
 	return &Session{program: program}
 }
 
+// LastIndex returns UTF-16 state, not a byte or rune offset.
 func (s *Session) LastIndex() int { return s.lastIndex }
 
+// SetLastIndex clamps negatives to zero. Values beyond input end remain stored
+// until stateful Exec resets them on ordinary failure.
 func (s *Session) SetLastIndex(index int) {
 	s.lastIndex = max(index, 0)
 }
 
 // Exec applies RegExpBuiltinExec lastIndex, global, and sticky behavior. Limit
 // failures leave lastIndex unchanged; an ordinary failed global or sticky
-// match resets it to zero.
+// match resets it to zero. Non-global/non-sticky programs ignore lastIndex.
+// Empty success leaves lastIndex at that same boundary; callers looping Exec
+// must apply their own progress policy. No workers or locks are supplied.
+// nil context means Background.
 func (s *Session) Exec(ctx context.Context, input string, limits MatchLimits) (Result, bool, error) {
 	view, err := makeInputViewContext(ctx, input, limits)
 	if err != nil {

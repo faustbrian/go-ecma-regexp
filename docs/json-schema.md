@@ -43,9 +43,12 @@ using them may not interoperate with other JSON Schema implementations. The
 profile never rewrites unsupported syntax or falls back to Go's `regexp`
 package.
 
-Every validation call requires explicit `MatchOptions`. Exhausted step,
-backtrack, stack, allocation, input, output, result, or wall-time budgets are
-returned as typed errors and are not treated as a schema mismatch.
+Every validation call requires explicit `MatchOptions`; use `StartUTF16=0` for
+the whole-instance search and never pass negative starts. Input, charged VM
+work, stack/recursion, logical-allocation and sampled wall-time failures remain
+errors, not schema mismatches. Result/output limits apply to collection and
+replacement operations, not this single boolean search. This is one pattern
+assertion profile, not a complete JSON Schema implementation.
 
 Normative references:
 

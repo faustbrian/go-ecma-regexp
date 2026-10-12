@@ -7,7 +7,10 @@ import (
 )
 
 // FindAll returns ordered non-overlapping matches. Empty matches advance by
-// AdvanceStringIndex semantics, using code points in u or v mode.
+// AdvanceStringIndex semantics, using code points in u or v mode. g is not
+// required; y restricts each search attempt. StartUTF16 must be nonnegative.
+// One budget covers the collection. Errors discard collected matches rather
+// than return partial results; zero result allowance rejects a match.
 func (p *Program) FindAll(ctx context.Context, input string, options MatchOptions) ([]Result, error) {
 	view, err := makeInputViewContext(ctx, input, options.Limits)
 	if err != nil {
@@ -61,7 +64,10 @@ func (p *Program) findAll(ctx context.Context, view *inputView, options MatchOpt
 }
 
 // Replace applies ECMAScript GetSubstitution tokens. The g flag selects all
-// matches; without g, only the first match is replaced.
+// matches; without g, only the first match is replaced. StartUTF16 must be
+// nonnegative. Subject/template are admitted independently even on no-match.
+// Returned units are caller-owned; errors discard partial output. No replacement
+// callback/coercion or Session mutation is supplied.
 func (p *Program) Replace(ctx context.Context, input string, replacement UTF16String, options MatchOptions) (UTF16String, error) {
 	view, err := makeInputViewContext(ctx, input, options.Limits)
 	if err != nil {
@@ -273,10 +279,16 @@ type SplitValue struct {
 	value   UTF16String
 }
 
-func (v SplitValue) Defined() bool      { return v.defined }
+// Defined distinguishes inserted unmatched captures from defined empty split values.
+func (v SplitValue) Defined() bool { return v.defined }
+
+// Value returns copied exact UTF-16 units; undefined captures have an empty value.
 func (v SplitValue) Value() UTF16String { return newUTF16String(v.value.units) }
 
-// Split separates input and inserts separator captures in result order.
+// Split separates input and inserts separator captures in result order. It
+// starts at zero and ignores StartUTF16 and g/y selection, attempting the
+// separator at successive boundaries. Limits bound the whole call; errors
+// return nil rather than a truncated partial result.
 func (p *Program) Split(ctx context.Context, input string, options MatchOptions) ([]SplitValue, error) {
 	view, err := makeInputViewContext(ctx, input, options.Limits)
 	if err != nil {

@@ -25,7 +25,9 @@ security](security.md) and [performance](performance.md).
 
 ECMAScript indices use UTF-16 code units. Read `Index.UTF16` for the normative
 position and use `Index.Byte`, `Index.Rune`, and `Index.Exact` when mapping to a
-Go string. Use the `UTF16String` APIs when lone surrogates must be preserved.
+Go string only when Exact is true and the capture participated. Exact UTF-16
+input containing any lone surrogate has unavailable post-origin Go mappings
+(-1/Exact=false). Use `UTF16String` values when lone surrogates must be preserved.
 
 ## More help
 

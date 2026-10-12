@@ -10,15 +10,21 @@ import (
 
 // CompileLimits bounds the immutable executable representation.
 type CompileLimits struct {
+	// ProgramInstructions caps emitted instructions including the final match instruction;
+	// default 1,048,576. It does not count every temporary compiler allocation.
 	ProgramInstructions uint64
 }
 
 // CompileOptions selects parsing and compilation limits.
 type CompileOptions struct {
-	Parse  ParseOptions
+	// Parse supplies the edition, Annex B policy and parser allowances.
+	Parse ParseOptions
+	// Limits caps emitted bytecode independently of parse limits.
 	Limits CompileLimits
 }
 
+// DefaultCompileOptions returns explicit default parsing and instruction budgets.
+// Compile does not normalize zero options into these defaults.
 func DefaultCompileOptions() CompileOptions {
 	return CompileOptions{
 		Parse:  DefaultParseOptions(),
@@ -38,19 +44,34 @@ type Program struct {
 	captureNames map[string][]int
 }
 
-func (p *Program) Source() string   { return p.source }
+// Source returns retained original pattern text; do not log sensitive patterns.
+func (p *Program) Source() string { return p.source }
+
+// Edition reports the selected language edition.
 func (p *Program) Edition() Edition { return p.edition }
-func (p *Program) Flags() Flags     { return p.flags }
+
+// Flags reports the immutable compilation flags.
+func (p *Program) Flags() Flags { return p.flags }
+
+// CaptureCount excludes capture zero, the complete match.
 func (p *Program) CaptureCount() int {
 	return p.captures
 }
 
+// CaptureNameIndices returns independent name/index metadata, including disjoint
+// duplicate names.
 func (p *Program) CaptureNameIndices() map[string][]int {
 	return cloneCaptureNames(p.captureNames)
 }
 
 // Compile parses and compiles a pattern without delegating to Go's regexp
-// package or embedding a JavaScript runtime.
+// package or embedding a JavaScript runtime. flagSource is authoritative and
+// replaces options.Parse.Flags. Invalid flags, syntax or limits return nil and
+// an error; no context or wall-time allowance applies to compilation. Emitted
+// instruction limits do not account for every preliminary class-set allocation
+// or repetition expansion step. A repeated empty body can perform work without
+// emitting instructions; the instruction cap is not a compile-time CPU deadline.
+// The returned immutable Program retains original source and owns private code.
 func Compile(source, flagSource string, options CompileOptions) (*Program, error) {
 	flags, err := ParseFlags(flagSource)
 	if err != nil {
@@ -297,6 +318,8 @@ func (c *compiler) evaluateClassStrings(node Node) [][]uint16 {
 	return result
 }
 
+// stringSet keys exact code units rather than lossy decoded Go text, preserving
+// distinct UTF-16 sequences during class-string set algebra.
 func stringSet(values [][]uint16) map[string][]uint16 {
 	result := make(map[string][]uint16, len(values))
 	for _, value := range values {
@@ -415,6 +438,8 @@ func (c *compiler) alternation(branches []Node, reverse bool) error {
 	return nil
 }
 
+// quantifier expands declared repetitions; empty bodies may emit no bytecode.
+// The emitted-instruction limit does not charge those expansion iterations.
 func (c *compiler) quantifier(node Node, reverse bool) error {
 	child := node.children[0]
 	for count := 0; count < node.min; count++ {
@@ -444,6 +469,8 @@ func (c *compiler) quantifier(node Node, reverse bool) error {
 	return nil
 }
 
+// unbounded uses opGuard to prevent nullable repeated bodies from revisiting one
+// position indefinitely while preserving greedy/lazy preference.
 func (c *compiler) unbounded(child Node, greedy, reverse bool) error {
 	split, err := c.emit(instruction{op: opSplit})
 	if err != nil {
@@ -467,6 +494,8 @@ func (c *compiler) unbounded(child Node, greedy, reverse bool) error {
 	return nil
 }
 
+// compileIteration clears nested captures before repetition so a later branch
+// which omits a group cannot retain an earlier iteration value.
 func (c *compiler) compileIteration(child Node, reverse bool) error {
 	minimum, maximum, ok := captureBounds(child)
 	if ok {

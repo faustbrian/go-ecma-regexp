@@ -7,6 +7,13 @@ and this project uses semantic versioning.
 
 ## [Unreleased]
 
+### Changed
+
+- Clarify parser/VM budgets, UTF-16 capture and index ownership, stateless versus
+  Session progression, and existing negative-start and AST metadata limitations.
+  Distinguish cooperative logical accounting from hard memory/time guarantees
+  without changing runtime algorithms or specification inputs.
+
 ## [2.0.0] - 2026-10-08
 
 Publish the Go 1.27 `/v2` major with independently bounded replacement

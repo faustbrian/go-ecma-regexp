@@ -12,25 +12,50 @@ import (
 // one code point. Steps includes consumed substitution and capture-name work.
 // Zero is a zero allowance, not unlimited.
 type MatchLimits struct {
-	InputBytes     uint64
-	InputRunes     uint64
-	Steps          uint64
-	Backtracks     uint64
-	StackDepth     uint64
+	// InputBytes admits subject and replacement separately; Go strings use byte length,
+	// exact UTF-16 uses two bytes per unit. Default 16 MiB.
+	InputBytes uint64
+	// InputRunes admits subject and replacement code-point counts separately; paired
+	// surrogates count once and lone surrogates once. Default 16,777,216.
+	InputRunes uint64
+	// Steps caps charged VM dispatch and consumed substitution/name work, not every
+	// internal comparison. Default 10 million.
+	Steps uint64
+	// Backtracks caps resumed alternative frames across start attempts; default 1 million.
+	Backtracks uint64
+	// StackDepth caps pending alternatives in each VM invocation, not aggregate nested
+	// lookaround stack storage. Default 100,000.
+	StackDepth uint64
+	// RecursionDepth caps nested lookaround invocations; the first lookaround has depth
+	// one. Default 256.
 	RecursionDepth uint64
-	Allocations    uint64
-	Results        uint64
-	OutputUTF16    uint64
-	WallTime       time.Duration
+	// Allocations caps selected logical capture/guard reservations, not total Go heap
+	// allocations or bytes. Default 2 million.
+	Allocations uint64
+	// Results caps FindAll matches, replacements or Split values; single Match/Find do not
+	// use this counter. Default 1 million.
+	Results uint64
+	// OutputUTF16 caps replacement output or total defined Split value units; not captured
+	// match storage. Default 16,777,216.
+	OutputUTF16 uint64
+	// WallTime is the sampled execution allowance after subject/replacement preparation;
+	// zero or negative does not mean unlimited. Default one second.
+	WallTime time.Duration
 }
 
 // MatchOptions selects the explicit ECMAScript UTF-16 start position and all
 // execution budgets.
 type MatchOptions struct {
+	// StartUTF16 is a nonnegative code-unit index, not a byte or rune offset. Unicode
+	// Find-based methods can panic on negative values; Split ignores it.
 	StartUTF16 int
-	Limits     MatchLimits
+	// Limits contains per-call allowances, shared across Find candidates and collection
+	// matches; zero fields remain zero.
+	Limits MatchLimits
 }
 
+// DefaultMatchOptions returns start zero and explicit finite positive budgets.
+// Execution does not substitute these allowances for zero fields.
 func DefaultMatchOptions() MatchOptions {
 	return MatchOptions{Limits: MatchLimits{
 		InputBytes:     16 << 20,
@@ -54,9 +79,15 @@ type Capture struct {
 	span         IndexSpan
 }
 
+// Participated distinguishes an unmatched group from a participating empty capture.
 func (c Capture) Participated() bool { return c.participated }
+
+// Value returns a copied exact UTF-16 value; an unmatched capture returns empty units.
 func (c Capture) Value() UTF16String { return newUTF16String(c.value.units) }
-func (c Capture) Span() IndexSpan    { return c.span }
+
+// Span returns derived indices for a participating capture. An unmatched capture has
+// zero metadata; check Participated first.
+func (c Capture) Span() IndexSpan { return c.span }
 
 // Result is an immutable match result. Capture zero is the complete match.
 type Result struct {
@@ -64,6 +95,8 @@ type Result struct {
 	names    map[string][]int
 }
 
+// Named returns the participating group for a name, or its first unmatched group. The
+// bool reports name existence, not participation.
 func (r Result) Named(name string) (Capture, bool) {
 	indices := r.names[name]
 	if len(indices) == 0 {
@@ -77,12 +110,21 @@ func (r Result) Named(name string) (Capture, bool) {
 	return r.captures[indices[0]], true
 }
 
+// Full returns capture zero. Call it only on a successful matched result; the zero
+// Result panics.
 func (r Result) Full() Capture { return r.captures[0] }
+
+// Captures copies the ordered capture values including capture zero; nested storage
+// remains immutable through their accessors.
 func (r Result) Captures() []Capture {
 	return append([]Capture(nil), r.captures...)
 }
 
-// Match attempts the program exactly at StartUTF16.
+// Match attempts exactly at StartUTF16 independently of g/y. nil ctx means
+// Background. Preparation snapshots input; returned captures do not borrow caller
+// storage. The bool distinguishes a usable match from ordinary no-match. Errors
+// return no usable partial result. Cancellation/time sampling does not interrupt
+// every comparison or memory copy.
 func (p *Program) Match(ctx context.Context, input string, options MatchOptions) (Result, bool, error) {
 	view, err := makeInputViewContext(ctx, input, options.Limits)
 	if err != nil {
@@ -104,7 +146,10 @@ func (p *Program) MatchUTF16(ctx context.Context, input UTF16String, options Mat
 }
 
 // Find returns the first ordered match at or after StartUTF16. Sticky programs
-// attempt only the explicit start position.
+// attempt only the explicit start position. StartUTF16 must be nonnegative;
+// Unicode search can panic before index validation on negative starts. Candidates
+// share counters/time rather than receiving fresh budgets. g does not make this
+// stateless call update Session state.
 func (p *Program) Find(ctx context.Context, input string, options MatchOptions) (Result, bool, error) {
 	view, err := makeInputViewContext(ctx, input, options.Limits)
 	if err != nil {
@@ -114,7 +159,8 @@ func (p *Program) Find(ctx context.Context, input string, options MatchOptions) 
 	return executor.find(options.StartUTF16, p.flags.Sticky())
 }
 
-// FindUTF16 returns the first ordered match in an exact ECMAScript string.
+// FindUTF16 searches exact ECMAScript units under Find semantics. Input units
+// are copied and lone surrogates preserved. StartUTF16 must be nonnegative.
 func (p *Program) FindUTF16(ctx context.Context, input UTF16String, options MatchOptions) (Result, bool, error) {
 	view, err := makeUTF16InputViewContext(ctx, input, options.Limits)
 	if err != nil {
@@ -428,6 +474,8 @@ func (e *executor) backtrack(current *thread, stack *[]thread) (bool, error) {
 	return true, nil
 }
 
+// result snapshots capture units and names after success. These copies are not
+// individually charged by the logical allocation counter or step accounting.
 func (e *executor) result(indices []int) Result {
 	captures := make([]Capture, len(indices)/2)
 	for index := range captures {
@@ -468,6 +516,8 @@ func (e *executor) step() error {
 	return nil
 }
 
+// shouldCheckExecution polls at first dispatch and each 256 charged steps, not
+// asynchronously during class/backreference work or completed-result copies.
 func shouldCheckExecution(steps uint64) bool {
 	if steps == 1 {
 		return true
@@ -563,6 +613,8 @@ func (e *executor) classWidth(position, direction int, class characterClass, fla
 	return width
 }
 
+// backreference compares a captured sequence within one charged dispatch;
+// individual comparisons do not each poll cancellation or consume Steps.
 func (e *executor) backreference(current thread, captures []int, direction int, flags Flags) (int, bool) {
 	capture := participatingCapture(current.captures, captures)
 	if capture == 0 {

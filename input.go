@@ -10,18 +10,29 @@ const inputContextCheckInterval = 256
 
 // Index maps one ECMAScript UTF-16 boundary to Go byte and rune boundaries.
 // Exact is false when a UTF-16 boundary splits a surrogate pair and therefore
-// has no exact Go string or rune boundary.
+// has no exact Go string or rune boundary. For exact UTF-16 input containing
+// any lone surrogate, every post-origin Byte/Rune mapping is unavailable (-1)
+// and Exact is false, including otherwise scalar boundaries.
 type Index struct {
+	// UTF16 is the normative ECMAScript code-unit boundary.
 	UTF16 int
-	Rune  int
-	Byte  int
+	// Rune is the derived Go rune boundary, or -1 after the origin when exact input
+	// contains any lone surrogate.
+	Rune int
+	// Byte is the derived Go byte boundary, or -1 after the origin when exact input
+	// contains any lone surrogate.
+	Byte int
+	// Exact reports an available Go boundary mapping; false for split surrogate pairs or
+	// unavailable exact-input Go mappings.
 	Exact bool
 }
 
 // IndexSpan is a half-open range in all supported index coordinate systems.
 type IndexSpan struct {
+	// Start is the inclusive boundary.
 	Start Index
-	End   Index
+	// End is the exclusive boundary, in the same coordinate systems.
+	End Index
 }
 
 type inputView struct {
@@ -106,6 +117,9 @@ func makeUTF16InputView(input UTF16String, limits MatchLimits) (*inputView, erro
 	return makeUTF16InputViewContext(context.Background(), input, limits)
 }
 
+// makeUTF16InputViewContext keeps UTF-16 authoritative. If any lone surrogate
+// occurs, Go coordinates are unavailable for the whole input after origin, not
+// reconstructed locally around that surrogate.
 func makeUTF16InputViewContext(ctx context.Context, input UTF16String, limits MatchLimits) (*inputView, error) {
 	ctx = normalizeContext(ctx)
 	if err := ctx.Err(); err != nil {

@@ -5,10 +5,19 @@ not have RE2's linear-time guarantee. Treat untrusted patterns and inputs as
 potentially adversarial.
 
 `ParseOptions` bounds pattern bytes, AST depth and nodes, captures, and
-character classes. `CompileOptions` bounds program instructions.
+character classes. `CompileOptions` bounds emitted program instructions,
+not all compile work.
+Repetition expansion of an empty body can do work without emitting instructions;
+large counts are not refused by an independent expansion/CPU budget. Parse/Compile
+have no context API. These are existing implementation limits, not intentional
+specification guarantees or proof of prompt termination for hostile patterns.
 `MatchOptions` bounds input bytes and runes, VM steps, backtracks, stack and
 recursion depth, logical allocations, results, replacement/split output, and
-wall time. Zero means no allowance, not unlimited.
+wall time. Zero means no allowance, not unlimited. These counters are selected
+logical work boundaries: Steps do not charge every comparison inside an
+instruction, and Allocations do not count all Go heap allocations or bytes.
+Preparation, successful capture copies and output storage need their own
+application capacity policy; this is not a process memory ceiling.
 
 Replacement templates independently use the same input byte/code-point
 allowances as subjects. Consumed token and name work is charged even when it
@@ -40,7 +49,7 @@ immutable-program/caller-owned-cache race assertion once with a two-minute
 timeout. See [contributor verification](../CONTRIBUTING.md#verification) for
 deterministic seeds versus active fuzzing and the full qualification boundary.
 
-Default limits are safe starting points, not universal policy. Lower them for
+Default limits are starting points, not universal safety policy. Lower them for
 interactive or multi-tenant validation and measure real workloads before
 raising them.
 

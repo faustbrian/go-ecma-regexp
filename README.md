@@ -63,7 +63,10 @@ if matched {
 
 All parsing and execution limits are explicit. Limit exhaustion, cancellation,
 and wall-time exhaustion are errors distinct from invalid syntax and an
-ordinary no-match result.
+ordinary no-match result. Budgets count selected logical work, not every internal
+comparison or all heap allocations; execution time/cancellation is cooperative.
+Use nonnegative UTF-16 start indices and application-owned capacity limits.
+See [the exact API boundaries](docs/api.md).
 
 For JSON Schema Draft 2020-12, use `CompileJSONSchemaPattern`; it selects
 Unicode semantics and the required unanchored search behavior.

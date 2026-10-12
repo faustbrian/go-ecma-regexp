@@ -10,21 +10,36 @@ import (
 
 // ParseLimits bounds parser-controlled resources. Zero is not unlimited.
 type ParseLimits struct {
-	PatternBytes     uint64
-	ASTDepth         uint64
-	Captures         uint64
+	// PatternBytes caps UTF-8 pattern source bytes before token allocation; default 1 MiB.
+	PatternBytes uint64
+	// ASTDepth caps nested groups and Unicode Sets classes; default 256.
+	ASTDepth uint64
+	// Captures caps numbered capturing groups; default 4096.
+	Captures uint64
+	// CharacterClasses caps charged bracket classes and Unicode property escapes,
+	// including v-mode nesting; default 4096.
 	CharacterClasses uint64
-	ASTNodes         uint64
+	// ASTNodes caps nodes charged during parsing, not an exact final-tree or heap size;
+	// default 1,048,576.
+	ASTNodes uint64
 }
 
 // ParseOptions selects the closed edition, flags, and parser limits.
 type ParseOptions struct {
+	// Edition must be Edition2025; zero does not select a default.
 	Edition Edition
-	Flags   Flags
-	AnnexB  bool
-	Limits  ParseLimits
+	// Flags selects the grammar from ParseFlags; Compile replaces this with its
+	// flagSource.
+	Flags Flags
+	// AnnexB enables legacy web-compatibility grammar only outside u/v modes; default
+	// true.
+	AnnexB bool
+	// Limits contains finite parser allowances; zero fields remain zero, not defaults.
+	Limits ParseLimits
 }
 
+// DefaultParseOptions selects Edition2025, Annex B and finite positive allowances.
+// Pass this value explicitly; Parse does not fill defaults into zero options.
 func DefaultParseOptions() ParseOptions {
 	return ParseOptions{
 		Edition: Edition2025,
@@ -50,7 +65,11 @@ func (o ParseOptions) validate(pattern string) error {
 	return nil
 }
 
-// Parse parses a pattern according to the selected closed edition.
+// Parse constructs an immutable AST for the selected closed edition and flags.
+// It retains source text and returns nil on syntax or resource failure. It has
+// no context/time budget; structural limits do not count every analysis operation
+// or temporary allocation. No normalization, JavaScript host coercion or fallback
+// engine is supplied. Invalid UTF-8 follows Go replacement decoding for literals.
 func Parse(source string, options ParseOptions) (*Pattern, error) {
 	tokens, err := Tokenize(source, options)
 	if err != nil {
@@ -93,6 +112,8 @@ type parser struct {
 	namedCaptureGroups bool
 }
 
+// scanCaptureMetadata resolves forward reference grammar using all capturing
+// declarations, without mistaking parentheses inside classes for groups.
 func scanCaptureMetadata(tokens []Token, unicodeSets bool) (int, bool) {
 	captures := 0
 	named := false
@@ -1075,6 +1096,8 @@ type namedCaptureOccurrence struct {
 	choices map[*Node]int
 }
 
+// validateDuplicateCaptureNames compares static alternation choices rather than
+// executing patterns; only disjoint branches can reuse one logical name.
 func validateDuplicateCaptureNames(root Node) error {
 	byName := make(map[string][]namedCaptureOccurrence)
 	collectNamedCaptures(&root, nil, byName)

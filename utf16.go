@@ -5,6 +5,8 @@ import (
 	"unicode/utf16"
 )
 
+// ErrUnpairedSurrogate reports a value which cannot be converted losslessly to Go
+// string text.
 var ErrUnpairedSurrogate = errors.New("UTF-16 value contains an unpaired surrogate")
 
 // UTF16String preserves every ECMAScript string code unit, including lone
@@ -17,7 +19,9 @@ func newUTF16String(units []uint16) UTF16String {
 	return UTF16String{units: append([]uint16(nil), units...)}
 }
 
-// UTF16FromString converts a scalar Go string to its exact UTF-16 form.
+// UTF16FromString copies Go text as UTF-16. Each invalid UTF-8 byte becomes U+FFFD;
+// use UTF16FromUnits for exact lone surrogate input. No Unicode normalization is
+// applied. Conversion has no context or engine admission budget.
 func UTF16FromString(value string) UTF16String {
 	return newUTF16String(utf16.Encode([]rune(value)))
 }

@@ -11,7 +11,9 @@ type JSONSchemaPattern struct {
 
 // CompileJSONSchemaPattern compiles a JSON Schema pattern with ECMAScript
 // Unicode semantics. JSON Schema has no syntax for flags, so this profile
-// selects only the u flag and leaves anchoring entirely to the pattern.
+// selects only the u flag and leaves anchoring entirely to the pattern. Other
+// options, including edition and budgets, remain explicit. This pattern profile
+// is not a complete JSON Schema validator.
 func CompileJSONSchemaPattern(source string, options CompileOptions) (*JSONSchemaPattern, error) {
 	program, err := Compile(source, "u", options)
 	if err != nil {
@@ -22,7 +24,9 @@ func CompileJSONSchemaPattern(source string, options CompileOptions) (*JSONSchem
 }
 
 // Match reports whether the pattern matches anywhere in the JSON string.
-// Execution remains subject to the caller-provided resource budgets.
+// Execution remains subject to caller budgets and StartUTF16; use zero to search
+// the whole instance. Negative starts can panic in the Unicode search path.
+// Errors are execution failures, not schema mismatch.
 func (p *JSONSchemaPattern) Match(ctx context.Context, input string, options MatchOptions) (bool, error) {
 	_, matched, err := p.program.Find(ctx, input, options)
 	return matched, err

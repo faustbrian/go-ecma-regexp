@@ -47,6 +47,8 @@ func BenchmarkMatchAstralUnicode(b *testing.B) {
 	}
 }
 
+// BenchmarkAdversarialBudget measures bounded failure on its fixture, not linear-time
+// behavior or a universal latency ceiling.
 func BenchmarkAdversarialBudget(b *testing.B) {
 	program := benchmarkProgram(b, "(a|aa)*b", "")
 	options := ecmascript.DefaultMatchOptions()

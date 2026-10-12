@@ -1,3 +1,9 @@
+// Command test262bridge handles one synthetic Test262 request on stdin and
+// emits one JSON response on stdout. Pattern/subject use base64 little-endian
+// UTF-16; lone pattern surrogates become explicit escapes before Compile. It
+// uses diagnostic input-scaled budgets, not public service policy. Transport
+// decoding has no request-size or caller-context boundary; this repository tool
+// is not an untrusted network handler.
 package main
 
 import (

@@ -28,6 +28,8 @@ func FuzzTokenizeAndParse(f *testing.F) {
 	})
 }
 
+// FuzzCompileAndMatch uses finite fixture limits; successful cases do not qualify the
+// full external Test262 corpus.
 func FuzzCompileAndMatch(f *testing.F) {
 	f.Add("(a|aa)*b", "", "aaaaaaaa")
 	f.Add("(?=(a+))a*b\\1", "", "aaabaaa")
