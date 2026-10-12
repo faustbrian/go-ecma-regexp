@@ -141,3 +141,17 @@ Unverified: full Test262 and peer interoperability, timing/concurrency/leak/fuzz
 mutation/performance campaigns, physical heap ceilings or hard interruption,
 external consumers, hosted CI and remote-main delivery. This prose pass does not
 repair the existing runtime limitations or qualify those boundaries.
+
+## Objective Enforcement
+
+The checksum-pinned public Tools v2.4.1 verifier now supplies
+`make source-docs-check` as a prerequisite of the existing local and CI Make
+routes. Ordinary shared CI selects strict source-documentation checking and
+requires its result. Native prerequisites, operation budgets, security and
+release controls are retained. Hosted exact-head evidence is recorded by the
+coordination ledger; configuration alone does not establish green delivery.
+
+This patch admits the existing tracked Go command-package producer directory.
+The generated Unicode table, header, shell directive, producer and pinned
+inputs are unchanged; unsupported shell regeneration still requires manual
+review, not an assertion that regeneration was executed.
