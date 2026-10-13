@@ -1,5 +1,8 @@
 # JSON Schema profile
 
+[Documentation map](index.md) · [Repository README](../README.md)
+[Next: API and indices](api.md)
+
 `CompileJSONSchemaPattern` implements the regular-expression profile used by
 JSON Schema Draft 2020-12. It compiles the schema's `pattern` string with the
 ECMAScript `u` flag and uses an unanchored search when validating an instance.

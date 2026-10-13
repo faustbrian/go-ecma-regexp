@@ -1,5 +1,8 @@
 # FAQ
 
+[Documentation map](index.md) · [Repository README](../README.md)
+[Next: API and indices](api.md)
+
 ## Why not Go regexp?
 
 Go `regexp` intentionally implements RE2 semantics. ECMAScript includes

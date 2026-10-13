@@ -1,5 +1,8 @@
 # Troubleshooting
 
+[Documentation map](index.md) · [Repository README](../README.md)
+[Next: API and indices](api.md)
+
 ## Compilation fails
 
 Inspect the returned error rather than matching its text. Invalid flags and

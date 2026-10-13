@@ -1,5 +1,8 @@
 # Cookbook
 
+[Documentation map](index.md) · [Repository README](../README.md)
+[Next: API and indices](api.md)
+
 ## Whole-string validation
 
 Put anchors in the pattern and use `Find` or the JSON Schema profile:

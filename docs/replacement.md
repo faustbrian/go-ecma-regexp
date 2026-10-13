@@ -1,5 +1,8 @@
 # Replacement and split
 
+[Documentation map](index.md) · [Repository README](../README.md)
+[Next: API and indices](api.md)
+
 `Replace` and `ReplaceUTF16` implement ECMAScript substitution tokens:
 
 | Token | Meaning |

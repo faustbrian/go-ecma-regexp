@@ -1,5 +1,8 @@
 # Syntax, flags, Unicode, and captures
 
+[Documentation map](index.md) · [Repository README](../README.md)
+[Next: API and indices](api.md)
+
 `Compile` accepts ECMAScript 2025 pattern text and a separate flag string.
 Only `d`, `g`, `i`, `m`, `s`, `u`, `v`, and `y` are accepted. Duplicate flags,
 unknown flags, and the conflicting `u` plus `v` combination are errors.

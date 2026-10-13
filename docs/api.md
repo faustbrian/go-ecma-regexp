@@ -1,5 +1,8 @@
 # API and indices
 
+[Documentation map](index.md) · [Repository README](../README.md)
+[Next: Limits and security](security.md)
+
 The processing pipeline is explicit:
 
 1. `Tokenize` returns immutable tokens with pattern byte spans.

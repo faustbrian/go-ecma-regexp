@@ -1,5 +1,8 @@
 # Threat model
 
+[Documentation map](index.md) · [Repository README](../README.md)
+[Next: API and indices](api.md)
+
 - Model: `ECMA-REGEXP-THREAT-MODEL-2.0.0`
 - Applies to: `github.com/faustbrian/go-ecma-regexp/v2` v2.0.0
 - Reviewed: 2026-10-08

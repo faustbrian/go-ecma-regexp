@@ -1,5 +1,8 @@
 # Limits and security
 
+[Documentation map](index.md) · [Repository README](../README.md)
+[Next: API and indices](api.md)
+
 ECMAScript backreferences and lookaround require a backtracking engine and do
 not have RE2's linear-time guarantee. Treat untrusted patterns and inputs as
 potentially adversarial.

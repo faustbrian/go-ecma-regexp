@@ -1,5 +1,8 @@
 # ECMAScript regular-expression specification decisions
 
+[Documentation map](index.md) · [Repository README](../README.md)
+[Next: API and indices](api.md)
+
 This register is the human view of the strict machine records in [`specification/decisions.json`](../specification/decisions.json). Normative sources outrank fixtures and maintained-peer behavior. A resolved entry is a compatibility contract; unresolved entries block release.
 
 Statuses are `resolved`, `unresolved`, or `superseded`. Source changes, peer divergences, and behavior changes require an explicit review, updated evidence, a new content digest, and a changelog record.

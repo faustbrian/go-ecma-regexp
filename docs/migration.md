@@ -1,5 +1,8 @@
 # Migration from Go regexp and PCRE
 
+[Documentation map](index.md) · [Repository README](../README.md)
+[Next: API and indices](api.md)
+
 ## Published v2 adoption
 
 V2.0.0 is published from main. Use

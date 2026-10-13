@@ -1,5 +1,8 @@
 # ECMAScript regular-expression conformance matrix
 
+[Documentation map](../docs/index.md) · [Repository README](../README.md)
+[Next: Documentation map](../docs/index.md)
+
 The root module implements only the decision-bounded ECMA-262, Test262, Unicode, and JSON Schema profiles declared in the [specification decision register](../docs/specification-decisions.md). No broader JavaScript host-object or certification claim is implied.
 
 [`manifest.json`](manifest.json) pins generated and official inputs. [`monitoring.json`](monitoring.json) records bounded source and change-authority review. [`decision-history.json`](decision-history.json) retains every canonical decision digest.

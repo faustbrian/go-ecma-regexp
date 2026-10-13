@@ -1,5 +1,8 @@
 # Performance and benchmarks
 
+[Documentation map](index.md) · [Repository README](../README.md)
+[Next: API and indices](api.md)
+
 Parse and compile patterns once, then reuse the immutable `Program`. Avoid a
 shared unbounded cache; use an application-owned cache with explicit size and
 eviction limits when pattern reuse warrants it.

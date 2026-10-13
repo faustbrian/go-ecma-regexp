@@ -1,5 +1,8 @@
 # Support and compatibility
 
+[Documentation map](index.md) · [Repository README](../README.md)
+[Next: API and indices](api.md)
+
 ## Version matrix
 
 | Surface | Supported value |
