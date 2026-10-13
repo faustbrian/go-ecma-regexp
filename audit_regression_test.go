@@ -23,14 +23,14 @@ func TestNegativeSearchStartReturnsError(t *testing.T) {
 			options.StartUTF16 = -1
 			exact := ecmascript.UTF16FromString("a")
 			calls := map[string]func() error{
-				"Match":        func() error { _, _, err := program.Match(nil, "a", options); return err },
-				"MatchUTF16":   func() error { _, _, err := program.MatchUTF16(nil, exact, options); return err },
-				"Find":         func() error { _, _, err := program.Find(nil, "a", options); return err },
-				"FindUTF16":    func() error { _, _, err := program.FindUTF16(nil, exact, options); return err },
-				"FindAll":      func() error { _, err := program.FindAll(nil, "a", options); return err },
-				"FindAllUTF16": func() error { _, err := program.FindAllUTF16(nil, exact, options); return err },
-				"Replace":      func() error { _, err := program.Replace(nil, "a", exact, options); return err },
-				"ReplaceUTF16": func() error { _, err := program.ReplaceUTF16(nil, exact, exact, options); return err },
+				"Match":        func() error { _, _, err := program.Match(context.Background(), "a", options); return err },
+				"MatchUTF16":   func() error { _, _, err := program.MatchUTF16(context.Background(), exact, options); return err },
+				"Find":         func() error { _, _, err := program.Find(context.Background(), "a", options); return err },
+				"FindUTF16":    func() error { _, _, err := program.FindUTF16(context.Background(), exact, options); return err },
+				"FindAll":      func() error { _, err := program.FindAll(context.Background(), "a", options); return err },
+				"FindAllUTF16": func() error { _, err := program.FindAllUTF16(context.Background(), exact, options); return err },
+				"Replace":      func() error { _, err := program.Replace(context.Background(), "a", exact, options); return err },
+				"ReplaceUTF16": func() error { _, err := program.ReplaceUTF16(context.Background(), exact, exact, options); return err },
 			}
 			for name, call := range calls {
 				t.Run(name, func(t *testing.T) {
@@ -45,10 +45,10 @@ func TestNegativeSearchStartReturnsError(t *testing.T) {
 					}
 				})
 			}
-			if _, err := program.Split(nil, "a", options); err != nil {
+			if _, err := program.Split(context.Background(), "a", options); err != nil {
 				t.Errorf("Split must ignore start: %v", err)
 			}
-			if _, err := program.SplitUTF16(nil, exact, options); err != nil {
+			if _, err := program.SplitUTF16(context.Background(), exact, options); err != nil {
 				t.Errorf("SplitUTF16 must ignore start: %v", err)
 			}
 		})
@@ -65,7 +65,7 @@ func TestEmptyFiniteRepetitionCompileIsBounded(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		result, matched, err := program.Match(nil, "", ecmascript.DefaultMatchOptions())
+		result, matched, err := program.Match(context.Background(), "", ecmascript.DefaultMatchOptions())
 		if err != nil || !matched || result.Full().Span().End.UTF16 != 0 {
 			t.Fatalf("empty repetition match = %v, %v", matched, err)
 		}
@@ -96,7 +96,7 @@ func TestLoneSurrogateCoordinatesRemainExactOnlyAtOrigin(t *testing.T) {
 		if _, err := subject.GoString(); !errors.Is(err, ecmascript.ErrUnpairedSurrogate) {
 			t.Fatalf("subject GoString = %v", err)
 		}
-		result, matched, err := program.FindUTF16(nil, subject, ecmascript.DefaultMatchOptions())
+		result, matched, err := program.FindUTF16(context.Background(), subject, ecmascript.DefaultMatchOptions())
 		if err != nil || !matched {
 			t.Fatalf("FindUTF16 = %v, %v", matched, err)
 		}
@@ -133,7 +133,7 @@ func TestFiniteRepetitionPreservesEffectfulBodies(t *testing.T) {
 			if err != nil {
 				t.Fatal(err)
 			}
-			result, matched, err := program.Find(nil, test.input, ecmascript.DefaultMatchOptions())
+			result, matched, err := program.Find(context.Background(), test.input, ecmascript.DefaultMatchOptions())
 			if err != nil || !matched {
 				t.Fatalf("Find = %v, %v", matched, err)
 			}
@@ -174,7 +174,7 @@ func TestJSONSchemaPatternRejectsNegativeStart(t *testing.T) {
 			t.Errorf("JSON Schema negative start panicked: %v", recovered)
 		}
 	}()
-	matched, err := pattern.Match(nil, "a", options)
+	matched, err := pattern.Match(context.Background(), "a", options)
 	var syntax *ecmascript.SyntaxError
 	if matched || !errors.As(err, &syntax) {
 		t.Fatalf("JSON Schema negative start = %v, %v", matched, err)
@@ -189,12 +189,12 @@ func TestSearchStartBoundaryContracts(t *testing.T) {
 		}
 		options := ecmascript.DefaultMatchOptions()
 		options.StartUTF16 = 1
-		result, matched, err := program.Find(nil, "a", options)
+		result, matched, err := program.Find(context.Background(), "a", options)
 		if err != nil || !matched || result.Full().Span().Start.UTF16 != 1 {
 			t.Fatalf("end start (%s) = %v, %v", flags, matched, err)
 		}
 		options.StartUTF16 = 2
-		_, matched, err = program.Find(nil, "a", options)
+		_, matched, err = program.Find(context.Background(), "a", options)
 		if flags == "uy" {
 			var syntax *ecmascript.SyntaxError
 			if matched || !errors.As(err, &syntax) {
