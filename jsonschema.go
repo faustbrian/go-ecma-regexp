@@ -25,7 +25,7 @@ func CompileJSONSchemaPattern(source string, options CompileOptions) (*JSONSchem
 
 // Match reports whether the pattern matches anywhere in the JSON string.
 // Execution remains subject to caller budgets and StartUTF16; use zero to search
-// the whole instance. Negative starts can panic in the Unicode search path.
+// the whole instance. Negative starts return SyntaxError.
 // Errors are execution failures, not schema mismatch.
 func (p *JSONSchemaPattern) Match(ctx context.Context, input string, options MatchOptions) (bool, error) {
 	_, matched, err := p.program.Find(ctx, input, options)

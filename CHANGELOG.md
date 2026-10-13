@@ -7,6 +7,13 @@ and this project uses semantic versioning.
 
 ## [Unreleased]
 
+### Fixed
+
+- Return a typed syntax error for negative search starts in Unicode mode,
+  including collection, replacement and JSON Schema pattern entrypoints.
+- Collapse mandatory repetitions of zero-bytecode bodies instead of expanding
+  large finite counts, preserving captures, assertions and instruction limits.
+
 ### Changed
 
 - Clarify parser/VM budgets, UTF-16 capture and index ownership, stateless versus

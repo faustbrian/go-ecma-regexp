@@ -69,8 +69,8 @@ func (p *Program) CaptureNameIndices() map[string][]int {
 // replaces options.Parse.Flags. Invalid flags, syntax or limits return nil and
 // an error; no context or wall-time allowance applies to compilation. Emitted
 // instruction limits do not account for every preliminary class-set allocation
-// or repetition expansion step. A repeated empty body can perform work without
-// emitting instructions; the instruction cap is not a compile-time CPU deadline.
+// or AST traversal step. Repetitions whose first mandatory iteration emits no
+// instructions are not expanded further; the cap is not a compile-time CPU deadline.
 // The returned immutable Program retains original source and owns private code.
 func Compile(source, flagSource string, options CompileOptions) (*Program, error) {
 	flags, err := ParseFlags(flagSource)
@@ -438,13 +438,18 @@ func (c *compiler) alternation(branches []Node, reverse bool) error {
 	return nil
 }
 
-// quantifier expands declared repetitions; empty bodies may emit no bytecode.
-// The emitted-instruction limit does not charge those expansion iterations.
+// quantifier expands declared repetitions under the emitted-instruction budget.
+// A zero-bytecode iteration has no observable effects: compiling it once is
+// sufficient even for nested empty bodies with arbitrarily large counts.
 func (c *compiler) quantifier(node Node, reverse bool) error {
 	child := node.children[0]
 	for count := 0; count < node.min; count++ {
+		before := len(c.code)
 		if err := c.compileIteration(child, reverse); err != nil {
 			return err
+		}
+		if len(c.code) == before {
+			return nil
 		}
 	}
 	if node.max == node.min {

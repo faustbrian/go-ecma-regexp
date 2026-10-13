@@ -47,7 +47,7 @@ type MatchLimits struct {
 // execution budgets.
 type MatchOptions struct {
 	// StartUTF16 is a nonnegative code-unit index, not a byte or rune offset. Unicode
-	// Find-based methods can panic on negative values; Split ignores it.
+	// methods reject negative values with SyntaxError; Split ignores it.
 	StartUTF16 int
 	// Limits contains per-call allowances, shared across Find candidates and collection
 	// matches; zero fields remain zero.
@@ -146,8 +146,7 @@ func (p *Program) MatchUTF16(ctx context.Context, input UTF16String, options Mat
 }
 
 // Find returns the first ordered match at or after StartUTF16. Sticky programs
-// attempt only the explicit start position. StartUTF16 must be nonnegative;
-// Unicode search can panic before index validation on negative starts. Candidates
+// attempt only the explicit start position. Negative starts return SyntaxError. Candidates
 // share counters/time rather than receiving fresh budgets. g does not make this
 // stateless call update Session state.
 func (p *Program) Find(ctx context.Context, input string, options MatchOptions) (Result, bool, error) {
@@ -171,7 +170,7 @@ func (p *Program) FindUTF16(ctx context.Context, input UTF16String, options Matc
 }
 
 func (e *executor) find(start int, sticky bool) (Result, bool, error) {
-	if sticky {
+	if sticky || start < 0 {
 		return e.at(start)
 	}
 	for ; start <= len(e.input.units); start++ {

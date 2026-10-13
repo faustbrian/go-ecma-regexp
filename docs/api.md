@@ -14,8 +14,8 @@ The processing pipeline is explicit:
    cooperatively. Nil contexts retain background behavior.
 
 `Match` attempts only `MatchOptions.StartUTF16`. `Find` searches from that
-position unless the `y` flag makes the program sticky. Starts must be nonnegative
-UTF-16 positions: existing Unicode Find-based paths can panic on negative values.
+position unless the `y` flag makes the program sticky. Negative UTF-16 starts
+return `SyntaxError` across Match, Find, FindAll, Replace and their UTF-16 variants.
 `Split` starts at zero and ignores `StartUTF16` and `g`/`y` selection.
 `FindAll` returns
 ordered, non-overlapping matches and advances empty matches using ECMAScript
@@ -33,7 +33,10 @@ Every capture has a half-open `IndexSpan`. `Index.UTF16` is the normative
 ECMAScript code-unit position. `Index.Rune` and `Index.Byte` map to the Go
 input. `Index.Exact` is false at a boundary inside a surrogate pair. For exact UTF-16
 input containing any lone surrogate, every post-origin Go rune/byte mapping is
-unavailable (`-1`, `Exact=false`), including otherwise scalar boundaries. Check
+unavailable (`-1`, `Exact=false`), including otherwise scalar boundaries. This
+whole-subject policy avoids inventing offsets into a Go string that `GoString`
+cannot represent losslessly. The origin remains exactly zero; an independently
+scalar capture can still be converted with its own `Value().GoString()`. Check
 participation before using a capture span; unmatched captures have zero metadata.
 Only a successful matched result has a usable `Full` capture; the zero Result panics.
 

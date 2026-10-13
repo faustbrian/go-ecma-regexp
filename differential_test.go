@@ -27,6 +27,12 @@ type differentialOutcome struct {
 
 func TestDifferentialMatchingAgainstJavaScriptEngines(t *testing.T) {
 	vectors := []differentialVector{
+		{Pattern: "(?:){9}", Flags: "u", Input: ""},
+		{Pattern: "(?:(?:){9}){7}a", Flags: "u", Input: "a"},
+		{Pattern: "(){3}", Flags: "u", Input: ""},
+		{Pattern: "(?:(a)?){2}", Flags: "u", Input: "a"},
+		{Pattern: "(?:(?=a)){3}a", Flags: "u", Input: "a"},
+		{Pattern: "(?:){3,5}?a", Flags: "u", Input: "a"},
 		{Pattern: "(a|ab)+c", Flags: "d", Input: "ababc"},
 		{Pattern: "a+?b", Input: "zaaab"},
 		{Pattern: "(a)?b\\1", Input: "b"},

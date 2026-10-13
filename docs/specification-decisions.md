@@ -112,3 +112,15 @@ Authoritative source: <https://ecma-international.org/wp-content/uploads/ECMA-26
 ```
 
 No known unresolved interpretation remains in the declared surface. New ambiguities, errata, source changes, maintained-peer divergences, or observable policies MUST be registered before release.
+
+## Defensive boundary regressions
+
+The selected edition and decisions remain unchanged.
+`TestNegativeSearchStartReturnsError` and
+`TestJSONSchemaPatternRejectsNegativeStart` exercise validated start admission
+under DEC-003/010. `TestEmptyFiniteRepetitionCompileIsBounded` and
+`TestFiniteRepetitionPreservesEffectfulBodies` exercise count-independent empty
+compilation and preserved effectful repetition under DEC-010.
+`TestLoneSurrogateCoordinatesRemainExactOnlyAtOrigin` characterizes DEC-003:
+Go-string inputs have derived Go coordinates; exact UTF-16 subjects containing
+a lone surrogate retain normative UTF-16 offsets, not invented lossy Go offsets.

@@ -2,6 +2,7 @@ package ecmascript_test
 
 import (
 	"context"
+	"errors"
 
 	"testing"
 
@@ -31,6 +32,8 @@ func FuzzTokenizeAndParse(f *testing.F) {
 // FuzzCompileAndMatch uses finite fixture limits; successful cases do not qualify the
 // full external Test262 corpus.
 func FuzzCompileAndMatch(f *testing.F) {
+	f.Add("(?:){9223372036854775807}", "u", "")
+	f.Add("(?:(?:){9223372036854775807}){9223372036854775807}", "u", "")
 	f.Add("(a|aa)*b", "", "aaaaaaaa")
 	f.Add("(?=(a+))a*b\\1", "", "aaabaaa")
 	f.Add("[[a-z]&&[^aeiou]]+", "v", "bcdf")
@@ -74,6 +77,12 @@ func FuzzUTF16Matcher(f *testing.F) {
 		options := fuzzMatchOptions()
 		_, _, _ = program.FindUTF16(context.Background(), input, options)
 		_, _ = program.FindAllUTF16(context.Background(), input, options)
+		options.StartUTF16 = -1
+		_, matched, err := program.FindUTF16(context.Background(), input, options)
+		var syntax *ecmascript.SyntaxError
+		if matched || !errors.As(err, &syntax) {
+			t.Fatalf("negative start = %v, %v", matched, err)
+		}
 	})
 }
 

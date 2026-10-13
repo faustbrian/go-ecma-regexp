@@ -10,10 +10,11 @@ potentially adversarial.
 `ParseOptions` bounds pattern bytes, AST depth and nodes, captures, and
 character classes. `CompileOptions` bounds emitted program instructions,
 not all compile work.
-Repetition expansion of an empty body can do work without emitting instructions;
-large counts are not refused by an independent expansion/CPU budget. Parse/Compile
-have no context API. These are existing implementation limits, not intentional
-specification guarantees or proof of prompt termination for hostile patterns.
+A mandatory repetition whose body emits no instructions is compiled once, not
+expanded count times, including nested empty bodies. Captures, assertions and
+alternative branches still emit instructions and retain their normal budgets
+and semantics. Parse/Compile have no context API or independent CPU deadline;
+class-set preparation and individual AST traversals are not instruction charges.
 `MatchOptions` bounds input bytes and runes, VM steps, backtracks, stack and
 recursion depth, logical allocations, results, replacement/split output, and
 wall time. Zero means no allowance, not unlimited. These counters are selected
