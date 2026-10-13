@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-test "$(go env GOVERSION)" = "go1.27.0"
+test "$(go env GOVERSION)" = "go$(cat .go-version)"
 test -z "$(go list -m -f '{{if .Replace}}{{.Path}}{{end}}' all)"
 go mod verify
 git diff --exit-code -- go.mod go.sum unicode_tables_generated.go
