@@ -7,12 +7,15 @@ and this project uses semantic versioning.
 
 ## [Unreleased]
 
+## [2.0.1] - 2026-10-13
+
 ### Fixed
 
 - Return a typed syntax error for negative search starts in Unicode mode,
   including collection, replacement and JSON Schema pattern entrypoints.
 - Collapse mandatory repetitions of zero-bytecode bodies instead of expanding
   large finite counts, preserving captures, assertions and instruction limits.
+  [9b190c1eff](https://github.com/faustbrian/go-ecma-regexp/commit/9b190c1effc11eeaf3649f14488c3ae8c33b6648)
 
 ### Changed
 
@@ -20,6 +23,22 @@ and this project uses semantic versioning.
   Session progression, and existing negative-start and AST metadata limitations.
   Distinguish cooperative logical accounting from hard memory/time guarantees
   without changing runtime algorithms or specification inputs.
+  [a6e73b091d](https://github.com/faustbrian/go-ecma-regexp/commit/a6e73b091d6f09b0024ae289c14c49928ec99542)
+- Publish v2 security guidance and connect package adoption navigation.
+  [73cf8a8659](https://github.com/faustbrian/go-ecma-regexp/commit/73cf8a86593f6540c650cc431c6f8659f45fbcd2),
+  [e02aa34a3e](https://github.com/faustbrian/go-ecma-regexp/commit/e02aa34a3eea66c73f298e770bd3b15cd6ee2321)
+- Keep contributor checks bounded, standardize the risk-based policy and
+  enforce source-documentation contracts while retaining release gates.
+  [a1c8492c25](https://github.com/faustbrian/go-ecma-regexp/commit/a1c8492c258a62b7dcea1266d6e8f40339f6f240),
+  [1b9aeca696](https://github.com/faustbrian/go-ecma-regexp/commit/1b9aeca6965447b645569091ab67d888fe351b14),
+  [65b9f86c7e](https://github.com/faustbrian/go-ecma-regexp/commit/65b9f86c7ed6c015494401611f773c78caa7aeff)
+- Adopt authenticated shared supply-chain tooling and monitor npm
+  dependency updates without changing Go runtime dependency locks.
+  [d070f36912](https://github.com/faustbrian/go-ecma-regexp/commit/d070f369126227dcb8470962beaf2de28e153d4b),
+  [136a851837](https://github.com/faustbrian/go-ecma-regexp/commit/136a851837f99404bcc6614cd559dbbd0fd779e8)
+- Use explicit background contexts in audit regressions without changing
+  cancellation or runtime behavior.
+  [e5c4b0c5fd](https://github.com/faustbrian/go-ecma-regexp/commit/e5c4b0c5fdace1b3e7c146b11ef5ee164a0311c9)
 
 ## [2.0.0] - 2026-10-08
 
@@ -230,6 +249,7 @@ preparation wording is historical.
 - Meaningful 100% production statement coverage and exact 100% mutation
   efficacy for every viable mutant.
 
-[Unreleased]: https://github.com/faustbrian/go-ecma-regexp/compare/v1.1.0...HEAD
+[Unreleased]: https://github.com/faustbrian/go-ecma-regexp/compare/v2.0.1...HEAD
+[2.0.1]: https://github.com/faustbrian/go-ecma-regexp/compare/v2.0.0...v2.0.1
 [1.1.0]: https://github.com/faustbrian/go-ecma-regexp/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/faustbrian/go-ecma-regexp/releases/tag/v1.0.0

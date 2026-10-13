@@ -16,8 +16,8 @@ The supported language is closed to ECMA-262, 16th edition (ECMAScript 2025),
 with Unicode 16.0.0 data. The exact ECMA-262, Test262, Unicode, and emoji
 provenance is recorded in [`specification/manifest.json`](specification/manifest.json).
 
-> Release status: v2.0.0 is the latest published stable release and requires
-> Go 1.27 or later. The legacy v1 module has no backport of the replacement
+> Release status: the published v2 major is stable and requires Go 1.27
+> or later. The legacy v1 module has no backport of the replacement
 > admission repair. See [security guidance](docs/security.md),
 > [migration](docs/migration.md), and the
 > [conformance inventory](specification/README.md).
@@ -25,8 +25,9 @@ provenance is recorded in [`specification/manifest.json`](specification/manifest
 ## Adoption entry points
 
 The root module is `github.com/faustbrian/go-ecma-regexp/v2` (stable).
-It requires Go 1.27.0. Pin the published `v2.0.0` root tag
-with `go get github.com/faustbrian/go-ecma-regexp/v2@v2.0.0`.
+It requires Go 1.27.0. The prepared `v2.0.1` patch restores negative-start
+admission and bounded empty-repetition compilation. After its tag is published,
+adopt it with `go get github.com/faustbrian/go-ecma-regexp/v2@v2.0.1`.
 Root subpackages share this module; they need no separate installation.
 
 Start with the [documentation map](docs/index.md) for package selection,
