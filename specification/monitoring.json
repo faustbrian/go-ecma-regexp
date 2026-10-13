@@ -18,7 +18,7 @@
       "kind": "releases",
       "version": "",
       "url": "https://ecma-international.org/publications-and-standards/standards/ecma-262/",
-      "sha256": "0b0eb4cdcad935ddcd4dbfe389e44bd82206fbbc0bbf9a7f3c6b5cda15e5757e",
+      "sha256": "80d750ca0510f00572de56ead77d97a450b3f63cdbf43f940e58f5f411a945df",
       "specifications": [
         "ECMA-262 16th edition (ECMAScript 2025)"
       ]
