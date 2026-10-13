@@ -6,6 +6,7 @@ import (
 	"os"
 	"os/exec"
 	"strconv"
+	"strings"
 	"testing"
 	"time"
 
@@ -77,7 +78,14 @@ func TestEmptyFiniteRepetitionCompileIsBounded(t *testing.T) {
 			ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
 			defer cancel()
 			command := exec.CommandContext(ctx, os.Args[0], "-test.run=^TestEmptyFiniteRepetitionCompileIsBounded$", "-test.timeout=3s")
-			command.Env = append(os.Environ(), "ECMA_REGEXP_EMPTY_REPEAT_PROBE="+pattern)
+			// The parent owns the mutation-profile lock. The child keeps its
+			// hard timeout but must not reacquire that same profile lock.
+			for _, variable := range os.Environ() {
+				if !strings.HasPrefix(variable, "GOLIB_GREMLINS_COVERAGE_PROFILE=") {
+					command.Env = append(command.Env, variable)
+				}
+			}
+			command.Env = append(command.Env, "ECMA_REGEXP_EMPTY_REPEAT_PROBE="+pattern)
 			output, err := command.CombinedOutput()
 			if err != nil {
 				t.Fatalf("bounded empty compilation: %v; deadline=%v; output=%s", err, ctx.Err(), output)
