@@ -4,17 +4,17 @@
     {
       "module_directory": ".",
       "package_directory": ".",
-      "source_digest": "1ad40f68bc1e4bf7aa64b7850ec760a29ac0117b55e1509b000aaa35a9e4fb0a",
+      "source_digest": "e60b415c9ad8d38736c87347787193c9e549368b2383c759c71ce97daed0d8dc",
       "gremlins_version": "v0.6.0",
-      "gremlins_verifier_sha256": "c28707fd4ce35dd228260de564107c1fb7726e42d4e9ea2bf9e988083e1f3b5b",
+      "gremlins_verifier_sha256": "390cf4085a0063fe5dcaa29ce942ea4cb8c7876347da90376b65dc8c5c811104",
       "mutations": [
         {
           "file_name": "input.go",
           "type": "CONDITIONALS_BOUNDARY",
-          "line": 148,
+          "line": 162,
           "column": 24,
           "contract_domain": "Documented synchronous cooperative cancellation during finite UTF-8/UTF-16 preparation, explicit input byte/code-point allowances, unchanged successful units/indexes, no partial result or VM/session mutation after observed cancellation; not exact polling, timing, transient allocation or cancellation-versus-limit interleavings",
-          "reason": "Previously independently accepted by /root/knapsack_placement_final_review; owner runtime maintainer; reviewed 2026-10-08; expires 2026-11-07 or any bound source/verifier, polling granularity or public cancellation/error-precedence change. Changing start<len to start<=len adds exactly one context check and empty [len:len] copy when unit length is divisible by256, including zero; other lengths are unchanged. It adds no payload copy, capacity or index mutation and retains all nonempty-chunk checks and subsequent construction/final cancellation checks. Side-effectful, blocking or panicking Context method traces and exact asynchronous winners are not claimed equivalent. Source rebind requires independent validation of the unchanged copy loop and retained final checks before qualification. Historical native37580275331 remains FAILED1197killed/13lived; the six old inline conditional identities have been removed after shared-policy extraction. No current native pass is inferred."
+          "reason": "Fresh applicability reviewer /root/remaining_inventory; date 2026-10-13; expiry 2026-11-07 or any relevant source, verifier, admission, caller, cancellation or error-precedence change. Complete current target and caller proof reviewed; existing narrow disposition retained. Prior disposition retained: Previously independently accepted by /root/knapsack_placement_final_review; owner runtime maintainer; reviewed 2026-10-08; expires 2026-11-07 or any bound source/verifier, polling granularity or public cancellation/error-precedence change. Changing start<len to start<=len adds exactly one context check and empty [len:len] copy when unit length is divisible by256, including zero; other lengths are unchanged. It adds no payload copy, capacity or index mutation and retains all nonempty-chunk checks and subsequent construction/final cancellation checks. Side-effectful, blocking or panicking Context method traces and exact asynchronous winners are not claimed equivalent. Source rebind requires independent validation of the unchanged copy loop and retained final checks before qualification. Historical native37580275331 remains FAILED1197killed/13lived; the six old inline conditional identities have been removed after shared-policy extraction. No current native pass is inferred."
         }
       ]
     }
