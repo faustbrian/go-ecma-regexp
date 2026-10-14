@@ -62,9 +62,9 @@ jobs:
           go test -p=1 -run '^Test(ParserLimitContracts|CharacterClassRangeAndLimitBoundaries|UnicodeSetRangeDepthAndClassBoundaries|GroupAndNodeLimitsAllowExactBoundary|LookaroundEnforcesRecursionBudget|LegacyOctalEscapeUsesThreeDigitsOnlyThroughThree|AnnexBLegacyDecimalAndOctalEscapes)$' -count=1 -timeout=2m .
 
   ci:
-    uses: faustbrian/go-library-tools/.github/workflows/library-ci.yml@12d2a3d5425b20f9482e26eef60c957569145cbe # v2.4.1
+    uses: faustbrian/go-library-tools/.github/workflows/library-ci.yml@09b43f49385650c44dd4151a12b0877ca6b48a88 # v2.5.1
     with:
-      tooling_sha: 12d2a3d5425b20f9482e26eef60c957569145cbe
+      tooling_sha: 09b43f49385650c44dd4151a12b0877ca6b48a88
       source_bootstrap: false
       source_documentation: check
       public_dependencies: true
